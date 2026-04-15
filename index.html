@@ -5,46 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AppyClaud - Bienvenido</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Arial', sans-serif;
             height: 100vh;
             background-image: url('APPYC.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
-        /* Capa semitransparente para mejorar la legibilidad (opcional) */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 1;
-        }
-
-        /* Contenedor del botón */
-        .button-container {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        /* Estilo del botón */
         .ingresar-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -55,41 +29,17 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            font-family: inherit;
         }
 
         .ingresar-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .ingresar-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .button-container {
-            animation: fadeIn 1s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="button-container">
-        <a href="inicio.html" class="ingresar-btn">INGRESAR</a>
-    </div>
+    <a href="inicio.html" class="ingresar-btn">INGRESAR</a>
 </body>
 </html>
