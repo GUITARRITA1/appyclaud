@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entregar Trabajo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .estado {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .exito { background: #2ecc71; }
+        .error { background: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📤 Entregar Trabajo</h2>
+        
+        <input type="text" id="nombre" placeholder="Tu nombre" required>
+        <input type="file" id="archivo" accept=".pdf" required>
+        <button onclick="subirArchivo()">📥 Entregar PDF</button>
+        
+        <div id="mensaje"></div>
+    </div>
+
+    <script>
+        // 🔑 CONFIGURACIÓN - REEMPLAZA CON TUS DATOS
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ
+";
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function subirArchivo() {
+            const nombre = document.getElementById('nombre').value;
+            const archivo = document.getElementById('archivo').files[0];
+            const mensajeDiv = document.getElementById('mensaje');
+            
+            if (!nombre || !archivo) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Completa todos los campos</div>';
+                return;
+            }
+            
+            mensajeDiv.innerHTML = '<div class="estado">⏳ Subiendo archivo...</div>';
+            
+            try {
+                // 1. Generar nombre único para el archivo
+                const timestamp = Date.now();
+                const archivoPath = `entregas/${timestamp}_${archivo.name}`;
+                
+                // 2. Subir archivo a Supabase Storage
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from('entregas')
+                    .upload(archivoPath, archivo);
+                
+                if (uploadError) throw new Error(uploadError.message);
+                
+                // 3. Obtener la URL pública del archivo
+                const { data: urlData } = supabase.storage
+                    .from('entregas')
+                    .getPublicUrl(archivoPath);
+                
+                const archivoUrl = urlData.publicUrl;
+                
+                // 4. Guardar registro en la tabla "entregas"
+                const { error: insertError } = await supabase
+                    .from('entregas')
+                    .insert({
+                        nombre_alumno: nombre,
+                        archivo_url: archivoUrl,
+                        archivo_nombre: archivo.name
+                    });
+                
+                if (insertError) throw new Error(insertError.message);
+                
+                mensajeDiv.innerHTML = '<div class="estado exito">✅ ¡PDF entregado con éxito! 📄</div>';
+                document.getElementById('nombre').value = '';
+                document.getElementById('archivo').value = '';
+                
+            } catch (error) {
+                mensajeDiv.innerHTML = `<div class="estado error">❌ Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
