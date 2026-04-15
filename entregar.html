@@ -23,6 +23,7 @@
             max-width: 500px;
             width: 100%;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
         input, button {
             width: 100%;
@@ -45,6 +46,7 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
         button:hover {
             transform: scale(1.02);
@@ -57,6 +59,9 @@
         .exito { background: #2ecc71; }
         .error { background: #e74c3c; }
         .cargando { background: #f39c12; }
+        h2 {
+            margin-bottom: 20px;
+        }
         .info {
             font-size: 12px;
             margin-top: 20px;
@@ -69,22 +74,22 @@
         <h2>📤 Entregar Trabajo</h2>
         
         <input type="text" id="apellido" placeholder="INTRODUZCA APELLIDO" autocomplete="off">
-        <input type="password" id="clave" placeholder="CONTRASEÑA " autocomplete="off">
-        <input type="file" id="archivo" accept=".pdf">
-        <button id="btnEntregar">📥 Entregar PDF</button>
+        <input type="password" id="clave" placeholder="CONTRASEÑA (ej: alumno1)" autocomplete="off">
+        <input type="file" id="archivo" accept=".pdf" required>
+        <button onclick="subirArchivo()">📥 Entregar PDF</button>
         
         <div id="mensaje"></div>
-        <div class="info">🔐 Usa tu APELLIDO y tu código </div>
+        <div class="info">🔐 Usa tu APELLIDO y tu código (alumno1 hasta alumno25)</div>
     </div>
 
     <script>
-        // Configuración de Supabase
+        // 🔑 CONFIGURACIÓN DE SUPABASE
         const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Lista de alumnos
+        // 📋 LISTA DE ALUMNOS (solo apellido + código)
         const alumnos = {
             "alumno1": "Alene",
             "alumno2": "Benitez",
@@ -120,92 +125,93 @@
                 .trim();
         }
 
-        // Esperar a que el DOM esté listo
-        document.addEventListener('DOMContentLoaded', function() {
-            const btn = document.getElementById('btnEntregar');
+        // Función GLOBAL que se llama desde el botón (onclick)
+        window.subirArchivo = async function() {
+            const mensajeDiv = document.getElementById('mensaje');
+            mensajeDiv.innerHTML = '';
             
-            btn.addEventListener('click', async function() {
-                const mensajeDiv = document.getElementById('mensaje');
-                mensajeDiv.innerHTML = '';
+            const apellidoIngresado = document.getElementById('apellido').value.trim();
+            const clave = document.getElementById('clave').value.trim();
+            const archivo = document.getElementById('archivo').files[0];
+            
+            // VALIDACIÓN DE USUARIO Y CONTRASEÑA
+            if (!apellidoIngresado || !clave) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
+                return;
+            }
+            
+            const apellidoEsperado = alumnos[clave];
+            
+            if (!apellidoEsperado) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
+                return;
+            }
+            
+            if (normalizarTexto(apellidoIngresado) !== normalizarTexto(apellidoEsperado)) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
+                return;
+            }
+            
+            // VALIDACIÓN DEL ARCHIVO
+            if (!archivo) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Debe seleccionar un archivo PDF</div>';
+                return;
+            }
+            
+            if (archivo.type !== 'application/pdf') {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Solo se permiten archivos PDF</div>';
+                return;
+            }
+            
+            if (archivo.size > 5 * 1024 * 1024) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ El archivo no debe superar los 5MB</div>';
+                return;
+            }
+            
+            // SUBIR A SUPABASE
+            mensajeDiv.innerHTML = '<div class="estado cargando">⏳ Subiendo archivo...</div>';
+            
+            try {
+                const timestamp = Date.now();
+                const apellidoLimpio = apellidoIngresado.replace(/\s/g, '_');
+                const archivoPath = `entregas/${timestamp}_${apellidoLimpio}_${archivo.name}`;
                 
-                const apellidoIngresado = document.getElementById('apellido').value.trim();
-                const clave = document.getElementById('clave').value.trim();
-                const archivo = document.getElementById('archivo').files[0];
+                // Subir archivo usando supabase
+                const { error: uploadError } = await supabase.storage
+                    .from('entregas')
+                    .upload(archivoPath, archivo);
                 
-                // Validación usuario/contraseña
-                if (!apellidoIngresado || !clave) {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
-                    return;
-                }
+                if (uploadError) throw new Error(uploadError.message);
                 
-                const apellidoEsperado = alumnos[clave];
+                // Obtener URL
+                const { data: urlData } = supabase.storage
+                    .from('entregas')
+                    .getPublicUrl(archivoPath);
                 
-                if (!apellidoEsperado) {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
-                    return;
-                }
+                // Guardar registro
+                const { error: insertError } = await supabase
+                    .from('entregas')
+                    .insert({
+                        nombre_alumno: apellidoIngresado,
+                        codigo_alumno: clave,
+                        archivo_url: urlData.publicUrl,
+                        archivo_nombre: archivo.name
+                    });
                 
-                if (normalizarTexto(apellidoIngresado) !== normalizarTexto(apellidoEsperado)) {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
-                    return;
-                }
+                if (insertError) throw new Error(insertError.message);
                 
-                // Validación del archivo
-                if (!archivo) {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ Debe seleccionar un archivo PDF</div>';
-                    return;
-                }
+                mensajeDiv.innerHTML = '<div class="estado exito">✅ ¡Entrega realizada con éxito!</div>';
+                document.getElementById('apellido').value = '';
+                document.getElementById('clave').value = '';
+                document.getElementById('archivo').value = '';
                 
-                if (archivo.type !== 'application/pdf') {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ Solo se permiten archivos PDF</div>';
-                    return;
-                }
-                
-                if (archivo.size > 5 * 1024 * 1024) {
-                    mensajeDiv.innerHTML = '<div class="estado error">❌ El archivo no debe superar los 5MB</div>';
-                    return;
-                }
-                
-                // Subir archivo
-                mensajeDiv.innerHTML = '<div class="estado cargando">⏳ Subiendo archivo...</div>';
-                
-                try {
-                    const timestamp = Date.now();
-                    const apellidoLimpio = apellidoIngresado.replace(/\s/g, '_');
-                    const archivoPath = `entregas/${timestamp}_${apellidoLimpio}_${archivo.name}`;
-                    
-                    const { error: uploadError } = await supabase.storage
-                        .from('entregas')
-                        .upload(archivoPath, archivo);
-                    
-                    if (uploadError) throw new Error(uploadError.message);
-                    
-                    const { data: urlData } = supabase.storage
-                        .from('entregas')
-                        .getPublicUrl(archivoPath);
-                    
-                    const { error: insertError } = await supabase
-                        .from('entregas')
-                        .insert({
-                            nombre_alumno: apellidoIngresado,
-                            codigo_alumno: clave,
-                            archivo_url: urlData.publicUrl,
-                            archivo_nombre: archivo.name
-                        });
-                    
-                    if (insertError) throw new Error(insertError.message);
-                    
-                    mensajeDiv.innerHTML = '<div class="estado exito">✅ ¡Entrega realizada con éxito!</div>';
-                    document.getElementById('apellido').value = '';
-                    document.getElementById('clave').value = '';
-                    document.getElementById('archivo').value = '';
-                    
-                } catch (error) {
-                    console.error("Error:", error);
-                    mensajeDiv.innerHTML = `<div class="estado error">❌ Error: ${error.message}</div>`;
-                }
-            });
-        });
+            } catch (error) {
+                console.error("Error:", error);
+                mensajeDiv.innerHTML = `<div class="estado error">❌ Error: ${error.message}</div>`;
+            }
+        };
+        
+        console.log("✅ Script cargado. Función subirArchivo está lista.");
     </script>
 </body>
 </html>
