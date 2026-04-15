@@ -74,23 +74,22 @@
         <h2>📤 Entregar Trabajo</h2>
         
         <input type="text" id="apellido" placeholder="INTRODUZCA APELLIDO" autocomplete="off">
-        <input type="password" id="clave" placeholder="CONTRASEÑA " autocomplete="off">
+        <input type="password" id="clave" placeholder="CONTRASEÑA (ej: alumno1)" autocomplete="off">
         <input type="file" id="archivo" accept=".pdf" required>
         <button onclick="subirArchivo()">📥 Entregar PDF</button>
         
         <div id="mensaje"></div>
-        <div class="info">🔐 Usa tu APELLIDO y tu código </div>
+        <div class="info">🔐 Usa tu APELLIDO y tu código (alumno1 hasta alumno25)</div>
     </div>
 
     <script>
-        // 🔑 CONFIGURACIÓN DE SUPABASE
+        // CONFIGURACIÓN DE SUPABASE
         const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
-        // Inicializar Supabase UNA SOLA VEZ
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 📋 LISTA DE ALUMNOS (solo apellido + código)
+        // LISTA DE ALUMNOS
         const alumnos = {
             "alumno1": "Alene",
             "alumno2": "Benitez",
@@ -126,7 +125,6 @@
                 .trim();
         }
 
-        // Función global para el botón
         window.subirArchivo = async function() {
             const mensajeDiv = document.getElementById('mensaje');
             mensajeDiv.innerHTML = '';
@@ -177,27 +175,26 @@
                 const apellidoLimpio = apellidoIngresado.replace(/\s/g, '_');
                 const archivoPath = `entregas/${timestamp}_${apellidoLimpio}_${archivo.name}`;
                 
-                // Subir archivo usando supabaseClient
-                const { error: uploadError } = await supabaseClient.storage
+                // Subir archivo a Storage
+                const { error: uploadError } = await supabase.storage
                     .from('entregas')
                     .upload(archivoPath, archivo);
                 
                 if (uploadError) throw new Error(uploadError.message);
                 
-                // Obtener URL
-                const { data: urlData } = supabaseClient.storage
+                // Obtener URL pública
+                const { data: urlData } = supabase.storage
                     .from('entregas')
                     .getPublicUrl(archivoPath);
                 
-                // Guardar registro
-                const { error: insertError } = await supabaseClient
+                // Guardar en la tabla (SOLO las columnas que existen)
+                const { error: insertError } = await supabase
                     .from('entregas')
                     .insert({
                         nombre_alumno: apellidoIngresado,
                         codigo_alumno: clave,
                         archivo_url: urlData.publicUrl,
-                        archivo_nombre: archivo.name,
-                        fecha_subida: new Date().toISOString()
+                        archivo_nombre: archivo.name
                     });
                 
                 if (insertError) throw new Error(insertError.message);
