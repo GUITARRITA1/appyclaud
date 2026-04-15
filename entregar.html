@@ -87,7 +87,8 @@
         const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Inicializar Supabase UNA SOLA VEZ
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // 📋 LISTA DE ALUMNOS (solo apellido + código)
         const alumnos = {
@@ -125,7 +126,8 @@
                 .trim();
         }
 
-        async function subirArchivo() {
+        // Función global para el botón
+        window.subirArchivo = async function() {
             const mensajeDiv = document.getElementById('mensaje');
             mensajeDiv.innerHTML = '';
             
@@ -133,34 +135,25 @@
             const clave = document.getElementById('clave').value.trim();
             const archivo = document.getElementById('archivo').files[0];
             
-            // ============================================
-            // VALIDACIÓN DE USUARIO (apellido) Y CONTRASEÑA (código)
-            // ============================================
-            
+            // VALIDACIÓN DE USUARIO Y CONTRASEÑA
             if (!apellidoIngresado || !clave) {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
                 return;
             }
             
-            // Buscar el apellido asociado a la contraseña
             const apellidoEsperado = alumnos[clave];
             
-            // Si la contraseña no existe
             if (!apellidoEsperado) {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
                 return;
             }
             
-            // Comparar apellidos (sin mayúsculas, sin acentos)
             if (normalizarTexto(apellidoIngresado) !== normalizarTexto(apellidoEsperado)) {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
                 return;
             }
             
-            // ============================================
             // VALIDACIÓN DEL ARCHIVO
-            // ============================================
-            
             if (!archivo) {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ Debe seleccionar un archivo PDF</div>';
                 return;
@@ -176,10 +169,7 @@
                 return;
             }
             
-            // ============================================
             // SUBIR A SUPABASE
-            // ============================================
-            
             mensajeDiv.innerHTML = '<div class="estado cargando">⏳ Subiendo archivo...</div>';
             
             try {
@@ -187,20 +177,20 @@
                 const apellidoLimpio = apellidoIngresado.replace(/\s/g, '_');
                 const archivoPath = `entregas/${timestamp}_${apellidoLimpio}_${archivo.name}`;
                 
-                // Subir archivo
-                const { error: uploadError } = await supabase.storage
+                // Subir archivo usando supabaseClient
+                const { error: uploadError } = await supabaseClient.storage
                     .from('entregas')
                     .upload(archivoPath, archivo);
                 
                 if (uploadError) throw new Error(uploadError.message);
                 
                 // Obtener URL
-                const { data: urlData } = supabase.storage
+                const { data: urlData } = supabaseClient.storage
                     .from('entregas')
                     .getPublicUrl(archivoPath);
                 
                 // Guardar registro
-                const { error: insertError } = await supabase
+                const { error: insertError } = await supabaseClient
                     .from('entregas')
                     .insert({
                         nombre_alumno: apellidoIngresado,
@@ -218,10 +208,10 @@
                 document.getElementById('archivo').value = '';
                 
             } catch (error) {
-                console.error(error);
+                console.error("Error:", error);
                 mensajeDiv.innerHTML = `<div class="estado error">❌ Error: ${error.message}</div>`;
             }
-        }
+        };
     </script>
 </body>
 </html>
