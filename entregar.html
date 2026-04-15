@@ -73,13 +73,13 @@
     <div class="container">
         <h2>📤 Entregar Trabajo</h2>
         
-        <input type="text" id="apellido" placeholder="Tu APELLIDO (ej: Benitez, Diaz, Sotelo)" autocomplete="off">
-        <input type="text" id="clave" placeholder="Código de alumno (ej: alumno1)" autocomplete="off">
+        <input type="text" id="apellido" placeholder="INTRODUZCA APELLIDO" autocomplete="off">
+        <input type="password" id="clave" placeholder="CONTRASEÑA (ej: alumno1)" autocomplete="off">
         <input type="file" id="archivo" accept=".pdf" required>
         <button onclick="subirArchivo()">📥 Entregar PDF</button>
         
         <div id="mensaje"></div>
-        <div class="info">🔐 Usa tu APELLIDO (solo el primero) y el código que te dio el profesor</div>
+        <div class="info">🔐 Usa tu APELLIDO y tu código (alumno1 hasta alumno25)</div>
     </div>
 
     <script>
@@ -89,135 +89,136 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 📋 LISTA DE ALUMNOS AUTORIZADOS
-        // clave → { apellidoEsperado, nombreCompleto }
-        const alumnosAutorizados = {
-            "alumno1": { apellido: "Alene", nombreCompleto: "Alene Dylan" },
-            "alumno2": { apellido: "Benitez", nombreCompleto: "Benitez Valdez, Fausta" },
-            "alumno3": { apellido: "Cata", nombreCompleto: "Cata Melany" },
-            "alumno4": { apellido: "Centurion", nombreCompleto: "Centurion Benitez, Magas" },
-            "alumno5": { apellido: "Copa", nombreCompleto: "Copa, Priscilla" },
-            "alumno6": { apellido: "Diaz", nombreCompleto: "Diaz, Mia" },
-            "alumno7": { apellido: "Due", nombreCompleto: "Due, Ornella" },
-            "alumno8": { apellido: "Escobar", nombreCompleto: "Escobar Tevez, Tiziano" },
-            "alumno9": { apellido: "Esperanza", nombreCompleto: "Esperanza, Paul" },
-            "alumno10": { apellido: "Genes", nombreCompleto: "Genes Morales, Lautaro" },
-            "alumno11": { apellido: "Ibañez", nombreCompleto: "Ibañez, Morena" },
-            "alumno12": { apellido: "Lobos", nombreCompleto: "Lobos, Morena" },
-            "alumno13": { apellido: "Mamani", nombreCompleto: "Mamani Laura, Luz" },
-            "alumno14": { apellido: "Medina", nombreCompleto: "Medina, Kevin" },
-            "alumno15": { apellido: "Melon", nombreCompleto: "Melon, Erik" },
-            "alumno16": { apellido: "Monroeta", nombreCompleto: "Monroeta, Matías" },
-            "alumno17": { apellido: "Paco", nombreCompleto: "Paco Chambi, Juarez" },
-            "alumno18": { apellido: "Raulta", nombreCompleto: "Raulta, Luna" },
-            "alumno19": { apellido: "Ponce", nombreCompleto: "Ponce, Alma" },
-            "alumno20": { apellido: "Quintanilla", nombreCompleto: "Quintanilla, Giuliana" },
-            "alumno21": { apellido: "Rueda", nombreCompleto: "Rueda, Rocío" },
-            "alumno22": { apellido: "Salazar", nombreCompleto: "Salazar Lozano, Tía" },
-            "alumno23": { apellido: "Torres", nombreCompleto: "Torres, Julia" },
-            "alumno24": { apellido: "Valero", nombreCompleto: "Valero Eulalia, Alex" },
-            "alumno25": { apellido: "Sotelo", nombreCompleto: "Sotelo Márquez, Mariano Ramón" }
+        // 📋 LISTA DE ALUMNOS (solo apellido + código)
+        const alumnos = {
+            "alumno1": "Alene",
+            "alumno2": "Benitez",
+            "alumno3": "Cata",
+            "alumno4": "Centurion",
+            "alumno5": "Copa",
+            "alumno6": "Diaz",
+            "alumno7": "Due",
+            "alumno8": "Escobar",
+            "alumno9": "Esperanza",
+            "alumno10": "Genes",
+            "alumno11": "Ibañez",
+            "alumno12": "Lobos",
+            "alumno13": "Mamani",
+            "alumno14": "Medina",
+            "alumno15": "Melon",
+            "alumno16": "Monroeta",
+            "alumno17": "Paco",
+            "alumno18": "Raulta",
+            "alumno19": "Ponce",
+            "alumno20": "Quintanilla",
+            "alumno21": "Rueda",
+            "alumno22": "Salazar",
+            "alumno23": "Torres",
+            "alumno24": "Valero",
+            "alumno25": "Sotelo"
         };
 
-        // Función para normalizar texto (quitar acentos y pasar a minúscula)
         function normalizarTexto(texto) {
             return texto.toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+                .replace(/[\u0300-\u036f]/g, "")
                 .trim();
         }
 
         async function subirArchivo() {
+            const mensajeDiv = document.getElementById('mensaje');
+            mensajeDiv.innerHTML = '';
+            
             const apellidoIngresado = document.getElementById('apellido').value.trim();
             const clave = document.getElementById('clave').value.trim();
             const archivo = document.getElementById('archivo').files[0];
-            const mensajeDiv = document.getElementById('mensaje');
             
-            // Validar campos vacíos
-            if (!apellidoIngresado || !clave || !archivo) {
-                mensajeDiv.innerHTML = '<div class="estado error">❌ Completa TODOS los campos</div>';
+            // ============================================
+            // VALIDACIÓN DE USUARIO (apellido) Y CONTRASEÑA (código)
+            // ============================================
+            
+            if (!apellidoIngresado || !clave) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
                 return;
             }
             
-            // Validar que el archivo sea PDF
+            // Buscar el apellido asociado a la contraseña
+            const apellidoEsperado = alumnos[clave];
+            
+            // Si la contraseña no existe
+            if (!apellidoEsperado) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
+                return;
+            }
+            
+            // Comparar apellidos (sin mayúsculas, sin acentos)
+            if (normalizarTexto(apellidoIngresado) !== normalizarTexto(apellidoEsperado)) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Usuario o contraseña incorrectos</div>';
+                return;
+            }
+            
+            // ============================================
+            // VALIDACIÓN DEL ARCHIVO
+            // ============================================
+            
+            if (!archivo) {
+                mensajeDiv.innerHTML = '<div class="estado error">❌ Debe seleccionar un archivo PDF</div>';
+                return;
+            }
+            
             if (archivo.type !== 'application/pdf') {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ Solo se permiten archivos PDF</div>';
                 return;
             }
             
-            // Validar que el archivo no pese más de 5MB
             if (archivo.size > 5 * 1024 * 1024) {
                 mensajeDiv.innerHTML = '<div class="estado error">❌ El archivo no debe superar los 5MB</div>';
                 return;
             }
             
-            // 🔐 VALIDAR CLAVE DEL ALUMNO
-            const alumno = alumnosAutorizados[clave];
+            // ============================================
+            // SUBIR A SUPABASE
+            // ============================================
             
-            if (!alumno) {
-                mensajeDiv.innerHTML = '<div class="estado error">❌ Código de alumno NO válido. Contacta al profesor.</div>';
-                return;
-            }
-            
-            // Normalizar ambos textos para comparar sin sensibilidad a mayúsculas/minúsculas ni acentos
-            const apellidoNormalizado = normalizarTexto(apellidoIngresado);
-            const apellidoEsperadoNormalizado = normalizarTexto(alumno.apellido);
-            
-            // Validar que el apellido ingresado coincida con el esperado
-            if (apellidoNormalizado !== apellidoEsperadoNormalizado) {
-                mensajeDiv.innerHTML = `<div class="estado error">❌ El apellido "${apellidoIngresado}" no corresponde al código "${clave}". Apellido esperado: ${alumno.apellido}</div>`;
-                return;
-            }
-            
-            // Mostrar mensaje de carga
-            mensajeDiv.innerHTML = '<div class="estado cargando">⏳ Subiendo archivo, espera...</div>';
+            mensajeDiv.innerHTML = '<div class="estado cargando">⏳ Subiendo archivo...</div>';
             
             try {
-                // 1. Generar nombre único para el archivo
                 const timestamp = Date.now();
                 const apellidoLimpio = apellidoIngresado.replace(/\s/g, '_');
                 const archivoPath = `entregas/${timestamp}_${apellidoLimpio}_${archivo.name}`;
                 
-                // 2. Subir archivo a Supabase Storage
+                // Subir archivo
                 const { error: uploadError } = await supabase.storage
                     .from('entregas')
                     .upload(archivoPath, archivo);
                 
-                if (uploadError) {
-                    throw new Error(`Error al subir: ${uploadError.message}`);
-                }
+                if (uploadError) throw new Error(uploadError.message);
                 
-                // 3. Obtener la URL pública del archivo
+                // Obtener URL
                 const { data: urlData } = supabase.storage
                     .from('entregas')
                     .getPublicUrl(archivoPath);
                 
-                const archivoUrl = urlData.publicUrl;
-                
-                // 4. Guardar registro en la tabla "entregas"
+                // Guardar registro
                 const { error: insertError } = await supabase
                     .from('entregas')
                     .insert({
-                        nombre_alumno: alumno.nombreCompleto,
-                        apellido_usado: apellidoIngresado,
+                        nombre_alumno: apellidoIngresado,
                         codigo_alumno: clave,
-                        archivo_url: archivoUrl,
+                        archivo_url: urlData.publicUrl,
                         archivo_nombre: archivo.name,
                         fecha_subida: new Date().toISOString()
                     });
                 
-                if (insertError) {
-                    throw new Error(`Error al guardar: ${insertError.message}`);
-                }
+                if (insertError) throw new Error(insertError.message);
                 
-                // Éxito
-                mensajeDiv.innerHTML = `<div class="estado exito">✅ ¡Entrega realizada con éxito! ${alumno.nombreCompleto}</div>`;
+                mensajeDiv.innerHTML = '<div class="estado exito">✅ ¡Entrega realizada con éxito!</div>';
                 document.getElementById('apellido').value = '';
                 document.getElementById('clave').value = '';
                 document.getElementById('archivo').value = '';
                 
             } catch (error) {
-                console.error("Error detallado:", error);
+                console.error(error);
                 mensajeDiv.innerHTML = `<div class="estado error">❌ Error: ${error.message}</div>`;
             }
         }
