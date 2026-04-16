@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiales2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Logo centrado */
+        .logo {
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .logo img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ===== ESTILOS PARA LA LISTA (lo que faltaba) ===== */
+        .materiales-lista1 {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .materiales-lista1 h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .materiales-lista1 ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .materiales-lista1 li {
+            background: rgba(102, 126, 234, 0.2);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .materiales-lista1 li:hover {
+            transform: translateX(10px);
+            background: rgba(102, 126, 234, 0.4);
+        }
+
+        .materiales-lista1 li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+        }
+
+        .materiales-lista1 li a:hover {
+            text-decoration: underline;
+        }
+
+
+        
+        /* Contenedor de botones */
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Estilo común de botones */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 600px) {
+            .btn {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+            
+            .logo img {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+  
+    
+    
+    <body>
+    <div class="container">
+        <!-- Logo centrado -->
+        <div class="logo">
+            <img src="logon.png" alt="Logo AppyClaud">
+        </div>
+        
+        <div class="materiales-lista1">
+    <h2>📚 Materiales de clase 3 :</h2>
+    <ul>
+        <li><a href="Material_Clase3.docx" target="_blank">📄 Material de clase 3 - Tarea práctica y teoría 📐 Magnitudes y Unidades.</a></li>
         <li><a href="MindMap2.png" target="_blank">🌱🧠 Árbol de Unidades en Mapa Mental básico </a></li>
+     <li><a href="https://youtube.com//watch?v=qFOTQ7yMtzk" target="_blank"> 🌐📐 Magnitudes y Unidades. Introduccion. </a></li>
+     <li><a href="https://youtube.com//watch?v=Xphb-tzJj24" target="_blank">🌐 Repaso Regla de 3 simple </a></li>
+     <li><a href="https://youtube.com//watch?v=QeVaK8lDzkQ" target="_blank">🌐 Conversion de unidades </a></li>
+
+        <!-- Agrega más archivos aquí -->
+    </ul>
+          </div>
+        
+        <!-- Botón Entregar -->
+        <div style="text-align: center;">
+            <a href="entregar.html" class="btn">🔗 Entregar Tareas, TP´s, Evaluaciones, Carpetas, etc.</a>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+</html>
