@@ -255,6 +255,10 @@
                 contador.textContent = '⚠️ Error de conexión';
             }
         }
+        console.log("=== DATOS DE SUPABASE ===");
+entregas.forEach(e => {
+    console.log(`Alumno: "${e.nombre_alumno}", Tipo: "${e.tipo}"`);
+});
         
         // Ejecutar al cargar
         cargarEntregas();
