@@ -121,7 +121,7 @@
         <div style="overflow-x: auto;">
             <table id="tablaEntregas">
                 <thead>
-                    <tr id="filaAlumnos">
+                    <tr>
                         <th>ID</th>
                         <th>ALUMNO</th>
                         <th>Act1</th>
@@ -152,12 +152,12 @@
                         <th style="background-color: #1e7e34;">dd/mm</th>
                         <th style="background-color: #1e7e34;">dd/mm</th>
                         <th style="background-color: #1e7e34;">dd/mm</th>
-                     </tr>
+                    </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
-                    <tr><td colspan="12" class="loading">⏳ Cargando entregas......</td></tr>
+                    <tr><td colspan="14" class="loading">⏳ Cargando entregas...</td></tr>
                 </tbody>
-             </table>
+            </table>
         </div>
     </div>
 
@@ -172,56 +172,74 @@
             "DIAZ", "DUE", "ESCOBAR", "ESPERANZA", "GENES",
             "IBANEZ", "LOBOS", "MAMANI", "MEDINA", "MELON",
             "MONROETA", "PACO", "RAULTA", "PONCE", "QUINTANILLA",
-            "RUEDA", "SALAZAR", "TORREZ", "VALERO", "SOTELO", "NUEVO1", "NUEVO2", "NUEVO3", "NUEVO4",
+            "RUEDA", "SALAZAR", "TORREZ", "VALERO", "SOTELO"
         ];
 
-        const actividades = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6",];
+        // Los tipos que vamos a mostrar en la tabla
+        const tiposEsperados = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6"];
 
         async function cargarEntregas() {
             const tbody = document.getElementById('cuerpoTabla');
             const contador = document.getElementById('contador');
             
             try {
+                // Obtener todas las entregas
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
                     .select('nombre_alumno, tipo');
                 
                 if (error) throw error;
                 
-                // Crear mapa: alumno -> Set de tipos entregados
-                const entregasPorAlumno = {};
+                // Crear un objeto para marcar entregas: { "ALENE": {"Act1": true, "Carp1": true} }
+                const entregasMap = {};
+                
+                // Inicializar para todos los alumnos
+                alumnos.forEach(alumno => {
+                    entregasMap[alumno] = {};
+                    tiposEsperados.forEach(tipo => {
+                        entregasMap[alumno][tipo] = false;
+                    });
+                });
+                
+                // Marcar las entregas existentes
                 entregas.forEach(entrega => {
-                    const alumno = entrega.nombre_alumno?.toUpperCase();
+                    const alumno = entrega.nombre_alumno?.toUpperCase().trim();
                     const tipo = entrega.tipo;
-if (alumno && tipo && actividades.some(act => act.toLowerCase() === tipo.toLowerCase())) {
-                        if (!entregasPorAlumno[alumno]) {
-                            entregasPorAlumno[alumno] = new Set();
-                        }
-                        entregasPorAlumno[alumno].add(tipo);
+                    
+                    if (alumno && entregasMap[alumno] && tiposEsperados.includes(tipo)) {
+                        entregasMap[alumno][tipo] = true;
                     }
                 });
                 
-                // Contar entregas
-                let total = 0;
-                for (const a in entregasPorAlumno) total += entregasPorAlumno[a].size;
-                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${total} entregas`;
+                // Contar entregas totales
+                let totalEntregas = 0;
+                for (const alumno in entregasMap) {
+                    for (const tipo in entregasMap[alumno]) {
+                        if (entregasMap[alumno][tipo]) totalEntregas++;
+                    }
+                }
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas registradas`;
                 
+                // Generar la tabla
                 tbody.innerHTML = '';
                 
                 alumnos.forEach((alumno, idx) => {
                     const row = tbody.insertRow();
-                    const entregados = entregasPorAlumno[alumno] || new Set();
                     
-                    row.insertCell(0).textContent = idx + 1;
+                    // ID
+                    const celdaId = row.insertCell(0);
+                    celdaId.textContent = idx + 1;
                     
+                    // Alumno
                     const celdaAlumno = row.insertCell(1);
                     celdaAlumno.textContent = alumno;
                     celdaAlumno.style.textAlign = 'left';
                     celdaAlumno.style.fontWeight = 'bold';
                     
-                    actividades.forEach(act => {
+                    // Cada tipo
+                    tiposEsperados.forEach(tipo => {
                         const celda = row.insertCell();
-                        if (entregados.has(act)) {
+                        if (entregasMap[alumno][tipo]) {
                             celda.innerHTML = '<span class="check">✅</span>';
                             celda.className = 'entregado';
                         } else {
@@ -232,11 +250,13 @@ if (alumno && tipo && actividades.some(act => act.toLowerCase() === tipo.toLower
                 });
                 
             } catch (error) {
-                console.error(error);
-                tbody.innerHTML = `<tr><td colspan="12" class="error">❌ Error: ${error.message}</td></tr>`;
+                console.error('Error:', error);
+                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+                contador.textContent = '⚠️ Error de conexión';
             }
         }
         
+        // Ejecutar al cargar
         cargarEntregas();
     </script>
 </body>
