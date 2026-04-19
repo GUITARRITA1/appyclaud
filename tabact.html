@@ -193,7 +193,7 @@
                 entregas.forEach(entrega => {
                     const alumno = entrega.nombre_alumno?.toUpperCase();
                     const tipo = entrega.tipo;
-                    if (alumno && tipo && actividades.includes(tipo)) {
+if (alumno && tipo && actividades.some(act => act.toLowerCase() === tipo.toLowerCase())) {
                         if (!entregasPorAlumno[alumno]) {
                             entregasPorAlumno[alumno] = new Set();
                         }
