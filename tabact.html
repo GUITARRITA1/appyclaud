@@ -175,7 +175,6 @@
             "RUEDA", "SALAZAR", "TORREZ", "VALERO", "SOTELO"
         ];
 
-        // Los tipos que vamos a mostrar en la tabla
         const tiposEsperados = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6"];
 
         async function cargarEntregas() {
@@ -183,17 +182,22 @@
             const contador = document.getElementById('contador');
             
             try {
-                // Obtener todas las entregas
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
                     .select('nombre_alumno, tipo');
                 
                 if (error) throw error;
                 
-                // Crear un objeto para marcar entregas: { "ALENE": {"Act1": true, "Carp1": true} }
-                const entregasMap = {};
+                // ============================================
+                // CONSOLE.LOG DENTRO DE LA FUNCIÓN (AHORA SÍ FUNCIONA)
+                // ============================================
+                console.log("=== DATOS DE SUPABASE ===");
+                entregas.forEach(e => {
+                    console.log(`Alumno: "${e.nombre_alumno}", Tipo: "${e.tipo}"`);
+                });
                 
-                // Inicializar para todos los alumnos
+                // Crear mapa de entregas
+                const entregasMap = {};
                 alumnos.forEach(alumno => {
                     entregasMap[alumno] = {};
                     tiposEsperados.forEach(tipo => {
@@ -201,42 +205,42 @@
                     });
                 });
                 
-                // Marcar las entregas existentes
+                // Marcar entregas existentes (normalizando nombres)
                 entregas.forEach(entrega => {
-                    const alumno = entrega.nombre_alumno?.toUpperCase().trim();
+                    const alumnoOriginal = entrega.nombre_alumno?.trim();
                     const tipo = entrega.tipo;
                     
-                    if (alumno && entregasMap[alumno] && tiposEsperados.includes(tipo)) {
-                        entregasMap[alumno][tipo] = true;
+                    // Buscar alumno en la lista (insensible a mayúsculas)
+                    const alumnoNormalizado = alumnos.find(a => a.toLowerCase() === alumnoOriginal?.toLowerCase());
+                    
+                    if (alumnoNormalizado && tiposEsperados.includes(tipo)) {
+                        entregasMap[alumnoNormalizado][tipo] = true;
+                        console.log(`✅ Match: ${alumnoNormalizado} - ${tipo}`);
+                    } else {
+                        console.log(`❌ No match: "${alumnoOriginal}" - "${tipo}"`);
                     }
                 });
                 
-                // Contar entregas totales
+                // Contar entregas
                 let totalEntregas = 0;
                 for (const alumno in entregasMap) {
                     for (const tipo in entregasMap[alumno]) {
                         if (entregasMap[alumno][tipo]) totalEntregas++;
                     }
                 }
-                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas registradas`;
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas`;
                 
-                // Generar la tabla
+                // Generar tabla
                 tbody.innerHTML = '';
-                
                 alumnos.forEach((alumno, idx) => {
                     const row = tbody.insertRow();
+                    row.insertCell(0).textContent = idx + 1;
                     
-                    // ID
-                    const celdaId = row.insertCell(0);
-                    celdaId.textContent = idx + 1;
-                    
-                    // Alumno
                     const celdaAlumno = row.insertCell(1);
                     celdaAlumno.textContent = alumno;
                     celdaAlumno.style.textAlign = 'left';
                     celdaAlumno.style.fontWeight = 'bold';
                     
-                    // Cada tipo
                     tiposEsperados.forEach(tipo => {
                         const celda = row.insertCell();
                         if (entregasMap[alumno][tipo]) {
@@ -255,12 +259,7 @@
                 contador.textContent = '⚠️ Error de conexión';
             }
         }
-        console.log("=== DATOS DE SUPABASE ===");
-entregas.forEach(e => {
-    console.log(`Alumno: "${e.nombre_alumno}", Tipo: "${e.tipo}"`);
-});
         
-        // Ejecutar al cargar
         cargarEntregas();
     </script>
 </body>
