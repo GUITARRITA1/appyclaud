@@ -114,6 +114,7 @@
             <table id="tablaNotas">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Alumno</th>
                         <th>TP1</th>
                         <th>Eval1</th>
@@ -136,12 +137,15 @@
         </div>
     </div>
 
+    <!-- 🔴 IMPORTANTE: La librería de Supabase DEBE ir primero -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
         // Configuración de Supabase - CAMBIÁ ESTOS DATOS
         const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
-        // Crear cliente de Supabase
+        // Crear cliente de Supabase (ahora supabase ya está definido)
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Función para obtener y mostrar datos
@@ -204,8 +208,5 @@
         // Cargar datos al abrir la página
         cargarNotas();
     </script>
-    
-    <!-- Incluir la librería de Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
