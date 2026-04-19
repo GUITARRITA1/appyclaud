@@ -146,7 +146,7 @@
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
         // Crear cliente de Supabase (ahora supabase ya está definido)
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Función para obtener y mostrar datos
         async function cargarNotas() {
