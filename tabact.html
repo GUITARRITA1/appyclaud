@@ -121,22 +121,20 @@
         <div style="overflow-x: auto;">
             <table id="tablaEntregas">
                 <thead>
-                    <!-- Primera fila: alumnos -->
                     <tr id="filaAlumnos">
                         <th>ID</th>
                         <th>ALUMNO</th>
-                        <th>Act1</th>
-                        <th>Act2</th>
-                        <th>Act3</th>
-                        <th>Act4</th>
-                        <th>Act5</th>
-                        <th>Act6</th>
-                        <th>Act7</th>
-                        <th>Act8</th>
-                        <th>Act9</th>
-                        <th>Act10</th>
-                    </tr>
-                    <!-- Segunda fila: fechas (cambiá los dd/mm por tus fechas) -->
+                        <th>trabajo1</th>
+                        <th>trabajo2</th>
+                        <th>trabajo3</th>
+                        <th>trabajo4</th>
+                        <th>trabajo5</th>
+                        <th>trabajo6</th>
+                        <th>trabajo7</th>
+                        <th>trabajo8</th>
+                        <th>trabajo9</th>
+                        <th>trabajo10</th>
+                     </tr>
                     <tr style="background-color: #1e7e34;">
                         <th style="background-color: #1e7e34;">#</th>
                         <th style="background-color: #1e7e34;">-</th>
@@ -150,23 +148,21 @@
                         <th style="background-color: #1e7e34;">dd/mm</th>
                         <th style="background-color: #1e7e34;">dd/mm</th>
                         <th style="background-color: #1e7e34;">dd/mm</th>
-                    </tr>
+                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
-                    <tr><td colspan="12" class="loading">⏳ Cargando entregas...</td></tr>
+                    <tr><td colspan="12" class="loading">⏳ Cargando entregas......</td></tr>
                 </tbody>
-            </table>
+             </table>
         </div>
     </div>
 
     <script>
-        // Credenciales de Supabase (igual que entregar.html)
         const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
         
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Lista de alumnos (igual que en entregar.html)
         const alumnos = [
             "ALENE", "BENITEZ", "CATA", "CENTURION", "COPA",
             "DIAZ", "DUE", "ESCOBAR", "ESPERANZA", "GENES",
@@ -175,97 +171,68 @@
             "RUEDA", "SALAZAR", "TORREZ", "VALERO", "SOTELO"
         ];
 
-        // Función para extraer el número de actividad del nombre del archivo
-        // Ejemplos: "act1.docx" → 1, "actividad_2.pdf" → 2, "tarea3.docx" → 3
-        function extraerNumeroActividad(nombreArchivo) {
-            if (!nombreArchivo) return null;
-            const match = nombreArchivo.match(/act(?:ividad)?[_\s]?(\d+)/i);
-            if (match) return parseInt(match[1]);
-            return null;
-        }
+        const actividades = ["trabajo1", "trabajo2", "trabajo3", "trabajo4", "trabajo5", "trabajo6", "trabajo7", "trabajo8", "trabajo9", "trabajo10"];
 
         async function cargarEntregas() {
             const tbody = document.getElementById('cuerpoTabla');
             const contador = document.getElementById('contador');
             
             try {
-                console.log("Cargando entregas...");
-                
-                // Obtener todas las entregas
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
-                    .select('nombre_alumno, archivo_nombre')
-                    .not('archivo_nombre', 'is', null);
+                    .select('nombre_alumno, tipo');
                 
                 if (error) throw error;
                 
-                console.log("Entregas encontradas:", entregas);
-                
-                // Crear un mapa: alumno -> [actividades entregadas]
+                // Crear mapa: alumno -> Set de tipos entregados
                 const entregasPorAlumno = {};
-                
                 entregas.forEach(entrega => {
                     const alumno = entrega.nombre_alumno?.toUpperCase();
-                    const archivo = entrega.archivo_nombre;
-                    const numAct = extraerNumeroActividad(archivo);
-                    
-                    if (alumno && numAct && numAct >= 1 && numAct <= 10) {
+                    const tipo = entrega.tipo;
+                    if (alumno && tipo && actividades.includes(tipo)) {
                         if (!entregasPorAlumno[alumno]) {
                             entregasPorAlumno[alumno] = new Set();
                         }
-                        entregasPorAlumno[alumno].add(numAct);
+                        entregasPorAlumno[alumno].add(tipo);
                     }
                 });
                 
-                // Contar entregas totales
-                let totalEntregas = 0;
-                for (const alumno in entregasPorAlumno) {
-                    totalEntregas += entregasPorAlumno[alumno].size;
-                }
-                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas registradas`;
+                // Contar entregas
+                let total = 0;
+                for (const a in entregasPorAlumno) total += entregasPorAlumno[a].size;
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${total} entregas`;
                 
-                // Generar tabla
                 tbody.innerHTML = '';
                 
-                alumnos.forEach((alumno, index) => {
+                alumnos.forEach((alumno, idx) => {
                     const row = tbody.insertRow();
-                    const entregasAlumno = entregasPorAlumno[alumno] || new Set();
+                    const entregados = entregasPorAlumno[alumno] || new Set();
                     
-                    // Columna ID
-                    const celdaId = row.insertCell(0);
-                    celdaId.textContent = index + 1;
+                    row.insertCell(0).textContent = idx + 1;
                     
-                    // Columna Alumno
                     const celdaAlumno = row.insertCell(1);
                     celdaAlumno.textContent = alumno;
                     celdaAlumno.style.textAlign = 'left';
                     celdaAlumno.style.fontWeight = 'bold';
                     
-                    // Columnas de actividades 1 a 10
-                    for (let act = 1; act <= 10; act++) {
-                        const celda = row.insertCell(act + 1);
-                        if (entregasAlumno.has(act)) {
+                    actividades.forEach(act => {
+                        const celda = row.insertCell();
+                        if (entregados.has(act)) {
                             celda.innerHTML = '<span class="check">✅</span>';
                             celda.className = 'entregado';
                         } else {
                             celda.innerHTML = '❌';
                             celda.className = 'no-entregado';
                         }
-                    }
+                    });
                 });
                 
-                if (alumnos.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="12" class="error">📭 No hay alumnos registrados</td></tr>';
-                }
-                
             } catch (error) {
-                console.error('Error:', error);
+                console.error(error);
                 tbody.innerHTML = `<tr><td colspan="12" class="error">❌ Error: ${error.message}</td></tr>`;
-                contador.textContent = '⚠️ Error de conexión';
             }
         }
         
-        // Cargar datos al abrir la página
         cargarEntregas();
     </script>
 </body>
