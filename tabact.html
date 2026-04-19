@@ -188,13 +188,7 @@
                 
                 if (error) throw error;
                 
-                // ============================================
-                // CONSOLE.LOG DENTRO DE LA FUNCIÓN (AHORA SÍ FUNCIONA)
-                // ============================================
-                console.log("=== DATOS DE SUPABASE ===");
-                entregas.forEach(e => {
-                    console.log(`Alumno: "${e.nombre_alumno}", Tipo: "${e.tipo}"`);
-                });
+                console.log("Datos de Supabase:", entregas);
                 
                 // Crear mapa de entregas
                 const entregasMap = {};
@@ -205,19 +199,24 @@
                     });
                 });
                 
-                // Marcar entregas existentes (normalizando nombres)
+                // Marcar entregas (comparación insensible a mayúsculas)
                 entregas.forEach(entrega => {
-                    const alumnoOriginal = entrega.nombre_alumno?.trim();
-                    const tipo = entrega.tipo;
+                    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
+                    const tipoOriginal = entrega.tipo?.trim();
                     
-                    // Buscar alumno en la lista (insensible a mayúsculas)
-                    const alumnoNormalizado = alumnos.find(a => a.toLowerCase() === alumnoOriginal?.toLowerCase());
+                    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}"`);
                     
-                    if (alumnoNormalizado && tiposEsperados.includes(tipo)) {
-                        entregasMap[alumnoNormalizado][tipo] = true;
-                        console.log(`✅ Match: ${alumnoNormalizado} - ${tipo}`);
+                    // Buscar si el alumno existe en la lista
+                    if (alumnos.includes(alumnoOriginal)) {
+                        // Buscar el tipo exacto (case sensitive para el tipo)
+                        if (tiposEsperados.includes(tipoOriginal)) {
+                            entregasMap[alumnoOriginal][tipoOriginal] = true;
+                            console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal}`);
+                        } else {
+                            console.log(`  ❌ Tipo no reconocido: ${tipoOriginal}`);
+                        }
                     } else {
-                        console.log(`❌ No match: "${alumnoOriginal}" - "${tipo}"`);
+                        console.log(`  ❌ Alumno no encontrado: ${alumnoOriginal}`);
                     }
                 });
                 
