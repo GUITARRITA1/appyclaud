@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Notas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .aprobado {
+            background: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .desaprobado {
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            color: #007bff;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+
+        .contador {
+            padding: 1rem;
+            text-align: right;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            th, td {
+                padding: 0.4rem;
+                font-size: 0.7rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sistema de Control de Notas</h1>
+        <div class="contador" id="contador">Cargando datos...</div>
+        <div style="overflow-x: auto;">
+            <table id="tablaNotas">
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>TP1</th>
+                        <th>Eval1</th>
+                        <th>TP2</th>
+                        <th>Eval2</th>
+                        <th>TP3</th>
+                        <th>Eval3</th>
+                        <th>Proyecto</th>
+                        <th>Eval4</th>
+                        <th>Prom TP</th>
+                        <th>Prom Eval</th>
+                        <th>Nota Final</th>
+                        <th>Condición</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                    <tr><td colspan="14" class="loading">⏳ Cargando notas...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Supabase - CAMBIÁ ESTOS DATOS
+        const SUPABASE_URL = 'https://tusitio.supabase.co';  // Tu URL de Supabase
+        const SUPABASE_ANON_KEY = 'tu-clave-anonima';       // Tu clave anónima
+
+        // Crear cliente de Supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Función para obtener y mostrar datos
+        async function cargarNotas() {
+            const tbody = document.getElementById('cuerpoTabla');
+            const contador = document.getElementById('contador');
+            
+            try {
+                // Consultar datos de la tabla notas
+                const { data, error } = await supabaseClient
+                    .from('notas')
+                    .select('*')
+                    .order('id', { ascending: true });
+                
+                if (error) throw error;
+                
+                // Actualizar contador
+                contador.textContent = `📋 ${data.length} alumnos registrados`;
+                
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="14" class="error">📭 No hay alumnos registrados</td></tr>';
+                    return;
+                }
+                
+                // Limpiar tabla
+                tbody.innerHTML = '';
+                
+                // Mostrar cada alumno
+                data.forEach(alumno => {
+                    const row = tbody.insertRow();
+                    
+                    // Determinar clase CSS según condición
+                    const condicionClass = alumno.condicion === 'APROBADO' ? 'aprobado' : 'desaprobado';
+                    
+                    row.innerHTML = `
+                        <td>${alumno.id || ''}</td>
+                        <td style="text-align: left; font-weight: bold;">${alumno.nombre_alumno || ''}</td>
+                        <td>${alumno.tp1 ?? '-'}</td>
+                        <td>${alumno.eval1 ?? '-'}</td>
+                        <td>${alumno.tp2 ?? '-'}</td>
+                        <td>${alumno.eval2 ?? '-'}</td>
+                        <td>${alumno.tp3 ?? '-'}</td>
+                        <td>${alumno.eval3 ?? '-'}</td>
+                        <td>${alumno.proyecto ?? '-'}</td>
+                        <td>${alumno.eval4 ?? '-'}</td>
+                        <td>${alumno.promedio_tp ? alumno.promedio_tp.toFixed(2) : '-'}</td>
+                        <td>${alumno.promedio_eval ? alumno.promedio_eval.toFixed(2) : '-'}</td>
+                        <td>${alumno.nota_final ? alumno.nota_final.toFixed(2) : '-'}</td>
+                        <td class="${condicionClass}">${alumno.condicion || '-'}</td>
+                    `;
+                });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error al cargar datos: ${error.message}</td></tr>`;
+                contador.textContent = '⚠️ Error de conexión';
+            }
+        }
+        
+        // Cargar datos al abrir la página
+        cargarNotas();
+    </script>
+    
+    <!-- Incluir la librería de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</body>
+</html>
