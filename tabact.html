@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Entregas - Actividades</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #28a745;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #28a745;
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .entregado {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .no-entregado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            color: #28a745;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+
+        .contador {
+            padding: 1rem;
+            text-align: right;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .check {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            th, td {
+                padding: 0.4rem;
+                font-size: 0.7rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+                padding: 1rem;
+            }
+            .check {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Control de Entregas - Actividades 1 a 10</h1>
+        <div class="contador" id="contador">Cargando datos...</div>
+        <div style="overflow-x: auto;">
+            <table id="tablaEntregas">
+                <thead>
+                    <!-- Primera fila: alumnos -->
+                    <tr id="filaAlumnos">
+                        <th>ID</th>
+                        <th>ALUMNO</th>
+                        <th>Act1</th>
+                        <th>Act2</th>
+                        <th>Act3</th>
+                        <th>Act4</th>
+                        <th>Act5</th>
+                        <th>Act6</th>
+                        <th>Act7</th>
+                        <th>Act8</th>
+                        <th>Act9</th>
+                        <th>Act10</th>
+                    </tr>
+                    <!-- Segunda fila: fechas (cambiá los dd/mm por tus fechas) -->
+                    <tr style="background-color: #1e7e34;">
+                        <th style="background-color: #1e7e34;">#</th>
+                        <th style="background-color: #1e7e34;">-</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                    <tr><td colspan="12" class="loading">⏳ Cargando entregas...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Credenciales de Supabase (igual que entregar.html)
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
+        
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Lista de alumnos (igual que en entregar.html)
+        const alumnos = [
+            "ALENE", "BENITEZ", "CATA", "CENTURION", "COPA",
+            "DIAZ", "DUE", "ESCOBAR", "ESPERANZA", "GENES",
+            "IBANEZ", "LOBOS", "MAMANI", "MEDINA", "MELON",
+            "MONROETA", "PACO", "RAULTA", "PONCE", "QUINTANILLA",
+            "RUEDA", "SALAZAR", "TORREZ", "VALERO", "SOTELO"
+        ];
+
+        // Función para extraer el número de actividad del nombre del archivo
+        // Ejemplos: "act1.docx" → 1, "actividad_2.pdf" → 2, "tarea3.docx" → 3
+        function extraerNumeroActividad(nombreArchivo) {
+            if (!nombreArchivo) return null;
+            const match = nombreArchivo.match(/act(?:ividad)?[_\s]?(\d+)/i);
+            if (match) return parseInt(match[1]);
+            return null;
+        }
+
+        async function cargarEntregas() {
+            const tbody = document.getElementById('cuerpoTabla');
+            const contador = document.getElementById('contador');
+            
+            try {
+                console.log("Cargando entregas...");
+                
+                // Obtener todas las entregas
+                const { data: entregas, error } = await supabaseClient
+                    .from('entregas')
+                    .select('nombre_alumno, archivo_nombre')
+                    .not('archivo_nombre', 'is', null);
+                
+                if (error) throw error;
+                
+                console.log("Entregas encontradas:", entregas);
+                
+                // Crear un mapa: alumno -> [actividades entregadas]
+                const entregasPorAlumno = {};
+                
+                entregas.forEach(entrega => {
+                    const alumno = entrega.nombre_alumno?.toUpperCase();
+                    const archivo = entrega.archivo_nombre;
+                    const numAct = extraerNumeroActividad(archivo);
+                    
+                    if (alumno && numAct && numAct >= 1 && numAct <= 10) {
+                        if (!entregasPorAlumno[alumno]) {
+                            entregasPorAlumno[alumno] = new Set();
+                        }
+                        entregasPorAlumno[alumno].add(numAct);
+                    }
+                });
+                
+                // Contar entregas totales
+                let totalEntregas = 0;
+                for (const alumno in entregasPorAlumno) {
+                    totalEntregas += entregasPorAlumno[alumno].size;
+                }
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas registradas`;
+                
+                // Generar tabla
+                tbody.innerHTML = '';
+                
+                alumnos.forEach((alumno, index) => {
+                    const row = tbody.insertRow();
+                    const entregasAlumno = entregasPorAlumno[alumno] || new Set();
+                    
+                    // Columna ID
+                    const celdaId = row.insertCell(0);
+                    celdaId.textContent = index + 1;
+                    
+                    // Columna Alumno
+                    const celdaAlumno = row.insertCell(1);
+                    celdaAlumno.textContent = alumno;
+                    celdaAlumno.style.textAlign = 'left';
+                    celdaAlumno.style.fontWeight = 'bold';
+                    
+                    // Columnas de actividades 1 a 10
+                    for (let act = 1; act <= 10; act++) {
+                        const celda = row.insertCell(act + 1);
+                        if (entregasAlumno.has(act)) {
+                            celda.innerHTML = '<span class="check">✅</span>';
+                            celda.className = 'entregado';
+                        } else {
+                            celda.innerHTML = '❌';
+                            celda.className = 'no-entregado';
+                        }
+                    }
+                });
+                
+                if (alumnos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="12" class="error">📭 No hay alumnos registrados</td></tr>';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = `<tr><td colspan="12" class="error">❌ Error: ${error.message}</td></tr>`;
+                contador.textContent = '⚠️ Error de conexión';
+            }
+        }
+        
+        // Cargar datos al abrir la página
+        cargarEntregas();
+    </script>
+</body>
+</html>
