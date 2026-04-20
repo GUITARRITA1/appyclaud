@@ -108,8 +108,31 @@
                 max-width: 200px;
             }
         }
+        
+        .boton-chat {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.boton-chat img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.boton-chat img:hover {
+    transform: scale(1.1);
+}
     </style>
 </head>
+    
 <body>
     <div class="container">
         <!-- Logo centrado -->
@@ -128,5 +151,9 @@
 
         </div>
     </div>
+    
+    <button class="boton-chat" onclick="window.open('msn.html', '_blank')">
+    <img src="iconomsn.jpg" alt="Chat">
+</button>
 </body>
 </html>
