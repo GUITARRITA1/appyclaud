@@ -9,14 +9,21 @@
  <!-- primero mensaje emergente -->
 /* Modal de imagen */
 .modal-imagen {
-        display: none;
+    display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,0.9);
     z-index: 2000;
-    display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Cuando se muestra, con JavaScript se cambia display a flex */
+.modal-imagen.mostrar {
+    display: flex;
 }
 
 .modal-imagen-contenido {
@@ -104,14 +111,15 @@
 
  <!-- mns emergente -->
   <script>
-    function mostrarModalImg() {
-        document.getElementById('modalEmergente').style.display = 'flex';
-    }
-    
-    function cerrarModalImg() {
-        document.getElementById('modalEmergente').style.display = 'none';
-    }
-    
+   function mostrarModalImg() {
+    const modal = document.getElementById('modalEmergente');
+    modal.style.display = 'flex';  // ← Cambiar a flex, no block
+}
+
+function cerrarModalImg() {
+    const modal = document.getElementById('modalEmergente');
+    modal.style.display = 'none';
+}
     // Mostrar al cargar la página
     setTimeout(mostrarModalImg, 500);
 </script>
