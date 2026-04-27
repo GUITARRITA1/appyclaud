@@ -71,28 +71,33 @@
 
      <style>
         .ingresar-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            padding: 30px 80px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 0 auto;     /* ← Esto centra */
-
-        }
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 30px 80px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    display: block;        /* ← Cambiar de inline-block a block */
+    margin: 0 auto;        /* ← Ahora sí funciona */
+    width: fit-content;    /* ← Para que no ocupe todo el ancho */
+}
 
         .ingresar-btn:hover {
             transform: scale(1.05);
         }
     </style>
 </head>
- <!-- para el mensaje emergente -->
+<!-- para el boton ingresar -->
+  <div style="text-align: center;">
+    <a href="menu.html" class="ingresar-btn">INGRESAR</a>
+</div>
+  
+  <!-- para el mensaje emergente -->
   <div id="modalEmergente" class="modal-imagen">
     <div class="modal-imagen-contenido">
         <img src="emergente.jpg" alt="Información importante">
