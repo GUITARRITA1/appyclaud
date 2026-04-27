@@ -4,7 +4,57 @@
     <title>AppyClaud - Bienvenido</title>
 
     <style>
-  body {
+
+      
+      /* primero mensaje emergente*/
+/* Modal de imagen */
+.modal-imagen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-imagen-contenido {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-imagen-contenido img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+}
+
+.cerrar-modal-img {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.cerrar-modal-img:hover {
+    background: #e84118;
+}
+/* hasta aca para el menssaje emergente*/
+
+
+     
+      body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
@@ -38,7 +88,34 @@
         }
     </style>
 </head>
+  /* para el mensaje emergente */
+  <div id="modalEmergente" class="modal-imagen">
+    <div class="modal-imagen-contenido">
+        <img src="emergentes.jpg" alt="Información importante">
+        <br>
+        <button class="cerrar-modal-img" onclick="cerrarModalImg()">Cerrar</button>
+    </div>
+</div>
+ /* fin emergemte */
+  
 <body>
     <a href="inicio.html" class="ingresar-btn">INGRESAR</a>
 </body>
+
+  /* mns emergente */
+  <script>
+    function mostrarModalImg() {
+        document.getElementById('modalEmergente').style.display = 'flex';
+    }
+    
+    function cerrarModalImg() {
+        document.getElementById('modalEmergente').style.display = 'none';
+    }
+    
+    // Mostrar al cargar la página
+    setTimeout(mostrarModalImg, 500);
+</script>
+
+
+  
 </html>
