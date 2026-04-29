@@ -740,17 +740,18 @@ Actividad 4 falta DIBUJAR la cadena.`,
         };
 
         // Función para verificar si es tarde (comparando fecha_solo)
-        function esTarde(fechaSolo, fechaLimiteStr) {
-            if (!fechaSolo) return false;
-            
-            // fechaSolo viene como "YYYY-MM-DD"
-            const [anio, mes, dia] = fechaSolo.split('-').map(Number);
-            const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
-            
-            if (mes > mesLimite) return true;
-            if (mes === mesLimite && dia > diaLimite) return true;
-            return false;
-        }
+       function esTarde(fechaEntrega, fechaLimiteStr) {
+    if (!fechaEntrega) return false;
+    
+    // fechaEntrega viene como "2024-04-20" (DATE)
+    const [anio, mes, dia] = fechaEntrega.split('-').map(Number);
+    const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
+    
+    // Comparar
+    if (mes > mesLimite) return true;
+    if (mes === mesLimite && dia > diaLimite) return true;
+    return false;
+}
 
         // Función para obtener corrección de un alumno y tipo
         function obtenerCorreccion(alumno, tipo) {
@@ -839,6 +840,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
                     } else {
                         console.log(`  ❌ No match: ${alumnoOriginal} - ${tipoOriginal}`);
                     }
+                    console.log("EntregasMap:", entregasMap);
                 });
                 
                 // Contar entregas
@@ -862,32 +864,25 @@ Actividad 4 falta DIBUJAR la cadena.`,
                     celdaAlumno.style.fontWeight = 'bold';
                     
                     tiposEsperados.forEach(tipo => {
-                        const celda = row.insertCell();
-                        const info = entregasMap[alumno][tipo];
-                        const fechaLim = fechasLimite[tipo];
-                        const entregado = info.entregado;
-                        
-                        if (entregado) {
-                            const tarde = esTarde(info.fecha, fechaLim);
-                            if (tarde) {
-                                celda.innerHTML = '<span class="check">✅</span>';
-                                celda.className = 'entregado-tarde';
-                            } else {
-                                celda.innerHTML = '<span class="check">✅</span>';
-                                celda.className = 'entregado';
-                            }
-                            celda.style.cursor = 'pointer';
-                            celda.onclick = (function(a, t, e, esT) {
-                                return function() { mostrarModal(a, t, e, esT); };
-                            })(alumno, tipo, entregado, tarde);
-                        } else {
-                            celda.innerHTML = '❌';
-                            celda.className = 'no-entregado';
-                            celda.style.cursor = 'pointer';
-                            celda.onclick = (function(a, t, e, esT) {
-                                return function() { mostrarModal(a, t, e, false); };
-                            })(alumno, tipo, false, false);
-                        }
+    const celda = row.insertCell();
+    const info = entregasMap[alumno][tipo];
+    const fechaLim = fechasLimite[tipo];
+    const entregado = info.entregado;
+    
+    if (entregado) {
+        const tarde = esTarde(info.fecha, fechaLim);  // ← info.fecha es created_at
+        console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);  // ← Para debug
+        if (tarde) {
+            celda.innerHTML = '<span class="check">✅</span>';
+            celda.className = 'entregado-tarde';  // ← Amarillo
+        } else {
+            celda.innerHTML = '<span class="check">✅</span>';
+            celda.className = 'entregado';  // ← Verde
+        }
+    } else {
+        celda.innerHTML = '❌';
+        celda.className = 'no-entregado';
+    }
                     });
                 });
                 
