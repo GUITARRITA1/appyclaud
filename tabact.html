@@ -71,13 +71,16 @@
             color: #721c24;
             cursor: pointer;
         }
+        
         .entregado-tarde {
             background-color: #fff3cd;
             color: #856404;
             font-weight: bold;
             font-size: 1.2rem;
+            cursor: pointer;
         }
-        .entregado:hover, .no-entregado:hover {
+        
+        .entregado:hover, .no-entregado:hover, .entregado-tarde:hover {
             opacity: 0.8;
             transform: scale(1.02);
         }
@@ -108,7 +111,6 @@
             font-size: 1.3rem;
         }
 
-        /* Modal para mostrar correcciones */
         .modal {
             display: none;
             position: fixed;
@@ -121,6 +123,7 @@
             justify-content: center;
             align-items: center;
         }
+        
         .modal-content {
             background-color: white;
             padding: 20px;
@@ -130,6 +133,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             position: relative;
         }
+        
         .modal-header {
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
@@ -138,26 +142,32 @@
             justify-content: space-between;
             align-items: center;
         }
+        
         .modal-header h3 {
             margin: 0;
             color: #333;
         }
+        
         .modal-close {
             cursor: pointer;
             font-size: 24px;
             font-weight: bold;
             color: #999;
         }
+        
         .modal-close:hover {
             color: #333;
         }
+        
         .modal-body {
             margin-bottom: 20px;
             line-height: 1.5;
         }
+        
         .modal-footer {
             text-align: right;
         }
+        
         .modal-footer button {
             background-color: #28a745;
             color: white;
@@ -166,15 +176,18 @@
             border-radius: 6px;
             cursor: pointer;
         }
+        
         .modal-footer button:hover {
             background-color: #1e7e34;
         }
+        
         .correccion-texto {
             background-color: #fff9e6;
             padding: 12px;
             border-left: 4px solid #ffc107;
             margin-top: 10px;
             font-size: 0.95rem;
+            white-space: pre-wrap;
         }
 
         @media (max-width: 768px) {
@@ -202,7 +215,7 @@
         <div style="overflow-x: auto;">
             <table id="tablaEntregas">
                 <thead>
-                    <tr>
+                    </tr>
                         <th>ID</th>
                         <th>ALUMNO</th>
                         <th>Act1</th>
@@ -242,7 +255,6 @@
         </div>
     </div>
 
-    <!-- Modal para mostrar correcciones -->
     <div id="correccionModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -276,493 +288,29 @@
 
         const tiposEsperados = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6"];
 
-        // ============================================================
-        // CORRECCIONES - EDITAR ACA LOS TEXTOS (cambiar "xxx" por el texto deseado)
-        // ============================================================
-        const correcciones = {
-            "ALEGRE": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "ALEJO": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "BENITEZ": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "CALA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "CENTURION": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "CORIA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "DIAZM": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "DIAZU": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "DUE": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "ESCOBAR": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "ESPERANZA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "GENES": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "IBAÑEZ": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "LOBOS": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "MAMANI": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "MEDINA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "MELON": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "MONROETA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "MOLINA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "ORTIGOZA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "PACO": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "PERALTA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "PONCE": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "QUINTEROS": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "RIVAROLA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "RUEDA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "SALAZAR": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "SOTELO": {
-                "Act1": "Muy bien, Parcialmente, completar resto para aprobar.",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "TORRES": {
-                "Act1": `8! Muy Bien. A tener en cuenta: Pag.4 faltan transformaciones. 
-                            Luego: En casi todas falta E.Mecanica entre Quimica y Cinética.
-                            La Energia no se crea ni se destruye.`,
-                "Act2": `8! Muy bien. Idem anterior: Persona-quimica-Musculos-mecánica-Bicicleta-cinética.
-                            Control remoto-Eléctrica+Radiante por las ondas de frecuencia.
-                            Actividad 4 falta DIBUJAR la cadena.`,
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "VALENZUELA": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            },
-            "VILARUO": {
-                "Act1": "xxx",
-                "Act2": "xxx",
-                "Act3": "xxx",
-                "Act4": "xxx",
-                "Act5": "xxx",
-                "Act6": "xxx",
-                "Carp1": "xxx",
-                "Carp2": "xxx",
-                "Carp3": "xxx",
-                "Carp4": "xxx",
-                "Carp5": "xxx",
-                "Carp6": "xxx"
-            }
+        // Fechas límite
+        const fechasLimite = {
+            "Act1": "17/04", "Act2": "24/04", "Act3": "01/05", "Act4": "08/05", 
+            "Act5": "15/05", "Act6": "22/05", "Carp1": "12/05", "Carp2": "29/05", 
+            "Carp3": "10/06", "Carp4": "24/06", "Carp5": "08/07", "Carp6": "22/07"
         };
-// Fechas límite para cada actividad (dd/mm)
-const fechasLimite = {
-    "Act1": "17/04",
-    "Act2": "24/04",
-    "Act3": "01/05",
-    "Act4": "08/05",
-    "Act5": "15/05",
-    "Act6": "22/05",
-    "Carp1": "17/04",
-    "Carp2": "24/04",
-    "Carp3": "01/05",
-    "Carp4": "08/05",
-    "Carp5": "15/05",
-    "Carp6": "22/05"
-};
 
-// Función para comparar fechas
-function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
-    if (!fechaEntrega) return false;
-    
-    // Convertir fecha límite (dd/mm) a objeto Date (año actual)
-    const [dia, mes] = fechaLimiteStr.split('/');
-    const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
-    
-    // Convertir created_at a Date
-    const entrega = new Date(fechaEntrega);
-    
-    // Si la entrega es posterior a la fecha límite
-    return entrega > limite;
-}
-        
-        // Función para obtener corrección de un alumno y tipo
-        function obtenerCorreccion(alumno, tipo) {
-            if (correcciones[alumno] && correcciones[alumno][tipo]) {
-                let texto = correcciones[alumno][tipo];
-                if (texto !== "xxx") {
-                    return texto;
-                }
-            }
-            return "📝 Sin correcciones registradas para este trabajo. Revisar manualmente.";
+        // Función para verificar si es tarde
+        function esTarde(fechaEntrega, fechaLimiteStr) {
+            if (!fechaEntrega) return false;
+            const [dia, mes] = fechaLimiteStr.split('/');
+            const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
+            return new Date(fechaEntrega) > limite;
         }
 
-        // Funciones del modal
-        function mostrarModal(alumno, tipo, entregado) {
+        // Correcciones (simplificadas)
+        const correcciones = {};
+
+        function obtenerCorreccion(alumno, tipo) {
+            return "📝 Click para ver corrección del profesor.";
+        }
+
+        function mostrarModal(alumno, tipo, entregado, esTardeEntrega) {
             const modal = document.getElementById('correccionModal');
             const modalAlumno = document.getElementById('modalAlumno');
             const modalTipo = document.getElementById('modalTipo');
@@ -771,11 +319,16 @@ function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
             modalAlumno.textContent = alumno;
             modalTipo.textContent = tipo;
             
-            let correccion = obtenerCorreccion(alumno, tipo);
-            let estado = entregado ? "✅ ENTREGADO" : "❌ NO ENTREGADO";
+            let estadoTexto = "";
+            if (!entregado) {
+                estadoTexto = "❌ NO ENTREGADO";
+            } else if (esTardeEntrega) {
+                estadoTexto = "⚠️ ENTREGADO FUERA DE TÉRMINO";
+            } else {
+                estadoTexto = "✅ ENTREGADO EN TIEMPO Y FORMA";
+            }
             
-            modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estado}<br><br><strong>📝 Corrección/Comentario:</strong><br>${correccion}`;
-            
+            modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estadoTexto}<br><br><strong>📝 Corrección:</strong><br>${obtenerCorreccion(alumno, tipo)}`;
             modal.style.display = "flex";
         }
 
@@ -783,7 +336,6 @@ function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
             document.getElementById('correccionModal').style.display = "none";
         }
 
-        // Cerrar modal al hacer click fuera del contenido
         window.onclick = function(event) {
             const modal = document.getElementById('correccionModal');
             if (event.target === modal) {
@@ -798,44 +350,43 @@ function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
             try {
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
-                    .select('nombre_alumno, tipo');
+                    .select('nombre_alumno, tipo, created_at');
                 
                 if (error) throw error;
                 
                 console.log("Datos de Supabase:", entregas);
                 
-                // Crear mapa de entregas
+                // Inicializar mapa
                 const entregasMap = {};
                 alumnos.forEach(alumno => {
                     entregasMap[alumno] = {};
                     tiposEsperados.forEach(tipo => {
-                    entregasMap[alumno][tipo] = { entregado: false, fecha: null };                    });
+                        entregasMap[alumno][tipo] = { entregado: false, fecha: null };
+                    });
                 });
                 
                 // Marcar entregas
-              entregas.forEach(entrega => {
-    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
-    const tipoOriginal = entrega.tipo?.trim();
-    const fechaEntrega = entrega.created_at;
-    
-    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}", Fecha="${fechaEntrega}"`);
-    
-    if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
-        entregasMap[alumnoOriginal][tipoOriginal] = {
-            entregado: true,
-            fecha: fechaEntrega
-        };
-        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
-    } else {
-        console.log(`  ❌ No match: ${alumnoOriginal} - ${tipoOriginal}`);
-    }
-});
+                entregas.forEach(entrega => {
+                    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
+                    const tipoOriginal = entrega.tipo?.trim();
+                    const fechaEntrega = entrega.created_at;
+                    
+                    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}"`);
+                    
+                    if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
+                        entregasMap[alumnoOriginal][tipoOriginal] = {
+                            entregado: true,
+                            fecha: fechaEntrega
+                        };
+                        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal}`);
+                    }
+                });
                 
                 // Contar entregas
                 let totalEntregas = 0;
                 for (const alumno in entregasMap) {
                     for (const tipo in entregasMap[alumno]) {
-                        if (entregasMap[alumno][tipo]) totalEntregas++;
+                        if (entregasMap[alumno][tipo].entregado) totalEntregas++;
                     }
                 }
                 contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas | 🖱️ Click en ✅ o ❌ para ver corrección`;
@@ -852,36 +403,32 @@ function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
                     celdaAlumno.style.fontWeight = 'bold';
                     
                     tiposEsperados.forEach(tipo => {
-    const celda = row.insertCell();
-    const info = entregasMap[alumno][tipo];
-    const fechaLim = fechasLimite[tipo];
-    
-    if (info.entregado) {
-        // Verificar si entregó después de la fecha límite
-        if (esTarde(info.fecha, fechaLim)) {
-            celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado-tarde';
-        } else {
-            celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado';
-        }
-    } else {
-        celda.innerHTML = '❌';
-        celda.className = 'no-entregado';
-    }
-});
-                    function esTarde(fechaEntrega, fechaLimiteStr) {
-    if (!fechaEntrega) return false;
-    const [dia, mes] = fechaLimiteStr.split('/');
-    const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
-    return new Date(fechaEntrega) > limite;
-}
-                    
-                    // Agregar evento click a la celda
-                        celda.style.cursor = 'pointer';
-                        celda.onclick = (function(a, t, e) {
-                            return function() { mostrarModal(a, t, e); };
-                        })(alumno, tipo, entregado);
+                        const celda = row.insertCell();
+                        const info = entregasMap[alumno][tipo];
+                        const fechaLim = fechasLimite[tipo];
+                        const entregado = info.entregado;
+                        
+                        if (entregado) {
+                            const tarde = esTarde(info.fecha, fechaLim);
+                            if (tarde) {
+                                celda.innerHTML = '<span class="check">✅</span>';
+                                celda.className = 'entregado-tarde';
+                            } else {
+                                celda.innerHTML = '<span class="check">✅</span>';
+                                celda.className = 'entregado';
+                            }
+                            celda.style.cursor = 'pointer';
+                            celda.onclick = (function(a, t, e, esT) {
+                                return function() { mostrarModal(a, t, e, esT); };
+                            })(alumno, tipo, entregado, tarde);
+                        } else {
+                            celda.innerHTML = '❌';
+                            celda.className = 'no-entregado';
+                            celda.style.cursor = 'pointer';
+                            celda.onclick = (function(a, t, e, esT) {
+                                return function() { mostrarModal(a, t, e, false); };
+                            })(alumno, tipo, false, false);
+                        }
                     });
                 });
                 
