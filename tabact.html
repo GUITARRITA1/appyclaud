@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Entregas - Actividades y Carpetas</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #28a745;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #28a745;
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .entregado {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .no-entregado {
+            background-color: #f8d7da;
+            color: #721c24;
+            cursor: pointer;
+        }
+
+        .entregado:hover, .no-entregado:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            color: #28a745;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+
+        .contador {
+            padding: 1rem;
+            text-align: right;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .check {
+            font-size: 1.3rem;
+        }
+
+        /* Modal para mostrar correcciones */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .modal-header {
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            color: #999;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
+        .modal-body {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .modal-footer {
+            text-align: right;
+        }
+        .modal-footer button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .modal-footer button:hover {
+            background-color: #1e7e34;
+        }
+        .correccion-texto {
+            background-color: #fff9e6;
+            padding: 12px;
+            border-left: 4px solid #ffc107;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            th, td {
+                padding: 0.4rem;
+                font-size: 0.7rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+                padding: 1rem;
+            }
+            .check {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Control de Entregas - Actividades y Carpetas</h1>
+        <div class="contador" id="contador">Cargando datos...</div>
+        <div style="overflow-x: auto;">
+            <table id="tablaEntregas">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ALUMNO</th>
+                        <th>Act1</th>
+                        <th>Act2</th>
+                        <th>Act3</th>
+                        <th>Act4</th>
+                        <th>Act5</th>
+                        <th>Act6</th>
+                        <th>Carp1</th>
+                        <th>Carp2</th>
+                        <th>Carp3</th>
+                        <th>Carp4</th>
+                        <th>Carp5</th>
+                        <th>Carp6</th>
+                    </tr>
+                    <tr style="background-color: #1e7e34;">
+                        <th style="background-color: #1e7e34;">#</th>
+                        <th style="background-color: #1e7e34;">-</th>
+                        <th style="background-color: #1e7e34;">17/04</th>
+                        <th style="background-color: #1e7e34;">24/04</th>
+                        <th style="background-color: #1e7e34;">05/05</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">dd/mm</th>
+                        <th style="background-color: #1e7e34;">12/05</th>
+                        <th style="background-color: #1e7e34;">29/05</th>
+                        <th style="background-color: #1e7e34;">10/06</th>
+                        <th style="background-color: #1e7e34;">24/06</th>
+                        <th style="background-color: #1e7e34;">08/07</th>
+                        <th style="background-color: #1e7e34;">22/07</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                    <tr><td colspan="14" class="loading">⏳ Cargando entregas...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar correcciones -->
+    <div id="correccionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitulo">Corrección</h3>
+                <span class="modal-close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p><strong>Alumno:</strong> <span id="modalAlumno"></span></p>
+                <p><strong>Trabajo:</strong> <span id="modalTipo"></span></p>
+                <div id="modalCorreccion" class="correccion-texto"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="cerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
+        
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const alumnos = [
+            "ALEGRE", "ALEJO", "BENITEZ", "CAPA", "CENTURION", "CORIA",
+            "DIAZM", "DIAZU", "DUE", "ESCOBAR", "ESPERANZA", "GENES",
+            "IBAÑEZ", "LOBOS", "MAMANI", "MEDINA", "MELON",
+            "MONROETA", "MOLINA", "ORTIGOZA", "PACO", "PERALTA", "PONCE", "QUINTEROS",
+            "RIVAROLA", "RUEDA", "SALAZAR", "SOTELO", "TORRES", "VALENZUELA", "VILARUO"
+        ];
+
+        const tiposEsperados = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6"];
+
+        // ============================================================
+        // CORRECCIONES - EDITAR ACA LOS TEXTOS (cambiar "xxx" por el texto deseado)
+        // ============================================================
+        const correcciones = {
+            "ALEGRE": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "ALEJO": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "BENITEZ": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "CAPA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "CENTURION": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "CORIA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "DIAZM": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "DIAZU": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "DUE": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "ESCOBAR": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "ESPERANZA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "GENES": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "IBAÑEZ": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "LOBOS": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "MAMANI": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "MEDINA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "MELON": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "MONROETA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "MOLINA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "ORTIGOZA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "PACO": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "PERALTA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "PONCE": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "QUINTEROS": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "RIVAROLA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "RUEDA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "SALAZAR": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "SOTELO": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "TORRES": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "VALENZUELA": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            },
+            "VILARUO": {
+                "Act1": "xxx",
+                "Act2": "xxx",
+                "Act3": "xxx",
+                "Act4": "xxx",
+                "Act5": "xxx",
+                "Act6": "xxx",
+                "Carp1": "xxx",
+                "Carp2": "xxx",
+                "Carp3": "xxx",
+                "Carp4": "xxx",
+                "Carp5": "xxx",
+                "Carp6": "xxx"
+            }
+        };
+
+        // Función para obtener corrección de un alumno y tipo
+        function obtenerCorreccion(alumno, tipo) {
+            if (correcciones[alumno] && correcciones[alumno][tipo]) {
+                let texto = correcciones[alumno][tipo];
+                if (texto !== "xxx") {
+                    return texto;
+                }
+            }
+            return "📝 Sin correcciones registradas para este trabajo. Revisar manualmente.";
+        }
+
+        // Funciones del modal
+        function mostrarModal(alumno, tipo, entregado) {
+            const modal = document.getElementById('correccionModal');
+            const modalAlumno = document.getElementById('modalAlumno');
+            const modalTipo = document.getElementById('modalTipo');
+            const modalCorreccion = document.getElementById('modalCorreccion');
+            
+            modalAlumno.textContent = alumno;
+            modalTipo.textContent = tipo;
+            
+            let correccion = obtenerCorreccion(alumno, tipo);
+            let estado = entregado ? "✅ ENTREGADO" : "❌ NO ENTREGADO";
+            
+            modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estado}<br><br><strong>📝 Corrección/Comentario:</strong><br>${correccion}`;
+            
+            modal.style.display = "flex";
+        }
+
+        function cerrarModal() {
+            document.getElementById('correccionModal').style.display = "none";
+        }
+
+        // Cerrar modal al hacer click fuera del contenido
+        window.onclick = function(event) {
+            const modal = document.getElementById('correccionModal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        }
+
+        async function cargarEntregas() {
+            const tbody = document.getElementById('cuerpoTabla');
+            const contador = document.getElementById('contador');
+            
+            try {
+                const { data: entregas, error } = await supabaseClient
+                    .from('entregas')
+                    .select('nombre_alumno, tipo');
+                
+                if (error) throw error;
+                
+                console.log("Datos de Supabase:", entregas);
+                
+                // Crear mapa de entregas
+                const entregasMap = {};
+                alumnos.forEach(alumno => {
+                    entregasMap[alumno] = {};
+                    tiposEsperados.forEach(tipo => {
+                        entregasMap[alumno][tipo] = false;
+                    });
+                });
+                
+                // Marcar entregas
+                entregas.forEach(entrega => {
+                    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
+                    const tipoOriginal = entrega.tipo?.trim();
+                    
+                    if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
+                        entregasMap[alumnoOriginal][tipoOriginal] = true;
+                    }
+                });
+                
+                // Contar entregas
+                let totalEntregas = 0;
+                for (const alumno in entregasMap) {
+                    for (const tipo in entregasMap[alumno]) {
+                        if (entregasMap[alumno][tipo]) totalEntregas++;
+                    }
+                }
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas | 🖱️ Click en ✅ o ❌ para ver corrección`;
+                
+                // Generar tabla
+                tbody.innerHTML = '';
+                alumnos.forEach((alumno, idx) => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = idx + 1;
+                    
+                    const celdaAlumno = row.insertCell(1);
+                    celdaAlumno.textContent = alumno;
+                    celdaAlumno.style.textAlign = 'left';
+                    celdaAlumno.style.fontWeight = 'bold';
+                    
+                    tiposEsperados.forEach(tipo => {
+                        const celda = row.insertCell();
+                        const entregado = entregasMap[alumno][tipo];
+                        
+                        if (entregado) {
+                            celda.innerHTML = '<span class="check">✅</span>';
+                            celda.className = 'entregado';
+                        } else {
+                            celda.innerHTML = '❌';
+                            celda.className = 'no-entregado';
+                        }
+                        
+                        // Agregar evento click a la celda
+                        celda.style.cursor = 'pointer';
+                        celda.onclick = (function(a, t, e) {
+                            return function() { mostrarModal(a, t, e); };
+                        })(alumno, tipo, entregado);
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+                contador.textContent = '⚠️ Error de conexión';
+            }
+        }
+        
+        cargarEntregas();
+    </script>
+</body>
+</html>
