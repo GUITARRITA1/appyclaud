@@ -870,69 +870,65 @@ Actividad 4 falta DIBUJAR la cadena.`,
                 }
                 contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas | 🖱️ Click en ✅ o ❌ para ver corrección`;
                 
-                // Generar tabla
-                tbody.innerHTML = '';
-                alumnos.forEach((alumno, idx) => {
-                    const row = tbody.insertRow();
-                    row.insertCell(0).textContent = idx + 1;
-                    
-                    const celdaAlumno = row.insertCell(1);
-                    celdaAlumno.textContent = alumno;
-                    celdaAlumno.style.textAlign = 'left';
-                    celdaAlumno.style.fontWeight = 'bold';
-                    
-                   tiposEsperados.forEach(tipo => {
-    const celda = row.insertCell();
-    const info = entregasMap[alumno][tipo];
-    const fechaLim = fechasLimite[tipo];
-    const entregado = info.entregado;
+             // Generar tabla
+tbody.innerHTML = '';
+alumnos.forEach((alumno, idx) => {
+    const row = tbody.insertRow();
+    row.insertCell(0).textContent = idx + 1;
     
-    if (entregado) {
-        const tarde = esTarde(info.fecha, fechaLim);
-        console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
-        console.log(`🔍 DEBUG: ${alumno} - ${tipo}`);
-    console.log(`   fecha: ${info.fecha}`);
-    console.log(`   fechaLim: ${fechaLim}`);
-    console.log(`   tarde: ${tarde}`);
+    const celdaAlumno = row.insertCell(1);
+    celdaAlumno.textContent = alumno;
+    celdaAlumno.style.textAlign = 'left';
+    celdaAlumno.style.fontWeight = 'bold';
     
-        if (tarde) {
-            celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado-tarde';
-        } else {
-            celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado';
-        }
-        // ============================================
-        // AGREGAR ESTAS 2 LÍNEAS PARA EL CLICK
-        // ============================================
-        celda.style.cursor = 'pointer';
-        celda.onclick = (function(a, t, e, esT) {
-            return function() { mostrarModal(a, t, e, esT); };
-        })(alumno, tipo, entregado, tarde);
-        // ============================================
-    } else {
-        celda.innerHTML = '❌';
-        celda.className = 'no-entregado';
-        // ============================================
-        // AGREGAR ESTAS 2 LÍNEAS PARA EL CLICK
-        // ============================================
-        celda.style.cursor = 'pointer';
-        celda.onclick = (function(a, t, e, esT) {
-            return function() { mostrarModal(a, t, e, false); };
-        })(alumno, tipo, false, false);
-        // ============================================
-    }
-                   });
-                });
-                
-            } catch (error) {
-                console.error('Error:', error);
-                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></table>`;
-                contador.textContent = '⚠️ Error de conexión';
-            }
-        }
+    tiposEsperados.forEach(tipo => {
+        const celda = row.insertCell();
+        const info = entregasMap[alumno][tipo];
+        const fechaLim = fechasLimite[tipo];
+        const entregado = info.entregado;
         
-        cargarEntregas();
+        if (entregado) {
+            const tarde = esTarde(info.fecha, fechaLim);
+            console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
+            console.log(`🔍 DEBUG: ${alumno} - ${tipo}`);
+            console.log(`   fecha: ${info.fecha}`);
+            console.log(`   fechaLim: ${fechaLim}`);
+            console.log(`   tarde: ${tarde}`);
+            
+            if (tarde) {
+                celda.innerHTML = '<span class="check">✅</span>';
+                celda.className = 'entregado-tarde';
+            } else {
+                celda.innerHTML = '<span class="check">✅</span>';
+                celda.className = 'entregado';
+            }
+            celda.style.cursor = 'pointer';
+            celda.onclick = (function(a, t, e, esT) {
+                return function() { mostrarModal(a, t, e, esT); };
+            })(alumno, tipo, entregado, tarde);
+        } else {
+            celda.innerHTML = '❌';
+            celda.className = 'no-entregado';
+            celda.style.cursor = 'pointer';
+            celda.onclick = (function(a, t, e, esT) {
+                return function() { mostrarModal(a, t, e, false); };
+            })(alumno, tipo, false, false);
+        }
+    }); // ← cierra tiposEsperados.forEach
+}); // ← cierra alumnos.forEach
+
+// Calcular promedios o actualizar contador si es necesario
+// (no hay más código después de esto)
+
+} catch (error) {
+    console.error('Error:', error);
+    tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+    contador.textContent = '⚠️ Error de conexión';
+}
+}
+
+cargarEntregas();
+
     </script>
 </body>
 </html>
