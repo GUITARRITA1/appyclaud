@@ -296,13 +296,17 @@
         };
 
         // Función para verificar si es tarde
-        function esTarde(fechaEntrega, fechaLimiteStr) {
-            if (!fechaEntrega) return false;
-            const [dia, mes] = fechaLimiteStr.split('/');
-            const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
-            return new Date(fechaEntrega) > limite;
-        }
-
+       function esTarde(fechaSolo, fechaLimiteStr) {
+    if (!fechaSolo) return false;
+    
+    // fechaSolo viene como "2024-04-20"
+    const [anio, mes, dia] = fechaSolo.split('-').map(Number);
+    const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
+    
+    if (mes > mesLimite) return true;
+    if (mes === mesLimite && dia > diaLimite) return true;
+    return false;
+}
         // Correcciones (simplificadas)
         const correcciones = {};
 
@@ -348,9 +352,9 @@
             const contador = document.getElementById('contador');
             
             try {
-                const { data: entregas, error } = await supabaseClient
-                    .from('entregas')
-                    .select('nombre_alumno, tipo, created_at');
+              const { data: entregas, error } = await supabaseClient
+    .from('entregas')
+    .select('nombre_alumno, tipo, fecha_solo');
                 
                 if (error) throw error;
                 
