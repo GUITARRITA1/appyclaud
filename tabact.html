@@ -807,7 +807,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
             try {
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
-                    .select('nombre_alumno, tipo, fecha_solo');
+                    .select('nombre_alumno, tipo, created_at');
                 
                 if (error) throw error;
                 
@@ -826,8 +826,8 @@ Actividad 4 falta DIBUJAR la cadena.`,
                 entregas.forEach(entrega => {
                     const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
                     const tipoOriginal = entrega.tipo?.trim();
-                    const fechaEntrega = entrega.fecha_solo;
-                    
+                    const fechaEntrega = entrega.created_at;
+
                     console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}", Fecha="${fechaEntrega}"`);
                     
                     if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
