@@ -740,25 +740,25 @@ Actividad 4 falta DIBUJAR la cadena.`,
         };
 
         // Función para verificar si es tarde (comparando fecha_solo)
-  function esTarde(fechaEntrega, fechaLimiteStr) {
+ function esTarde(fechaEntrega, fechaLimiteStr) {
     if (!fechaEntrega) return false;
     
     console.log(`📅 Comparando: fechaEntrega=${fechaEntrega}, fechaLimiteStr=${fechaLimiteStr}`);
     
-    // Extraer día y mes de la fecha de entrega (formato "2026-04-29")
     const partes = fechaEntrega.split('-');
     const mesEntrega = parseInt(partes[1]);
     const diaEntrega = parseInt(partes[2]);
     
-    // Extraer día y mes del límite (formato "17/04")
     const partesLimite = fechaLimiteStr.split('/');
     const diaLimite = parseInt(partesLimite[0]);
     const mesLimite = parseInt(partesLimite[1]);
     
     console.log(`   mesEntrega=${mesEntrega}, diaEntrega=${diaEntrega}`);
     console.log(`   mesLimite=${mesLimite}, diaLimite=${diaLimite}`);
+    console.log(`   ¿mesEntrega > mesLimite? ${mesEntrega > mesLimite}`);
+    console.log(`   ¿mesEntrega === mesLimite? ${mesEntrega === mesLimite}`);
+    console.log(`   ¿diaEntrega > diaLimite? ${diaEntrega > diaLimite}`);
     
-    // Comparar
     if (mesEntrega > mesLimite) {
         console.log(`   → RESULTADO: true (mes mayor)`);
         return true;
