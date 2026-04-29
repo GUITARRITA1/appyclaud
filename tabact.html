@@ -740,16 +740,34 @@ Actividad 4 falta DIBUJAR la cadena.`,
         };
 
         // Función para verificar si es tarde (comparando fecha_solo)
-       function esTarde(fechaEntrega, fechaLimiteStr) {
+  function esTarde(fechaEntrega, fechaLimiteStr) {
     if (!fechaEntrega) return false;
     
-    // fechaEntrega viene como "2024-04-20" (DATE)
-    const [anio, mes, dia] = fechaEntrega.split('-').map(Number);
-    const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
+    console.log(`📅 Comparando: fechaEntrega=${fechaEntrega}, fechaLimiteStr=${fechaLimiteStr}`);
+    
+    // Extraer día y mes de la fecha de entrega (formato "2026-04-29")
+    const partes = fechaEntrega.split('-');
+    const mesEntrega = parseInt(partes[1]);
+    const diaEntrega = parseInt(partes[2]);
+    
+    // Extraer día y mes del límite (formato "17/04")
+    const partesLimite = fechaLimiteStr.split('/');
+    const diaLimite = parseInt(partesLimite[0]);
+    const mesLimite = parseInt(partesLimite[1]);
+    
+    console.log(`   mesEntrega=${mesEntrega}, diaEntrega=${diaEntrega}`);
+    console.log(`   mesLimite=${mesLimite}, diaLimite=${diaLimite}`);
     
     // Comparar
-    if (mes > mesLimite) return true;
-    if (mes === mesLimite && dia > diaLimite) return true;
+    if (mesEntrega > mesLimite) {
+        console.log(`   → RESULTADO: true (mes mayor)`);
+        return true;
+    }
+    if (mesEntrega === mesLimite && diaEntrega > diaLimite) {
+        console.log(`   → RESULTADO: true (mismo mes, día mayor)`);
+        return true;
+    }
+    console.log(`   → RESULTADO: false`);
     return false;
 }
 
@@ -872,6 +890,13 @@ Actividad 4 falta DIBUJAR la cadena.`,
     if (entregado) {
         const tarde = esTarde(info.fecha, fechaLim);
         console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
+        console.log(`🔍 DEBUG: ${alumno} - ${tipo}`);
+    console.log(`   fecha: ${info.fecha}`);
+    console.log(`   fechaLim: ${fechaLim}`);
+    console.log(`   tarde: ${tarde}`);
+    // ...
+}
+        
         if (tarde) {
             celda.innerHTML = '<span class="check">✅</span>';
             celda.className = 'entregado-tarde';
