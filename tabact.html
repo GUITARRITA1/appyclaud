@@ -215,7 +215,7 @@
         <div style="overflow-x: auto;">
             <table id="tablaEntregas">
                 <thead>
-                    </tr>
+                    <tr>
                         <th>ID</th>
                         <th>ALUMNO</th>
                         <th>Act1</th>
@@ -249,7 +249,7 @@
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
-                    <tr><td colspan="14" class="loading">⏳ Cargando entregas...</td></tr>
+                    <tr><td colspan="14" class="loading">⏳ Cargando entregas... RuSdquo;
                 </tbody>
             </table>
         </div>
@@ -288,32 +288,483 @@
 
         const tiposEsperados = ["Act1", "Act2", "Act3", "Act4", "Act5", "Act6", "Carp1", "Carp2", "Carp3", "Carp4", "Carp5", "Carp6"];
 
-        // Fechas límite
+        // Fechas límite para cada actividad
         const fechasLimite = {
             "Act1": "17/04", "Act2": "24/04", "Act3": "01/05", "Act4": "08/05", 
             "Act5": "15/05", "Act6": "22/05", "Carp1": "12/05", "Carp2": "29/05", 
             "Carp3": "10/06", "Carp4": "24/06", "Carp5": "08/07", "Carp6": "22/07"
         };
 
-        // Función para verificar si es tarde
-       function esTarde(fechaSolo, fechaLimiteStr) {
-    if (!fechaSolo) return false;
-    
-    // fechaSolo viene como "2024-04-20"
-    const [anio, mes, dia] = fechaSolo.split('-').map(Number);
-    const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
-    
-    if (mes > mesLimite) return true;
-    if (mes === mesLimite && dia > diaLimite) return true;
-    return false;
-}
-        // Correcciones (simplificadas)
-        const correcciones = {};
+        // ============================================================
+        // CORRECCIONES - EDITAR ACA LOS TEXTOS
+        // ============================================================
+        const correcciones = {
+           const correcciones = {
+    "ALEGRE": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "ALEJO": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "BENITEZ": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "CALA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "CENTURION": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "CORIA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "DIAZM": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "DIAZU": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "DUE": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "ESCOBAR": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "ESPERANZA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "GENES": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "IBAÑEZ": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "LOBOS": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "MAMANI": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "MEDINA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "MELON": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "MONROETA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "MOLINA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "ORTIGOZA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "PACO": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "PERALTA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "PONCE": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "QUINTEROS": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "RIVAROLA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "RUEDA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "SALAZAR": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "SOTELO": {
+        "Act1": `Muy bien, Parcialmente, completar resto para aprobar.`,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "TORRES": {
+        "Act1": `8! Muy Bien. A tener en cuenta: Pag.4 faltan transformaciones. 
+Luego: En casi todas falta E.Mecanica entre Quimica y Cinética. 
+La Energia no se crea ni se destruye.`,
+        "Act2": `8! Muy bien. Idem anterior: Persona-quimica-Musculos-mecánica-Bicicleta-cinética. 
+Control remoto-Eléctrica+Radiante por las ondas de frecuencia. 
+Actividad 4 falta DIBUJAR la cadena.`,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "VALENZUELA": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    },
+    "VILARUO": {
+        "Act1": ``,
+        "Act2": ``,
+        "Act3": ``,
+        "Act4": ``,
+        "Act5": ``,
+        "Act6": ``,
+        "Carp1": ``,
+        "Carp2": ``,
+        "Carp3": ``,
+        "Carp4": ``,
+        "Carp5": ``,
+        "Carp6": ``
+    }
+        };
 
-        function obtenerCorreccion(alumno, tipo) {
-            return "📝 Click para ver corrección del profesor.";
+        // Función para verificar si es tarde (comparando fecha_solo)
+        function esTarde(fechaSolo, fechaLimiteStr) {
+            if (!fechaSolo) return false;
+            
+            // fechaSolo viene como "YYYY-MM-DD"
+            const [anio, mes, dia] = fechaSolo.split('-').map(Number);
+            const [diaLimite, mesLimite] = fechaLimiteStr.split('/').map(Number);
+            
+            if (mes > mesLimite) return true;
+            if (mes === mesLimite && dia > diaLimite) return true;
+            return false;
         }
 
+        // Función para obtener corrección de un alumno y tipo
+        function obtenerCorreccion(alumno, tipo) {
+            if (correcciones[alumno] && correcciones[alumno][tipo]) {
+                let texto = correcciones[alumno][tipo];
+                if (texto !== "xxx") {
+                    return texto;
+                }
+            }
+            return "📝 Sin correcciones registradas para este trabajo. Revisar manualmente.";
+        }
+
+        // Funciones del modal
         function mostrarModal(alumno, tipo, entregado, esTardeEntrega) {
             const modal = document.getElementById('correccionModal');
             const modalAlumno = document.getElementById('modalAlumno');
@@ -323,16 +774,19 @@
             modalAlumno.textContent = alumno;
             modalTipo.textContent = tipo;
             
-            let estadoTexto = "";
+            let correccion = obtenerCorreccion(alumno, tipo);
+            let estado = "";
+            
             if (!entregado) {
-                estadoTexto = "❌ NO ENTREGADO";
+                estado = "❌ NO ENTREGADO";
             } else if (esTardeEntrega) {
-                estadoTexto = "⚠️ ENTREGADO FUERA DE TÉRMINO";
+                estado = "⚠️ ENTREGADO FUERA DE TÉRMINO";
             } else {
-                estadoTexto = "✅ ENTREGADO EN TIEMPO Y FORMA";
+                estado = "✅ ENTREGADO EN TIEMPO Y FORMA";
             }
             
-            modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estadoTexto}<br><br><strong>📝 Corrección:</strong><br>${obtenerCorreccion(alumno, tipo)}`;
+            modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estado}<br><br><strong>📝 Corrección/Comentario:</strong><br>${correccion.replace(/\n/g, '<br>')}`;
+            
             modal.style.display = "flex";
         }
 
@@ -352,15 +806,15 @@
             const contador = document.getElementById('contador');
             
             try {
-              const { data: entregas, error } = await supabaseClient
-    .from('entregas')
-    .select('nombre_alumno, tipo, fecha_solo');
+                const { data: entregas, error } = await supabaseClient
+                    .from('entregas')
+                    .select('nombre_alumno, tipo, fecha_solo');
                 
                 if (error) throw error;
                 
                 console.log("Datos de Supabase:", entregas);
                 
-                // Inicializar mapa
+                // Crear mapa de entregas
                 const entregasMap = {};
                 alumnos.forEach(alumno => {
                     entregasMap[alumno] = {};
@@ -373,16 +827,18 @@
                 entregas.forEach(entrega => {
                     const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
                     const tipoOriginal = entrega.tipo?.trim();
-                    const fechaEntrega = entrega.created_at;
+                    const fechaEntrega = entrega.fecha_solo;
                     
-                    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}"`);
+                    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}", Fecha="${fechaEntrega}"`);
                     
                     if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
                         entregasMap[alumnoOriginal][tipoOriginal] = {
                             entregado: true,
                             fecha: fechaEntrega
                         };
-                        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal}`);
+                        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
+                    } else {
+                        console.log(`  ❌ No match: ${alumnoOriginal} - ${tipoOriginal}`);
                     }
                 });
                 
@@ -438,7 +894,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></table>`;
                 contador.textContent = '⚠️ Error de conexión';
             }
         }
