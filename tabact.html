@@ -71,7 +71,12 @@
             color: #721c24;
             cursor: pointer;
         }
-
+        .entregado-tarde {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
         .entregado:hover, .no-entregado:hover {
             opacity: 0.8;
             transform: scale(1.02);
@@ -714,7 +719,37 @@
                 "Carp6": "xxx"
             }
         };
+// Fechas límite para cada actividad (dd/mm)
+const fechasLimite = {
+    "Act1": "17/04",
+    "Act2": "24/04",
+    "Act3": "01/05",
+    "Act4": "08/05",
+    "Act5": "15/05",
+    "Act6": "22/05",
+    "Carp1": "17/04",
+    "Carp2": "24/04",
+    "Carp3": "01/05",
+    "Carp4": "08/05",
+    "Carp5": "15/05",
+    "Carp6": "22/05"
+};
 
+// Función para comparar fechas
+function esEntregadoTarde(fechaEntrega, fechaLimiteStr) {
+    if (!fechaEntrega) return false;
+    
+    // Convertir fecha límite (dd/mm) a objeto Date (año actual)
+    const [dia, mes] = fechaLimiteStr.split('/');
+    const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
+    
+    // Convertir created_at a Date
+    const entrega = new Date(fechaEntrega);
+    
+    // Si la entrega es posterior a la fecha límite
+    return entrega > limite;
+}
+        
         // Función para obtener corrección de un alumno y tipo
         function obtenerCorreccion(alumno, tipo) {
             if (correcciones[alumno] && correcciones[alumno][tipo]) {
@@ -774,19 +809,27 @@
                 alumnos.forEach(alumno => {
                     entregasMap[alumno] = {};
                     tiposEsperados.forEach(tipo => {
-                        entregasMap[alumno][tipo] = false;
-                    });
+                    entregasMap[alumno][tipo] = { entregado: false, fecha: null };                    });
                 });
                 
                 // Marcar entregas
-                entregas.forEach(entrega => {
-                    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
-                    const tipoOriginal = entrega.tipo?.trim();
-                    
-                    if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
-                        entregasMap[alumnoOriginal][tipoOriginal] = true;
-                    }
-                });
+              entregas.forEach(entrega => {
+    const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
+    const tipoOriginal = entrega.tipo?.trim();
+    const fechaEntrega = entrega.created_at;
+    
+    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}", Fecha="${fechaEntrega}"`);
+    
+    if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
+        entregasMap[alumnoOriginal][tipoOriginal] = {
+            entregado: true,
+            fecha: fechaEntrega
+        };
+        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
+    } else {
+        console.log(`  ❌ No match: ${alumnoOriginal} - ${tipoOriginal}`);
+    }
+});
                 
                 // Contar entregas
                 let totalEntregas = 0;
@@ -809,18 +852,32 @@
                     celdaAlumno.style.fontWeight = 'bold';
                     
                     tiposEsperados.forEach(tipo => {
-                        const celda = row.insertCell();
-                        const entregado = entregasMap[alumno][tipo];
-                        
-                        if (entregado) {
-                            celda.innerHTML = '<span class="check">✅</span>';
-                            celda.className = 'entregado';
-                        } else {
-                            celda.innerHTML = '❌';
-                            celda.className = 'no-entregado';
-                        }
-                        
-                        // Agregar evento click a la celda
+    const celda = row.insertCell();
+    const info = entregasMap[alumno][tipo];
+    const fechaLim = fechasLimite[tipo];
+    
+    if (info.entregado) {
+        // Verificar si entregó después de la fecha límite
+        if (esTarde(info.fecha, fechaLim)) {
+            celda.innerHTML = '<span class="check">✅</span>';
+            celda.className = 'entregado-tarde';
+        } else {
+            celda.innerHTML = '<span class="check">✅</span>';
+            celda.className = 'entregado';
+        }
+    } else {
+        celda.innerHTML = '❌';
+        celda.className = 'no-entregado';
+    }
+});
+                    function esTarde(fechaEntrega, fechaLimiteStr) {
+    if (!fechaEntrega) return false;
+    const [dia, mes] = fechaLimiteStr.split('/');
+    const limite = new Date(new Date().getFullYear(), parseInt(mes) - 1, parseInt(dia));
+    return new Date(fechaEntrega) > limite;
+}
+                    
+                    // Agregar evento click a la celda
                         celda.style.cursor = 'pointer';
                         celda.onclick = (function(a, t, e) {
                             return function() { mostrarModal(a, t, e); };
