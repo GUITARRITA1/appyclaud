@@ -863,27 +863,43 @@ Actividad 4 falta DIBUJAR la cadena.`,
                     celdaAlumno.style.textAlign = 'left';
                     celdaAlumno.style.fontWeight = 'bold';
                     
-                    tiposEsperados.forEach(tipo => {
+                   tiposEsperados.forEach(tipo => {
     const celda = row.insertCell();
     const info = entregasMap[alumno][tipo];
     const fechaLim = fechasLimite[tipo];
     const entregado = info.entregado;
     
     if (entregado) {
-        const tarde = esTarde(info.fecha, fechaLim);  // ← info.fecha es created_at
-        console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);  // ← Para debug
+        const tarde = esTarde(info.fecha, fechaLim);
+        console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
         if (tarde) {
             celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado-tarde';  // ← Amarillo
+            celda.className = 'entregado-tarde';
         } else {
             celda.innerHTML = '<span class="check">✅</span>';
-            celda.className = 'entregado';  // ← Verde
+            celda.className = 'entregado';
         }
+        // ============================================
+        // AGREGAR ESTAS 2 LÍNEAS PARA EL CLICK
+        // ============================================
+        celda.style.cursor = 'pointer';
+        celda.onclick = (function(a, t, e, esT) {
+            return function() { mostrarModal(a, t, e, esT); };
+        })(alumno, tipo, entregado, tarde);
+        // ============================================
     } else {
         celda.innerHTML = '❌';
         celda.className = 'no-entregado';
+        // ============================================
+        // AGREGAR ESTAS 2 LÍNEAS PARA EL CLICK
+        // ============================================
+        celda.style.cursor = 'pointer';
+        celda.onclick = (function(a, t, e, esT) {
+            return function() { mostrarModal(a, t, e, false); };
+        })(alumno, tipo, false, false);
+        // ============================================
     }
-                    });
+                   });
                 });
                 
             } catch (error) {
