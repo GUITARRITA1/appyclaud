@@ -743,31 +743,17 @@ Actividad 4 falta DIBUJAR la cadena.`,
  function esTarde(fechaEntrega, fechaLimiteStr) {
     if (!fechaEntrega) return false;
     
-    console.log(`📅 Comparando: fechaEntrega=${fechaEntrega}, fechaLimiteStr=${fechaLimiteStr}`);
+    console.log(`🔍 ${fechaEntrega} vs ${fechaLimiteStr}`);
     
     const partes = fechaEntrega.split('-');
     const mesEntrega = parseInt(partes[1]);
     const diaEntrega = parseInt(partes[2]);
-    
     const partesLimite = fechaLimiteStr.split('/');
     const diaLimite = parseInt(partesLimite[0]);
     const mesLimite = parseInt(partesLimite[1]);
     
-    console.log(`   mesEntrega=${mesEntrega}, diaEntrega=${diaEntrega}`);
-    console.log(`   mesLimite=${mesLimite}, diaLimite=${diaLimite}`);
-    console.log(`   ¿mesEntrega > mesLimite? ${mesEntrega > mesLimite}`);
-    console.log(`   ¿mesEntrega === mesLimite? ${mesEntrega === mesLimite}`);
-    console.log(`   ¿diaEntrega > diaLimite? ${diaEntrega > diaLimite}`);
-    
-    if (mesEntrega > mesLimite) {
-        console.log(`   → RESULTADO: true (mes mayor)`);
-        return true;
-    }
-    if (mesEntrega === mesLimite && diaEntrega > diaLimite) {
-        console.log(`   → RESULTADO: true (mismo mes, día mayor)`);
-        return true;
-    }
-    console.log(`   → RESULTADO: false`);
+    if (mesEntrega > mesLimite) return true;
+    if (mesEntrega === mesLimite && diaEntrega > diaLimite) return true;
     return false;
 }
 
