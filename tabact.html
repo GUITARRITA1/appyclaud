@@ -838,8 +838,8 @@ Actividad 4 falta DIBUJAR la cadena.`,
                     if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
                         entregasMap[alumnoOriginal][tipoOriginal] = {
                             entregado: true,
-                            fecha: fechaEntrega
-                            nota: entregas.NOTA  // ← AGREGAR ESTA LÍNEA
+                            fecha: fechaEntrega,
+                            nota: entrega.NOTA  // ← AGREGAR ESTA LÍNEA
                         };
                         console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
                     } else {
