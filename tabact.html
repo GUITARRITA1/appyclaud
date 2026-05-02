@@ -897,7 +897,7 @@ alumnos.forEach((alumno, idx) => {
         if (info.entregado && info.nota && typeof info.nota === 'number') {
             suma += info.nota;
             count++;
-            console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, cantidad=${cantidad}`);        }
+            console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, count=${count}`);        }
         
         if (entregado) {
             const tarde = esTarde(info.fecha, fechaLim);
@@ -931,7 +931,7 @@ alumnos.forEach((alumno, idx) => {
         }
     }); // ← cierra tiposEsperados.forEach
 
-    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, count=${cantidad}, promedio/12=${suma/12}`);
+    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, count=${count}, promedio/12=${suma/12}`);
 
     
     // ============================================
