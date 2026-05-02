@@ -896,7 +896,7 @@ alumnos.forEach((alumno, idx) => {
         // Acumular para el promedio
         if (info.entregado && info.nota && typeof info.nota === 'number') {
             suma += info.nota;
-            cantidad++;
+            count++;
             console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, cantidad=${cantidad}`);        }
         
         if (entregado) {
