@@ -752,6 +752,41 @@ Actividad 4 falta DIBUJAR la cadena.`,
     }
         };
 
+        // NOTAS DE PARTICIPACIÓN - EDITAR MANUALMENTE
+const notasParticipacion = {
+    "ALEGRE": 0,
+    "ALEJO": 0,
+    "BENITEZ": 0,
+    "CALA": 0,
+    "CENTURION": 0,
+    "CORIA": 0,
+    "DIAZM": 0,
+    "DIAZU": 0,
+    "DUE": 0,
+    "ESCOBAR": 0,
+    "ESPERANZA": 0,
+    "GENES": 0,
+    "IBAÑEZ": 0,
+    "LOBOS": 0,
+    "MAMANI": 0,
+    "MEDINA": 0,
+    "MELON": 0,
+    "MONROETA": 0,
+    "MOLINA": 0,
+    "ORTIGOZA": 0,
+    "PACO": 0,
+    "PERALTA": 0,
+    "PONCE": 0,
+    "QUINTEROS": 0,
+    "RIVAROLA": 0,
+    "RUEDA": 0,
+    "SALAZAR": 0,
+    "SOTELO": 0,
+    "TORRES": 0,
+    "VALENZUELA": 0,
+    "VILARUO": 0
+};
+        
         // Función para verificar si es tarde (comparando fecha_solo)
  function esTarde(fechaEntrega, fechaLimiteStr) {
     if (!fechaEntrega) return false;
@@ -943,10 +978,17 @@ alumnos.forEach((alumno, idx) => {
     celdaPromedio.style.backgroundColor = '#f8f9fa';
     celdaPromedio.style.fontWeight = 'bold';
     celdaPromedio.style.textAlign = 'center';
+
+    // Celda de Participación
+const celdaParticip = row.insertCell();
+const notaParticip = notasParticipacion[alumno] || 0;
+celdaParticip.textContent = notaParticip > 0 ? notaParticip : '--';
+celdaParticip.style.backgroundColor = '#f8f9fa';
+celdaParticip.style.fontWeight = 'bold';
+celdaParticip.style.textAlign = 'center';
     
 }); // ← cierra alumnos.forEach
-// Calcular promedios o actualizar contador si es necesario
-// (no hay más código después de esto)
+
 
 } catch (error) {
     console.error('Error:', error);
