@@ -811,7 +811,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
             
             try {
                 const { data: entregas, error } = await supabaseClient
-                    .from('entregas')
+                    .from('entregas')  // ← Nombre de la tabla en Supabase
                     .select('nombre_alumno, tipo, created_at, NOTA');
                 
                 if (error) throw error;
