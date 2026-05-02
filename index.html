@@ -103,7 +103,14 @@
     </div>
 </div>
 <!-- fin emergemte -->
-  
+ <!-- Segundo Modal -->
+<div id="modalEmergente2" class="modal-imagen">
+    <div class="modal-imagen-contenido">
+        <img src="emergente2.jpg" alt="Información importante">
+        <br>
+        <button class="cerrar-modal-img" onclick="cerrarModalImg2()">Cerrar</button>
+    </div>
+</div> 
 <body>
     <a href="inicio.html" class="ingresar-btn">INGRESAR</a>
 </body>
@@ -118,7 +125,15 @@
 function cerrarModalImg() {
     const modal = document.getElementById('modalEmergente');
     modal.style.display = 'none';
+// Mostrar segundo modal después de cerrar el primero
+    const modal2 = document.getElementById('modalEmergente2');
+    modal2.style.display = 'flex';
 }
+    function cerrarModalImg2() {
+    const modal2 = document.getElementById('modalEmergente2');
+    modal2.style.display = 'none';
+}
+
     // Mostrar al cargar la página
     setTimeout(mostrarModalImg, 500);
 </script>
