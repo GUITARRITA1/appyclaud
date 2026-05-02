@@ -1007,7 +1007,15 @@ celdaConceptual.textContent = conceptual > 0 ? conceptual.toFixed(2) : '--';
 celdaConceptual.style.backgroundColor = '#f8f9fa';
 celdaConceptual.style.fontWeight = 'bold';
 celdaConceptual.style.textAlign = 'center';
-    
+    // AGREGAR FONDO VERDE SI Conceptual >= 7
+// ============================================
+if (conceptual >= 7) {
+    celdaConceptual.style.backgroundColor = '#d4edda';  // Verde
+    celdaConceptual.style.color = '#155724';
+} else {
+    celdaConceptual.style.backgroundColor = '#f8f9fa';  // Gris claro
+    celdaConceptual.style.color = '#333';
+}
 }); // ← cierra alumnos.forEach
 
 
