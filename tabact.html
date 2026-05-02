@@ -812,7 +812,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
             try {
                 const { data: entregas, error } = await supabaseClient
                     .from('entregas')
-                    .select('nombre_alumno, tipo, created_at');
+                    .select('nombre_alumno, tipo, created_at, NOTA');
                 
                 if (error) throw error;
                 
@@ -839,7 +839,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
                         entregasMap[alumnoOriginal][tipoOriginal] = {
                             entregado: true,
                             fecha: fechaEntrega
-                            nota: entrega.nota  // ← AGREGAR ESTA LÍNEA
+                            nota: entrega.NOTA  // ← AGREGAR ESTA LÍNEA
                         };
                         console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
                     } else {
