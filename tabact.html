@@ -896,8 +896,8 @@ alumnos.forEach((alumno, idx) => {
         // Acumular para el promedio
         if (info.entregado && info.nota && typeof info.nota === 'number') {
             suma += info.nota;
-            count++;
-        }
+            cantidad++;
+            console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, cantidad=${cantidad}`);        }
         
         if (entregado) {
             const tarde = esTarde(info.fecha, fechaLim);
@@ -930,6 +930,9 @@ alumnos.forEach((alumno, idx) => {
             })(alumno, tipo, false, false);
         }
     }); // ← cierra tiposEsperados.forEach
+
+    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, cantidad=${cantidad}, promedio/12=${suma/12}`);
+
     
     // ============================================
     // AGREGAR CELDA DE PROMEDIO (después de todas las actividades)
