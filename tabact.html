@@ -839,6 +839,7 @@ Actividad 4 falta DIBUJAR la cadena.`,
                         entregasMap[alumnoOriginal][tipoOriginal] = {
                             entregado: true,
                             fecha: fechaEntrega
+                            nota: entrega.NOTA  // ← AGREGAR ESTA LÍNEA
                         };
                         console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
                     } else {
@@ -868,38 +869,42 @@ alumnos.forEach((alumno, idx) => {
     celdaAlumno.style.fontWeight = 'bold';
     
     tiposEsperados.forEach(tipo => {
-        const celda = row.insertCell();
-        const info = entregasMap[alumno][tipo];
-        const fechaLim = fechasLimite[tipo];
-        const entregado = info.entregado;
+    const celda = row.insertCell();
+    const info = entregasMap[alumno][tipo];
+    const fechaLim = fechasLimite[tipo];
+    const entregado = info.entregado;
+    
+    if (entregado) {
+        const tarde = esTarde(info.fecha, fechaLim);
+        console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
         
-        if (entregado) {
-            const tarde = esTarde(info.fecha, fechaLim);
-            console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
-            console.log(`🔍 DEBUG: ${alumno} - ${tipo}`);
-            console.log(`   fecha: ${info.fecha}`);
-            console.log(`   fechaLim: ${fechaLim}`);
-            console.log(`   tarde: ${tarde}`);
-            
-            if (tarde) {
-                celda.innerHTML = '<span class="check">✅</span>';
-                celda.className = 'entregado-tarde';
-            } else {
-                celda.innerHTML = '<span class="check">✅</span>';
-                celda.className = 'entregado';
-            }
-            celda.style.cursor = 'pointer';
-            celda.onclick = (function(a, t, e, esT) {
-                return function() { mostrarModal(a, t, e, esT); };
-            })(alumno, tipo, entregado, tarde);
+        // Asignar contenido (número o tilde)
+        if (info.nota && info.nota > 0) {
+            celda.innerHTML = info.nota;  // Muestra el número
         } else {
-            celda.innerHTML = '❌';
-            celda.className = 'no-entregado';
-            celda.style.cursor = 'pointer';
-            celda.onclick = (function(a, t, e, esT) {
-                return function() { mostrarModal(a, t, e, false); };
-            })(alumno, tipo, false, false);
+            celda.innerHTML = '<span class="check">✅</span>';  // Muestra tilde
         }
+        
+        // Asignar clase según si es tarde o no
+        if (tarde) {
+            celda.className = 'entregado-tarde';
+        } else {
+            celda.className = 'entregado';
+        }
+        
+        celda.style.cursor = 'pointer';
+        celda.onclick = (function(a, t, e, esT) {
+            return function() { mostrarModal(a, t, e, esT); };
+        })(alumno, tipo, entregado, tarde);
+    } else {
+        celda.innerHTML = '❌';
+        celda.className = 'no-entregado';
+        celda.style.cursor = 'pointer';
+        celda.onclick = (function(a, t, e, esT) {
+            return function() { mostrarModal(a, t, e, false); };
+        })(alumno, tipo, false, false);
+    }
+});
     }); // ← cierra tiposEsperados.forEach
 }); // ← cierra alumnos.forEach
 
