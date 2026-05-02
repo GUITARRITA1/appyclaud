@@ -986,6 +986,27 @@ celdaParticip.textContent = notaParticip > 0 ? notaParticip : '--';
 celdaParticip.style.backgroundColor = '#f8f9fa';
 celdaParticip.style.fontWeight = 'bold';
 celdaParticip.style.textAlign = 'center';
+
+    // Celda Conceptual (promedio entre Prom(A+C) y Particip)
+const celdaConceptual = row.insertCell();
+let conceptual = 0;
+const promAC = promedio > 0 ? promedio : 0;
+const notaPart = notaParticip > 0 ? notaParticip : 0;
+
+if (promAC > 0 && notaPart > 0) {
+    conceptual = (promAC + notaPart) / 2;
+} else if (promAC > 0) {
+    conceptual = promAC;
+} else if (notaPart > 0) {
+    conceptual = notaPart;
+} else {
+    conceptual = 0;
+}
+
+celdaConceptual.textContent = conceptual > 0 ? conceptual.toFixed(2) : '--';
+celdaConceptual.style.backgroundColor = '#f8f9fa';
+celdaConceptual.style.fontWeight = 'bold';
+celdaConceptual.style.textAlign = 'center';
     
 }); // ← cierra alumnos.forEach
 
