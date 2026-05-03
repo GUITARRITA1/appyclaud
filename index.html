@@ -116,28 +116,27 @@
 </body>
 
  <!-- mns emergente -->
-  <script>
-   function mostrarModalImg() {
-    const modal = document.getElementById('modalEmergente');
-    modal.style.display = 'flex';  // ← Cambiar a flex, no block
+<script>
+  let paso = 1;
+
+function mostrarModalImg() {
+    if (paso === 1) {
+        document.getElementById('modalEmergente').style.display = 'flex';
+    }
 }
 
 function cerrarModalImg() {
-    const modal = document.getElementById('modalEmergente');
-    modal.style.display = 'none';
-// Mostrar segundo modal después de cerrar el primero
-    const modal2 = document.getElementById('modalEmergente2');
-    modal2.style.display = 'flex';
-}
-    function cerrarModalImg2() {
-    const modal2 = document.getElementById('modalEmergente2');
-    modal2.style.display = 'none';
+    document.getElementById('modalEmergente').style.display = 'none';
+    paso = 2;
+    document.getElementById('modalEmergente2').style.display = 'flex';
 }
 
-    // Mostrar al cargar la página
-    setTimeout(mostrarModalImg, 500);
+function cerrarModalImg2() {
+    document.getElementById('modalEmergente2').style.display = 'none';
+}
+
+setTimeout(mostrarModalImg, 500);
+
 </script>
-
-
   
 </html>
