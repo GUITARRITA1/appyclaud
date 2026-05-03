@@ -107,11 +107,11 @@
 </div>
 <!-- fin emergemte -->
  <!-- Segundo Modal -->
-<div id="2modalEmergente" class="modal-imagen">
+<div id="modal2Emergente" class="modal-imagen">
     <div class="modal-imagen-contenido">
         <img src="emergente2.png" alt="Información importante">
         <br>
-        <button class="cerrar-modal-img" onclick="2cerrarModalImg()">Cerrar</button>
+        <button class="cerrar-modal-img" onclick="cerrar2ModalImg()">Cerrar</button>
     </div>
 </div> 
 
@@ -125,11 +125,11 @@
 
 function cerrarModalImg() {
     document.getElementById('modalEmergente').style.display = 'none';
-    document.getElementById('2modalEmergente').style.display = 'flex'; 
+    document.getElementById('modal2Emergente').style.display = 'flex'; 
 }
 
-function 2cerrarModalImg() {
-    document.getElementById('2modalEmergente').style.display = 'none';
+function cerrar2ModalImg() {
+    document.getElementById('modal2Emergente').style.display = 'none';
 }
 
     // Iniciar la secuencia cuando la página cargue
