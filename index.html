@@ -116,27 +116,47 @@
 </body>
 
  <!-- mns emergente -->
-<script>
-  let paso = 1;
 
-function mostrarModalImg() {
-    if (paso === 1) {
-        document.getElementById('modalEmergente').style.display = 'flex';
+ <script>
+    // Variable de control: 1 = primer modal, 2 = segundo modal, 3 = finalizado
+    let paso = 1;
+    // Bandera para evitar aperturas múltiples del segundo modal
+    let segundoAbierto = false;
+
+    function mostrarModalImg() {
+        // Solo mostrar el primer modal si estamos en el paso 1
+        if (paso === 1) {
+            const modal = document.getElementById('modalEmergente');
+            if (modal) modal.style.display = 'flex';
+        }
     }
-}
 
-function cerrarModalImg() {
-    document.getElementById('modalEmergente').style.display = 'none';
-    paso = 2;
-    document.getElementById('modalEmergente2').style.display = 'flex';
-}
+    function cerrarModalImg() {
+        // Solo procesar el cierre si aún estamos en el paso 1
+        if (paso === 1) {
+            // Ocultar el primer modal
+            const modal = document.getElementById('modalEmergente');
+            if (modal) modal.style.display = 'none';
+            
+            // Cambiar al paso 2 y abrir el segundo modal, solo si no se ha abierto antes
+            if (!segundoAbierto) {
+                paso = 2;
+                segundoAbierto = true;
+                const modal2 = document.getElementById('modalEmergente2');
+                if (modal2) modal2.style.display = 'flex';
+            }
+        }
+    }
 
-function cerrarModalImg2() {
-    document.getElementById('modalEmergente2').style.display = 'none';
-}
+    function cerrarModalImg2() {
+        // Cerrar el segundo modal y finalizar la secuencia
+        const modal2 = document.getElementById('modalEmergente2');
+        if (modal2) modal2.style.display = 'none';
+        paso = 3; // Secuencia finalizada
+    }
 
-setTimeout(mostrarModalImg, 500);
-
+    // Iniciar la secuencia cuando la página cargue
+    setTimeout(mostrarModalImg, 500);
 </script>
   
 </html>
