@@ -1190,12 +1190,22 @@ alumnos.forEach((alumno, idx) => {
     }
     // AGREGAR ONCLICK PARA VER CORRECCIÓN
     celda.style.cursor = 'pointer';
-    celda.onclick = (function(a, t) {
+   celda.onclick = (function(a, t, v) {
         return function() { 
-            // Para E1 a E6, no hay entregado ni esTardeEntrega
-            mostrarModal(a, t, true, false); 
+            // Si es +, está entregado y aprobado
+            if (v === "+") {
+                mostrarModalConEstado(a, t, true, false, "ENTREGADO EN TIEMPO Y FORMA");
+            } 
+            // Si es - , está entregado pero pendiente
+            else if (v === "-") {
+                mostrarModalConEstado(a, t, true, false, "ENTREGADO PENDIENTE DE CORRECCIÓN");
+            }
+            // Si es X, A, o cualquier otro, NO entregado
+            else {
+                mostrarModalConEstado(a, t, false, false, "NO ENTREGADO");
+            }
         };
-    })(alumno, tipo);
+    })(alumno, tipo, valor);
         // No seguir ejecutando el resto del código para estas celdas
         return;
 }
