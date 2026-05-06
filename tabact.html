@@ -1080,7 +1080,23 @@ const notasParticipacion = {
             
             modal.style.display = "flex";
         }
-
+// AGREGAR ESTA FUNCIÓN PARA E1 A E6
+function mostrarModalConEstado(alumno, tipo, entregado, esTardeEntrega, estadoTexto) {
+    const modal = document.getElementById('correccionModal');
+    const modalAlumno = document.getElementById('modalAlumno');
+    const modalTipo = document.getElementById('modalTipo');
+    const modalCorreccion = document.getElementById('modalCorreccion');
+    
+    modalAlumno.textContent = alumno;
+    modalTipo.textContent = tipo;
+    
+    let correccion = obtenerCorreccion(alumno, tipo);
+    
+    modalCorreccion.innerHTML = `<strong>Estado:</strong> ${estadoTexto}<br><br><strong>📝 Corrección/Comentario:</strong><br>${correccion.replace(/\n/g, '<br>')}`;
+    
+    modal.style.display = "flex";
+}
+//fin e1 a e6
         function cerrarModal() {
             document.getElementById('correccionModal').style.display = "none";
         }
