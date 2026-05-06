@@ -1210,15 +1210,15 @@ alumnos.forEach((alumno, idx) => {
         return function() { 
             // Si es +, está entregado y aprobado
             if (v === "+") {
-                mostrarModalConEstado(a, t, true, false, "ENTREGADO EN TIEMPO Y FORMA");
+                mostrarModalConEstado(a, t, true, false, "🌞🌞🌞🌞🌞ENTREGADO EN TIEMPO Y FORMA");
             } 
-            // Si es - , está entregado pero pendiente
-            else if (v === "-") {
-                mostrarModalConEstado(a, t, true, false, "ENTREGADO PENDIENTE DE CORRECCIÓN");
+            // Si es X , está no entregado ppresente
+            else if (v === "X") {
+                mostrarModalConEstado(a, t, true, false, "🪫🪫🪫🪫NO ENTREGO TRABAJO EN CLASE");
             }
-            // Si es X, A, o cualquier otro, NO entregado
+            // Si es A, o cualquier otro, NO entregado
             else {
-                mostrarModalConEstado(a, t, false, false, "NO ENTREGADO");
+                mostrarModalConEstado(a, t, false, false, "⛈️⛈️⛈️AUSENTE");
             }
         };
     })(alumno, tipo, valor);
