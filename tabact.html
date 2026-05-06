@@ -1174,6 +1174,20 @@ alumnos.forEach((alumno, idx) => {
     celda.style.backgroundColor = "#fff9e6";
     celda.style.fontWeight = "bold";
               celda.style.textAlign = "center";
+            // Colores según el valor
+    if (valor === "x" || valor === "X") {
+        celda.style.backgroundColor = "#ffcccc";  // Rojo claro
+        celda.style.color = "#cc0000";
+    } else if (valor === "+") {
+        celda.style.backgroundColor = "#ccffcc";  // Verde claro
+        celda.style.color = "#006600";
+    } else if (valor === "-") {
+        celda.style.backgroundColor = "#fff3cd";  // Amarillo claro
+        celda.style.color = "#856404";
+    } else {
+        celda.style.backgroundColor = "#e9ecef";  // Gris
+        celda.style.color = "#666";
+    }
         // No seguir ejecutando el resto del código para estas celdas
         return;
 }
