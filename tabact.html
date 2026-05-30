@@ -1507,14 +1507,14 @@ alumnos.forEach((alumno, idx) => {
         }
     }); // ← cierra tiposEsperados.forEach
 
-    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, count=${count}, promedio/12=${suma/12}`);
+    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, count=${count}, promedio/18=${suma/18}`);
 
     
     // ============================================
     // AGREGAR CELDA DE PROMEDIO (después de todas las actividades)
     // ============================================
     const celdaPromedio = row.insertCell();
-    const promedio = count > 0 ? suma / 12 : 0;  // Dividir por 12 (6 Act + 6 Carp)
+    const promedio = count > 0 ? suma / 18 : 0;  // Dividir por 18 (12 Act + 6 Carp)
     celdaPromedio.textContent = promedio > 0 ? promedio.toFixed(2) : '--';
     celdaPromedio.style.backgroundColor = '#f8f9fa';
     celdaPromedio.style.fontWeight = 'bold';
