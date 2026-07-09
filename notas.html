@@ -126,7 +126,7 @@
                         <th>Eval4</th>
                         <th>Prom TP</th>
                         <th>Prom Eval</th>
-                        <th>Concep</th>
+                        <th>conceptual</th>
                         <th>Nota Final</th>
                         <th>Condición</th>
                     </tr>
@@ -212,7 +212,7 @@
                         <td>${alumno.eval4 ?? '-'}</td>
                         <td>${alumno.promedio_tp ? alumno.promedio_tp.toFixed(2) : '-'}</td>
                         <td>${alumno.promedio_eval ? alumno.promedio_eval.toFixed(2) : '-'}</td>
-                        <td>${alumno.Concep ?? '-'}</td>
+                        <td>${alumno.conceptual ?? '-'}</td>
                         <td>${alumno.nota_final ? alumno.nota_final.toFixed(2) : '-'}</td>
                         <td class="${condicionClass}">${alumno.condicion || '-'}</td>
                     `;
