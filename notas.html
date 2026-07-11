@@ -213,7 +213,7 @@
                         <td>${alumno.promedio_tp ? alumno.promedio_tp.toFixed(2) : '-'}</td>
                         <td>${alumno.promedio_eval ? alumno.promedio_eval.toFixed(2) : '-'}</td>
                         <td>${alumno.conceptual ?? '-'}</td>
-                        <td>${alumno.nota_final ? alumno.nota_final.toFixed(2) : '-'}</td>
+                        <td style="font-weight: bold;">${alumno.nota_final ? alumno.nota_final.toFixed(2) : '-'}</td>
                         <td class="${condicionClass}">${alumno.condicion || '-'}</td>
                     `;
                 });
