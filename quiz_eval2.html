@@ -224,7 +224,7 @@
             "alumno9": "ESPERANZA",
             "INTERCAMBIO": "GENES",
             "TRANSFERENCIA": "IBAÑEZ",
-            "MAGNITUD": "LOBOS",
+            "MAGNITUDES": "LOBOS",
             "CLIMA": "MAMANI",
             "FUSION": "MEDINA",
             "CINETICA": "MELON",
@@ -345,7 +345,7 @@
 
             // Verificar si ya realizó el quiz (eval2 tiene nota)
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('notas')
                     .select('eval2')
                     .eq('nombre_alumno', alumnoActual)
@@ -463,7 +463,7 @@
     // Guardar en Supabase
     try {
         // 1. Guardar en respuestas_quiz (una fila con las 10 respuestas + nota)
-        const { error: errorResp } = await supabase
+        const { error: errorResp } = await supabaseClient
             .from('respuestas_quiz')
             .insert({
                 nombre_alumno: alumnoActual,
@@ -490,7 +490,7 @@
         }
 
         // 2. Actualizar eval2 en la tabla notas
-        const { error: errorNota } = await supabase
+        const { error: errorNota } = await supabaseClient
             .from('notas')
             .update({ eval2: nota })
             .eq('nombre_alumno', alumnoActual);
