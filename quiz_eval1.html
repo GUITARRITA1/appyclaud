@@ -185,7 +185,7 @@
 
         <!-- Área de Login -->
         <div id="loginArea" class="login-area">
-            <input type="text" id="nombreAlumno" placeholder="Tu nombre (ej: ALEGRE)" autocomplete="off">
+            <input type="text" id="nombreAlumno" placeholder="Tu nombre (ej: CLAUDIOO)" autocomplete="off">
             <input type="password" id="claveAlumno" placeholder="Tu código (ej: clave)" autocomplete="off">
             <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario.</button>
             <div id="loginError" class="error-msg">❌ Código o nombre incorrecto. O ya realizaste el quiz.</div>
@@ -344,11 +344,11 @@
             alumnoActual = nombreEsperado;
             errorDiv.style.display = 'none';
 
-            // Verificar si ya realizó el quiz (eval2 tiene nota)
+            // Verificar si ya realizó el quiz (eval1 tiene nota)
             try {
                 const { data, error } = await supabaseClient
                     .from('notas')
-                    .select('eval2')
+                    .select('eval1')
                     .eq('nombre_alumno', alumnoActual)
                     .single();
 
@@ -356,7 +356,7 @@
                     console.error('Error al verificar:', error);
                 }
 
-                if (data && data.eval2 !== null && data.eval2 !== undefined && data.eval2 !== 0) {
+                if (data && data.eval1 !== null && data.eval1 !== undefined && data.eval1 !== 0) {
                     yaRealizo = true;
                     document.getElementById('loginArea').style.display = 'none';
                     document.getElementById('quizArea').style.display = 'block';
@@ -364,7 +364,7 @@
                     document.getElementById('resultadoQuiz').className = 'resultado resultado-ya-realizado';
                     document.getElementById('resultadoQuiz').innerHTML = `
                         <h3>📌 Ya realizaste este quiz</h3>
-                        <p>Tu calificación: <strong>${data.eval2}</strong></p>
+                        <p>Tu calificación: <strong>${data.eval1}</strong></p>
                         <p>Solo se permite una única entrega por alumno.</p>
                     `;
                     document.querySelector('.btn-enviar').style.display = 'none';
@@ -459,14 +459,14 @@
 
     if (!confirm(`¿Seguro que querés enviar? . Solo se permite una entrega.`)) {
         return;
-        // Tu nota sería ${nota}/10
+        // Tu nota sería ${nota}/10     ESTO VA EN !confirm(......
     }
 
     // Guardar en Supabase
     try {
         // 1. Guardar en respuestas_quiz (una fila con las 10 respuestas + nota)
         const { error: errorResp } = await supabaseClient
-            .from('respuestas_quiz')
+            .from('quiz1')
             .insert({
                 nombre_alumno: alumnoActual,
                 r1: respuestas[0],
@@ -494,7 +494,7 @@
         // 2. Actualizar eval2 en la tabla notas
         const { error: errorNota } = await supabaseClient
             .from('notas')
-            .update({ eval2: nota })
+            .update({ eval1: nota })
             .eq('nombre_alumno', alumnoActual);
 
         if (errorNota) throw errorNota;
