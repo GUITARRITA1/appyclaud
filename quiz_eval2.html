@@ -310,7 +310,8 @@
         // ============================================
         // FUNCIÓN PARA INICIAR EL QUIZ
         // ============================================
-        window.iniciarQuiz = async function() {
+        async function iniciarQuiz() {
+   //  NO VA..   window.iniciarQuiz = async function() {
             const nombre = document.getElementById('nombreAlumno').value.trim().toUpperCase();
             const clave = document.getElementById('claveAlumno').value.trim();
             const errorDiv = document.getElementById('loginError');
