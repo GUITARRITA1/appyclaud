@@ -441,11 +441,7 @@
             alert(`Respondé la pregunta ${i+1} antes de enviar.`);
             break;
         }
-        respuestas.push({
-            pregunta: i + 1,
-            seleccionada: seleccionada,
-            correcta: preguntas[i].correcta
-        });
+        respuestas.push(seleccionada);
     }
 
     if (!todasRespondidas) return;
@@ -453,7 +449,7 @@
     // Calcular nota
     let correctas = 0;
     for (let i = 0; i < preguntas.length; i++) {
-        if (respuestas[i].seleccionada === preguntas[i].correcta) {
+        if (respuestas[i] === preguntas[i].correcta) {
             correctas++;
         }
     }
@@ -464,28 +460,42 @@
         return;
     }
 
-    // Guardar en Supabase (nota en eval2)
+    // Guardar en Supabase
     try {
-        // Guardar nota
+        // 1. Guardar en respuestas_quiz (una fila con las 10 respuestas + nota)
+        const { error: errorResp } = await supabase
+            .from('respuestas_quiz')
+            .insert({
+                nombre_alumno: alumnoActual,
+                r1: respuestas[0],
+                r2: respuestas[1],
+                r3: respuestas[2],
+                r4: respuestas[3],
+                r5: respuestas[4],
+                r6: respuestas[5],
+                r7: respuestas[6],
+                r8: respuestas[7],
+                r9: respuestas[8],
+                r10: respuestas[9],
+                nota: nota
+            });
+
+        if (errorResp) {
+            // Si el error es por duplicado (el alumno ya existe)
+            if (errorResp.code === '23505') {
+                alert('❌ Ya realizaste este quiz. No se permite rehacerlo.');
+                return;
+            }
+            throw errorResp;
+        }
+
+        // 2. Actualizar eval2 en la tabla notas
         const { error: errorNota } = await supabase
             .from('notas')
             .update({ eval2: nota })
             .eq('nombre_alumno', alumnoActual);
 
         if (errorNota) throw errorNota;
-
-        // Guardar respuestas detalladas
-        for (let i = 0; i < respuestas.length; i++) {
-            const { error: errorResp } = await supabase
-                .from('respuestas_quiz')
-                .insert({
-                    nombre_alumno: alumnoActual,
-                    pregunta_num: respuestas[i].pregunta,
-                    respuesta_seleccionada: respuestas[i].seleccionada,
-                    respuesta_correcta: respuestas[i].correcta
-                });
-            if (errorResp) console.error('Error al guardar respuesta:', errorResp);
-        }
 
         yaRealizo = true;
         const resultadoDiv = document.getElementById('resultadoQuiz');
@@ -496,7 +506,6 @@
             <p>Tu calificación: <strong>${nota}/10</strong></p>
             <p>${nota >= 7 ? '🎉 ¡Aprobado!' : '📚 Podés mejorar. Revisá los temas.'}</p>
             <p><small>Resultado guardado en tu historial.</small></p>
-            <button onclick="verMisRespuestas()" style="margin-top:10px; padding:8px 16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">📋 Ver mis respuestas</button>
         `;
         document.querySelector('.btn-enviar').style.display = 'none';
 
@@ -505,28 +514,6 @@
         alert('❌ Error al guardar el resultado. Intentá de nuevo.');
     }
 };
-
-// Función para ver respuestas guardadas (como profesor)
-async function verMisRespuestas() {
-    if (!alumnoActual) return;
-    const { data, error } = await supabase
-        .from('respuestas_quiz')
-        .select('*')
-        .eq('nombre_alumno', alumnoActual)
-        .order('pregunta_num', { ascending: true });
-
-    if (error) {
-        alert('Error al recuperar respuestas.');
-        return;
-    }
-
-    let mensaje = '📋 Tus respuestas:\n\n';
-    data.forEach(r => {
-        const correcta = r.respuesta_seleccionada === r.respuesta_correcta ? '✅' : '❌';
-        mensaje += `Pregunta ${r.pregunta_num}: ${correcta}\n`;
-    });
-    alert(mensaje);
-}
         // ============================================
         // ENTER PARA INICIAR
         // ============================================
