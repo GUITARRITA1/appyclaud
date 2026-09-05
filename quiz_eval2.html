@@ -456,8 +456,9 @@
 
     const nota = Math.round((correctas / preguntas.length) * 10);
 
-    if (!confirm(`¿Seguro que querés enviar? Tu nota sería ${nota}/10. Solo se permite una entrega.`)) {
+    if (!confirm(`¿Seguro que querés enviar? . Solo se permite una entrega.`)) {
         return;
+        // Tu nota sería ${nota}/10
     }
 
     // Guardar en Supabase
