@@ -464,9 +464,9 @@
 
     // Guardar en Supabase
     try {
-        // 1. Guardar en respuestas_quiz (una fila con las 10 respuestas + nota)
+        // 1. Guardar en quiz2 (una fila con las 10 respuestas + nota)
         const { error: errorResp } = await supabaseClient
-            .from('respuestas_quiz')
+            .from('quiz2')
             .insert({
                 nombre_alumno: alumnoActual,
                 r1: respuestas[0],
