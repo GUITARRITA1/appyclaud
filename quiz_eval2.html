@@ -562,13 +562,25 @@
         yaRealizo = true;
         const resultadoDiv = document.getElementById('resultadoQuiz');
         resultadoDiv.style.display = 'block';
-        resultadoDiv.className = 'resultado resultado-exito';
-        resultadoDiv.innerHTML = `
-            <h3>✅ ¡Quiz completado!</h3>
-            <p>Tu calificación: <strong>${nota}</strong></p>
-            <p>${nota >= 7 ? '🎉 ¡Aprobado!' : '📚 Podés mejorar. Revisá los temas.'}</p>
-            <p><small>Resultado guardado en tu historial.</small></p>
-        `;
+     
+        
+if (nota >= 7) {
+    resultadoDiv.className = 'resultado resultado-exito';
+    resultadoDiv.innerHTML = `
+        <h3>✅ ¡Quiz completado!</h3>
+        <p>Tu calificación: <strong>${nota}</strong></p>
+        <p>🎉 ¡Aprobado!</p>
+        <p><small>Resultado guardado en tu historial.</small></p>
+    `;
+} else {
+    resultadoDiv.className = 'resultado resultado-error';
+    resultadoDiv.innerHTML = `
+        <h3>❌ Quiz completado</h3>
+        <p>Tu calificación: <strong>${nota}</strong></p>
+        <p>📚 No alcanzaste el 7. Podés mejorar revisando los temas.</p>
+        <p><small>Resultado guardado en tu historial.</small></p>
+    `;
+}
         document.querySelector('.btn-enviar').style.display = 'none';
 
     } catch (error) {
