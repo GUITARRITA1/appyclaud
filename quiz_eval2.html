@@ -505,7 +505,7 @@
         }
     }
 
-    const nota = ((correctas / preguntas.length) * 10);
+    const nota = Math.round((correctas / preguntas.length) * 10);
 
     if (!confirm(`¿Seguro que querés enviar? . Solo se permite una entrega.`)) {
         return;
