@@ -298,9 +298,59 @@
                 correcta: 3
             },
             {
-                pregunta: "10. Con calculadora y entregar en clase las cuentas: Se tiene 1 metro de cable de cobre (L=1m) de 1 milimetro cuadrado de sección (S=1mm^2) en Serie a otro de 2 metros y misma sección. ¿Cual es el Voltaje si q1=5C durante 1 hora?",
-                opciones: ["1,42×10^(−4) V", "1,45×10^(−6) V", "1,5×10^(−8) V", "1,9×10^(−1) V"],
+                pregunta: "10. Una o mas cargas, o un campo eléctrico variable...",
+                opciones: ["Son conceptos de otra materia", "No se relacionan", "Producen cargas puntuales", "Producen una fuente de voltaje"],
+                correcta: 3
+            },
+            {
+                pregunta: "11. ¿Como viajan los electrones en un circuito de Pila?",
+                opciones: ["En todas direcciones", "Del núcleo a los saltos de niveles", "De polo positivo a negativo", "De polo negativo a positivo"],
+                correcta: 3
+            },
+           {
+                pregunta: "12. La Pila...",
+                opciones: ["Es una fuente contínua de energía eléctrica", "Es una fuente alterna de energía eléctrica", "No es una fuente", "Ninguna de las anteriores"],
                 correcta: 0
+            },
+            {
+                pregunta: "13. La Resistencia de un material depende de:",
+                opciones: ["El color de los cables", "La magnitud de cargas", "Dimensiones del conductor y tipo de material", "Solo del tipo de material"],
+                correcta: 2
+            },
+            {
+                pregunta: "14. La Ley de Ohm dice que el voltaje es",
+                opciones: ["Ohm x metro", "Ampére x Ohm", "Coulomb x metro", "Ohm x Segundo"],
+                correcta: 1
+            },
+            {
+                pregunta: "15. En Resistencias en serie, la Corriente Eléctrica total...",
+                opciones: ["Es la suma de todas las corrientes", "Se divide por la carga total", "Es igual en cada Resistencia", "Es igual al voltaje"],
+                correcta: 2
+            },
+            {
+                pregunta: "16. En Resistencias en serie, la Resistencia Equivalente total...",
+                opciones: ["Es la suma de las resistencias", "Es la resta de las resistencias", "Es la Resistencia menor", "Es la Resistencia mayor"],
+                correcta: 0
+            },
+             {
+                pregunta: "17. En Resistencias en paralelo, la Corriente Eléctrica total...",
+                opciones: ["Es la suma de corriente en cada resistencia", "Es la resta de corriente en cada resistencia", "Es la Corriente menor", "Es la Corriente mayor"],
+                correcta: 0
+            },
+            {
+                pregunta: "18. En el hogar en Argentina tenemos que utilizar...",
+                opciones: ["220 volts, y una térmica", "110 volts, y un disyuntor", "12 volts con disyuntor y termica", "220 volts con disyuntor y térmica"],
+                correcta: 3
+            },
+            {
+                pregunta: "19. Al igual que la Potencia Mecánica estudiada en unidades anteriores, la Potencia Eléctrica tambien es Energía en función del tiempo: P=VxI",
+                opciones: ["kiloVolts = Ohm x Joule", "Watts = Volts x Ampére", "Joule = Ampére x Ohm", "Ninguna"],
+                correcta: 1
+            },
+            {
+                pregunta: "20. Todo lo visto mas Energía de cada aparato eléctrico y Energía Solar, al aplicarlo al Trabajo Práctico N°2....",
+                opciones: ["Me ayudará a calcular el Consumo Eléctrico total de mi casa", "Me concientizará del gasto innecesario de algunos electrodomésticos", "Me ayudará a la hora de elegir un nuevo equipo y su costo energético", "Todas las anteriores"],
+                correcta: 3
             }
         ];
 
@@ -455,11 +505,11 @@
         }
     }
 
-    const nota = Math.round((correctas / preguntas.length) * 10);
+    const nota = Math.round((correctas / preguntas.length) * 20);
 
     if (!confirm(`¿Seguro que querés enviar? . Solo se permite una entrega.`)) {
         return;
-        // Tu nota sería ${nota}/10
+        // Tu nota sería ${nota}/20
     }
 
     // Guardar en Supabase
@@ -479,7 +529,17 @@
                 r8: respuestas[7],
                 r9: respuestas[8],
                 r10: respuestas[9],
-                nota: nota
+                 r11: respuestas[10],
+                r12: respuestas[11],
+                r13: respuestas[12],
+                r14: respuestas[13],
+                r15: respuestas[14],
+                r16: respuestas[15],
+                r17: respuestas[16],
+                r18: respuestas[17],
+                r19: respuestas[18],
+                r20: respuestas[19],
+               nota: nota
             });
 
         if (errorResp) {
@@ -505,7 +565,7 @@
         resultadoDiv.className = 'resultado resultado-exito';
         resultadoDiv.innerHTML = `
             <h3>✅ ¡Quiz completado!</h3>
-            <p>Tu calificación: <strong>${nota}/10</strong></p>
+            <p>Tu calificación: <strong>${nota}/20</strong></p>
             <p>${nota >= 7 ? '🎉 ¡Aprobado!' : '📚 Podés mejorar. Revisá los temas.'}</p>
             <p><small>Resultado guardado en tu historial.</small></p>
         `;
