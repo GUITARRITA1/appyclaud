@@ -81,6 +81,18 @@
             text-align: center;
             margin-top: 10px;
             display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .error-msg.warning {
+            color: #856404;
+            background: #fff3cd;
+        }
+
+        .error-msg.danger {
+            color: #721c24;
+            background: #f8d7da;
         }
 
         .quiz-area {
@@ -176,16 +188,15 @@
 <body>
     <div class="container">
         <h1>📝 Quiz 1 - Evaluación</h1>
-        <div class="subtitulo">HOLA CHICOS! Esta prueba teórica es para Prácticar, y hacerla "Sumará 1 punto" a la Evaluación de Clase!!! NO ES POR TIEMPO, 
-            PENSAR TRANQUILOS LAS RESPUESTAS. Completá tus datos y respondé el cuestionario. Solo se guarda el primer intento.</div>
+        <div class="subtitulo">HOLA CHICOS! Esta prueba teórica es para Prácticar, y hacerla "Sumará 1 punto" a la Evaluación de Clase!!! NO ES POR TIEMPO, PENSAR TRANQUILOS LAS RESPUESTAS. Completá tus datos y respondé el cuestionario. Solo se guarda el primer intento.</div>
 
         <!-- Área de Login -->
         <div id="loginArea" class="login-area">
             <input type="text" id="apellidoNombre" placeholder="Apellido y Nombre" autocomplete="off">
             <input type="text" id="dni" placeholder="DNI" autocomplete="off">
             <input type="number" id="escuela" placeholder="Número de Escuela" autocomplete="off">
-            <input type="text" id="año" placeholder="Año" autocomplete="off">
-            <input type="text" id="curso" placeholder="División" autocomplete="off">
+            <input type="text" id="año" placeholder="Año (ej: 4)" autocomplete="off">
+            <input type="text" id="curso" placeholder="División (ej: C)" autocomplete="off">
             <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario</button>
             <div id="loginError" class="error-msg"></div>
         </div>
@@ -268,6 +279,37 @@
         let yaRealizo = false;
 
         // ============================================
+        // OBTENER NOMBRE DE LA TABLA DEL CURSO
+        // ============================================
+        function obtenerNombreTabla(escuela, año, curso) {
+            const añoLimpio = año.trim().replace(/[°\s]/g, '');
+            const cursoLimpio = curso.trim().toUpperCase().replace(/[°\s]/g, '');
+            return `${escuela}_${añoLimpio}_${cursoLimpio}`;
+        }
+
+        // ============================================
+        // VERIFICAR SI EXISTE LA TABLA DEL CURSO
+        // ============================================
+        async function existeTablaCurso(nombreTabla) {
+            try {
+                const { error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .limit(1);
+
+                // Si hay error de tabla no existe
+                if (error && (error.code === '42P01' || error.message.includes('does not exist'))) {
+                    return false;
+                }
+
+                // Si no hay error, la tabla existe
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // ============================================
         // INICIAR QUIZ
         // ============================================
         async function iniciarQuiz() {
@@ -278,9 +320,14 @@
             const curso = document.getElementById('curso').value.trim();
             const errorDiv = document.getElementById('loginError');
 
+            // Resetear estilos del error
+            errorDiv.className = 'error-msg';
+            errorDiv.style.display = 'none';
+
             // Validar campos
             if (!apellidoNombre || !dni || !escuela || !año || !curso) {
                 errorDiv.textContent = '❌ Completá todos los campos.';
+                errorDiv.className = 'error-msg danger';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -288,33 +335,52 @@
             // Validar DNI (solo números, 7-8 dígitos)
             if (!/^\d{7,8}$/.test(dni)) {
                 errorDiv.textContent = '❌ El DNI debe tener 7 u 8 dígitos.';
+                errorDiv.className = 'error-msg danger';
                 errorDiv.style.display = 'block';
                 return;
             }
 
+            // Obtener nombre de la tabla del curso
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            console.log('Tabla del curso:', nombreTabla);
+
+            // Guardar datos
             datosAlumno = {
                 apellido_nombre: apellidoNombre,
                 dni: dni,
                 escuela: parseInt(escuela),
                 año: año,
-                curso: curso
+                curso: curso,
+                tabla: nombreTabla
             };
 
-            errorDiv.style.display = 'none';
-
             try {
-                // Verificar si ya realizó el quiz (por DNI)
+                // ============================================
+                // 1. VERIFICAR QUE EXISTA LA TABLA DEL CURSO
+                // ============================================
+                const tablaExiste = await existeTablaCurso(nombreTabla);
+
+                if (!tablaExiste) {
+                    errorDiv.textContent = '⚠️ No se dió de Alta este curso, revisar error o solicitar Alta.';
+                    errorDiv.className = 'error-msg warning';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                // ============================================
+                // 2. VERIFICAR SI YA REALIZÓ EL QUIZ (en tabla del curso)
+                // ============================================
                 const { data, error } = await supabaseClient
-                    .from('quiz1_all')
-                    .select('nota')
+                    .from(nombreTabla)
+                    .select('quiz1')
                     .eq('dni', dni)
-                    .single();
+                    .maybeSingle();
 
                 if (error && error.code !== 'PGRST116') {
                     console.error('Error al verificar:', error);
                 }
 
-                if (data && data.nota !== null && data.nota !== undefined) {
+                if (data && data.quiz1 !== null && data.quiz1 !== undefined) {
                     yaRealizo = true;
                     document.getElementById('loginArea').style.display = 'none';
                     document.getElementById('quizArea').style.display = 'block';
@@ -322,7 +388,7 @@
                     document.getElementById('resultadoQuiz').className = 'resultado resultado-ya-realizado';
                     document.getElementById('resultadoQuiz').innerHTML = `
                         <h3>📌 Ya realizaste este quiz</h3>
-                        <p>Tu calificación: <strong>${data.nota}</strong></p>
+                        <p>Tu calificación: <strong>${data.quiz1}</strong></p>
                         <p>Solo se permite una única entrega por DNI.</p>
                     `;
                     document.querySelector('.btn-enviar').style.display = 'none';
@@ -338,6 +404,7 @@
             } catch (error) {
                 console.error('Error:', error);
                 errorDiv.textContent = '❌ Error al verificar. Intentá de nuevo.';
+                errorDiv.className = 'error-msg danger';
                 errorDiv.style.display = 'block';
             }
         }
@@ -413,15 +480,16 @@
                 }
             }
 
-           // const nota = Math.round((correctas / preguntas.length) * 10);   ESTA NO MUESTRA DECIMALES
-const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
+            const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
 
             if (!confirm(`¿Seguro que querés enviar? Solo se permite una entrega.`)) {
                 return;
             }
 
-            // Guardar en Supabase
             try {
+                // ============================================
+                // 1. GUARDAR EN QUIZ1_ALL (registro general)
+                // ============================================
                 const { error: errorResp } = await supabaseClient
                     .from('quiz1_all')
                     .insert({
@@ -448,9 +516,63 @@ const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
                         alert('❌ Ya realizaste este quiz con ese DNI.');
                         return;
                     }
-                    throw errorResp;
+                    console.warn('Error al guardar en quiz1_all:', errorResp);
                 }
 
+                // ============================================
+                // 2. GUARDAR EN LA TABLA DEL CURSO
+                // ============================================
+                const nombreTabla = datosAlumno.tabla;
+
+                // Verificar si el alumno ya existe
+                const { data: alumnoExistente, error: errorBuscar } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .eq('dni', datosAlumno.dni)
+                    .maybeSingle();
+
+                if (errorBuscar && errorBuscar.code !== 'PGRST116') {
+                    console.warn('Error al buscar en tabla del curso:', errorBuscar);
+                }
+
+                if (alumnoExistente) {
+                    // ✅ Alumno existe: actualizar solo quiz1
+                    const { error: errorUpdate } = await supabaseClient
+                        .from(nombreTabla)
+                        .update({
+                            quiz1: nota,
+                            apellido_nombre: datosAlumno.apellido_nombre
+                        })
+                        .eq('dni', datosAlumno.dni);
+
+                    if (errorUpdate) {
+                        console.warn('Error al actualizar en tabla del curso:', errorUpdate);
+                    } else {
+                        console.log('✅ Actualizado en tabla del curso:', nombreTabla);
+                    }
+                } else {
+                    // ✅ Alumno nuevo: insertar fila completa
+                    const { error: errorInsert } = await supabaseClient
+                        .from(nombreTabla)
+                        .insert({
+                            apellido_nombre: datosAlumno.apellido_nombre,
+                            dni: datosAlumno.dni,
+                            escuela: datosAlumno.escuela,
+                            año: datosAlumno.año,
+                            curso: datosAlumno.curso,
+                            quiz1: nota
+                        });
+
+                    if (errorInsert) {
+                        console.warn('Error al insertar en tabla del curso:', errorInsert);
+                    } else {
+                        console.log('✅ Insertado en tabla del curso:', nombreTabla);
+                    }
+                }
+
+                // ============================================
+                // MOSTRAR RESULTADO
+                // ============================================
                 yaRealizo = true;
                 const resultadoDiv = document.getElementById('resultadoQuiz');
                 resultadoDiv.style.display = 'block';
@@ -483,7 +605,12 @@ const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
         // ============================================
         // ENTER PARA INICIAR
         // ============================================
-        document.getElementById('escuela').addEventListener('keypress', function(e) {
+        document.getElementById('curso').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                iniciarQuiz();
+            }
+        });
+        document.getElementById('año').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 iniciarQuiz();
             }
