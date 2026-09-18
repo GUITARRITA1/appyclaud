@@ -184,6 +184,7 @@
             <input type="text" id="apellidoNombre" placeholder="Apellido y Nombre" autocomplete="off">
             <input type="text" id="dni" placeholder="DNI" autocomplete="off">
             <input type="number" id="escuela" placeholder="Número de Escuela" autocomplete="off">
+            <input type="number" id="curso" placeholder="Año y división (Porej 3°2°: 3-2)" autocomplete="off">
             <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario</button>
             <div id="loginError" class="error-msg"></div>
         </div>
@@ -272,10 +273,11 @@
             const apellidoNombre = document.getElementById('apellidoNombre').value.trim();
             const dni = document.getElementById('dni').value.trim();
             const escuela = document.getElementById('escuela').value.trim();
+            const curso = document.getElementById('curso').value.trim();
             const errorDiv = document.getElementById('loginError');
 
             // Validar campos
-            if (!apellidoNombre || !dni || !escuela) {
+            if (!apellidoNombre || !dni || !escuela || !curso) {
                 errorDiv.textContent = '❌ Completá todos los campos.';
                 errorDiv.style.display = 'block';
                 return;
@@ -422,6 +424,7 @@ const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
                         apellido_nombre: datosAlumno.apellido_nombre,
                         dni: datosAlumno.dni,
                         escuela: datosAlumno.escuela,
+                        curso: datosAlumno.curso,
                         r1: respuestas[0],
                         r2: respuestas[1],
                         r3: respuestas[2],
