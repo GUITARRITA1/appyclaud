@@ -588,8 +588,8 @@
                         });
 
                     if (errorInsert) {
-                        console.warn('Error al insertar en tabla del curso:', errorInsert);
-                    } else {
+console.error('❌ Error detallado:', JSON.stringify(errorInsert, null, 2));
+alert('Error: ' + errorInsert.message + ' | Detalle: ' + JSON.stringify(errorInsert.details));                    } else {
                         console.log('✅ Insertado en tabla del curso:', nombreTabla);
                     }
                 }
