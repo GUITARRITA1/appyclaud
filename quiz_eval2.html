@@ -398,7 +398,7 @@
             try {
                 const { data, error } = await supabaseClient
                     .from('notas')
-                    .select('eval2')
+                    .select('q2')
                     .eq('nombre_alumno', alumnoActual)
                     .single();
 
@@ -406,7 +406,7 @@
                     console.error('Error al verificar:', error);
                 }
 
-                if (data && data.eval2 !== null && data.eval2 !== undefined && data.eval2 !== 0) {
+                if (data && data.q2 !== null && data.q2 !== undefined && data.q2 !== 0) {
                     yaRealizo = true;
                     document.getElementById('loginArea').style.display = 'none';
                     document.getElementById('quizArea').style.display = 'block';
@@ -551,10 +551,10 @@
             throw errorResp;
         }
 
-        // 2. Actualizar eval2 en la tabla notas
+        // 2. Actualizar q2 en la tabla notas
         const { error: errorNota } = await supabaseClient
             .from('notas')
-            .update({ eval2: nota })
+            .update({ q2: nota })
             .eq('nombre_alumno', alumnoActual);
 
         if (errorNota) throw errorNota;
