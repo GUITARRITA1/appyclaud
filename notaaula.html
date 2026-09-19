@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas del Aula</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .subtitulo {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .loading, .error, .vacio {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .loading { color: #007bff; }
+        .error { color: #dc3545; }
+        .vacio { color: #856404; background: #fff3cd; border-radius: 8px; }
+        
+        .tabla-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        
+        th, td {
+            padding: 6px 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+        
+        th {
+            background: #007bff;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover { background: #f1f1f1; }
+        
+        .nombre-col {
+            text-align: left;
+            font-weight: bold;
+            background: #f8f9fa;
+        }
+        
+        .propio {
+            background: #cce5ff !important;
+        }
+        
+        .nota-aprobado {
+            background: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+        
+        .nota-desaprobado {
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+        
+        .sin-nota { color: #999; }
+        
+        .promedio-col {
+            background: #e9ecef;
+            font-weight: bold;
+        }
+        
+        .btn-volver {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 25px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .btn-volver:hover { background: #5a6268; }
+        
+        .info-aula {
+            text-align: center;
+            padding: 10px;
+            background: #e8f0fe;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        
+        @media (max-width: 768px) {
+            th, td { padding: 4px; font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Notas del Aula</h1>
+        <div id="infoAula" class="info-aula"></div>
+        <div id="contenido">
+            <div class="loading">⏳ Cargando notas...</div>
+        </div>
+        <button class="btn-volver" onclick="volverAlQuiz()">🔄 Volver al Quiz</button>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Obtener parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+        const escuela = params.get('escuela');
+        const año = params.get('año');
+        const curso = params.get('curso');
+        const dniPropio = params.get('dni') || '';
+
+        // Nombre de la tabla
+        const nombreTabla = `${escuela}_${año}_${curso}`.replace(/[°\s]/g, '');
+
+        // Mostrar info del aula
+        document.getElementById('infoAula').textContent = 
+            `🏫 Escuela ${escuela} - ${año}° ${curso}`;
+
+        // ============================================
+        // CARGAR NOTAS DEL AULA
+        // ============================================
+        async function cargarNotas() {
+            const contenido = document.getElementById('contenido');
+
+            try {
+                // Consultar todos los alumnos de la tabla
+                const { data, error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('*')
+                    .order('apellido_nombre', { ascending: true });
+
+                if (error) {
+                    if (error.code === '42P01') {
+                        contenido.innerHTML = `<div class="vacio">📭 No se dió de Alta este curso.</div>`;
+                        return;
+                    }
+                    throw error;
+                }
+
+                if (!data || data.length === 0) {
+                    contenido.innerHTML = `<div class="vacio">📭 Aún no hay alumnos con notas en este curso.</div>`;
+                    return;
+                }
+
+                // Construir la tabla
+                let html = `
+                    <div class="tabla-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Apellido y Nombre</th>
+                                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                                    <th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th>
+                                    <th>Q9</th><th>Q10</th><th>Q11</th><th>Q12</th>
+                                    <th>T1</th><th>T2</th><th>T3</th>
+                                    <th>T4</th><th>T5</th><th>T6</th>
+                                    <th>MC1</th><th>MC2</th><th>MC3</th><th>MC4</th>
+                                    <th>MC5</th><th>MC6</th><th>MC7</th><th>MC8</th>
+                                    <th>MC9</th><th>MC10</th><th>MC11</th><th>MC12</th>
+                                    <th>Prom Quiz</th>
+                                    <th>Prom Tarea</th>
+                                    <th>Prom MC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                data.forEach(alumno => {
+                    const esPropio = (alumno.dni === dniPropio);
+                    const clasePropio = esPropio ? 'propio' : '';
+
+                    html += `<tr class="${clasePropio}">`;
+                    html += `<td class="nombre-col">${alumno.apellido_nombre}${esPropio ? ' (vos)' : ''}</td>`;
+
+                    // Quizzes
+                    for (let i = 1; i <= 12; i++) {
+                        const nota = alumno[`quiz${i}`];
+                        html += celdaNota(nota);
+                    }
+
+                    // Tareas
+                    for (let i = 1; i <= 6; i++) {
+                        const nota = alumno[`tarea${i}`];
+                        html += celdaNota(nota);
+                    }
+
+                    // MC
+                    for (let i = 1; i <= 12; i++) {
+                        const nota = alumno[`MC${i}`];
+                        html += celdaNota(nota);
+                    }
+
+                    // Promedios
+                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_quiz)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_tarea)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_MC)}</td>`;
+
+                    html += `</tr>`;
+                });
+
+                html += `</tbody></table></div>`;
+                contenido.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error:', error);
+                contenido.innerHTML = `<div class="error">❌ Error al cargar las notas: ${error.message}</div>`;
+            }
+        }
+
+        // Formatear nota
+        function formatoNota(nota) {
+            if (nota === null || nota === undefined) return '--';
+            return parseFloat(nota).toFixed(1);
+        }
+
+        // Celda con color según nota
+        function celdaNota(nota) {
+            if (nota === null || nota === undefined) {
+                return `<td class="sin-nota">--</td>`;
+            }
+            const n = parseFloat(nota);
+            const clase = n >= 7 ? 'nota-aprobado' : 'nota-desaprobado';
+            return `<td class="${clase}">${n.toFixed(1)}</td>`;
+        }
+
+        // Volver al quiz
+        function volverAlQuiz() {
+            window.location.href = 'quiz1_all.html';
+        }
+
+        // Cargar al abrir
+        cargarNotas();
+    </script>
+</body>
+</html>
