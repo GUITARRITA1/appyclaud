@@ -213,7 +213,7 @@
         // LISTA DE ALUMNOS (código: nombre)
         // ============================================
         const alumnos = {
-           "ARQUIMEDES": "ALENGRE",
+           "ARQUIMEDES": "ALEGRE",
             "CINETICA": "ALEJO",
             "TEMPERATURA": "BENITEZ",
             "ROZAMIENTO": "CALA",
@@ -495,7 +495,7 @@
         // 2. Actualizar eval2 en la tabla notas
         const { error: errorNota } = await supabaseClient
             .from('notas')
-            .update({ eval1: nota })
+            .update({ q1: nota })
             .eq('nombre_alumno', alumnoActual);
 
         if (errorNota) throw errorNota;
