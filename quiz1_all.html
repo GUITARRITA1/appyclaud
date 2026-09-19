@@ -198,6 +198,7 @@
             <input type="text" id="año" placeholder="Año (ej: 4)" autocomplete="off">
             <input type="text" id="curso" placeholder="División (ej: C)" autocomplete="off">
             <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario</button>
+            <button onclick="consultarNotas()" style="background:#6c757d; margin-top:10px;">📊 Consultar notas del aula</button>     
             <div id="loginError" class="error-msg"></div>
         </div>
 
@@ -434,6 +435,29 @@
             });
         }
 
+        // consultar notas del aula
+        function consultarNotas() {
+    const escuela = document.getElementById('escuela').value.trim();
+    const año = document.getElementById('año').value.trim();
+    const curso = document.getElementById('curso').value.trim();
+    const dni = document.getElementById('dni').value.trim();
+    
+    // Validar campos mínimos
+    if (!escuela || !año || !curso) {
+        alert('❌ Completá escuela, año y división para consultar las notas.');
+        return;
+    }
+    
+    // Redirigir a notaaula.html con parámetros
+    const params = new URLSearchParams({
+        escuela: escuela,
+        año: año,
+        curso: curso,
+        dni: dni  // opcional, para marcar al alumno
+    });
+    
+    window.location.href = `notaaula.html?${params.toString()}`;
+}
         // ============================================
         // ENVIAR QUIZ
         // ============================================
