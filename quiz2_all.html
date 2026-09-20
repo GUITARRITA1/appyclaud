@@ -611,10 +611,10 @@
 
             try {
                 // ============================================
-                // 1. GUARDAR EN QUIZ1_ALL (registro general)
+                // 1. GUARDAR EN QUIZ2_ALL (registro general)
                 // ============================================
                 const { error: errorResp } = await supabaseClient
-                    .from('quiz1_all')
+                    .from('quiz2_all')
                     .insert({
                         apellido_nombre: datosAlumno.apellido_nombre,
                         dni: datosAlumno.dni,
