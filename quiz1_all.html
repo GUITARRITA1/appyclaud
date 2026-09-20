@@ -77,7 +77,6 @@
         }
 
         .error-msg {
-            color: #dc3545;
             text-align: center;
             margin-top: 10px;
             display: none;
@@ -198,7 +197,7 @@
             <input type="text" id="año" placeholder="Año (ej: 4)" autocomplete="off">
             <input type="text" id="curso" placeholder="División (ej: C)" autocomplete="off">
             <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario</button>
-            <button onclick="consultarNotas()" style="background:#6c757d; margin-top:10px;">📊 Consultar notas del aula</button>     
+            <button onclick="consultarNotas()" style="background:#6c757d; margin-top:10px;">📊 Consultar notas del aula</button>
             <div id="loginError" class="error-msg"></div>
         </div>
 
@@ -298,12 +297,14 @@
                     .select('dni')
                     .limit(1);
 
-                // Si hay error de tabla no existe
-                if (error && (error.code === '42P01' || error.message.includes('does not exist'))) {
+                if (error && (
+                    error.code === '42P01' || 
+                    error.message.includes('does not exist') || 
+                    error.message.includes('schema cache')
+                )) {
                     return false;
                 }
 
-                // Si no hay error, la tabla existe
                 return true;
             } catch (e) {
                 return false;
@@ -333,7 +334,7 @@
                 return;
             }
 
-            // Validar DNI (solo números, 7-8 dígitos)
+            // Validar DNI
             if (!/^\d{7,8}$/.test(dni)) {
                 errorDiv.textContent = '❌ El DNI debe tener 7 u 8 dígitos.';
                 errorDiv.className = 'error-msg danger';
@@ -369,7 +370,7 @@
                 }
 
                 // ============================================
-                // 2. VERIFICAR SI YA REALIZÓ EL QUIZ (en tabla del curso)
+                // 2. VERIFICAR SI YA REALIZÓ EL QUIZ
                 // ============================================
                 const { data, error } = await supabaseClient
                     .from(nombreTabla)
@@ -435,29 +436,76 @@
             });
         }
 
-        // consultar notas del aula
-        function consultarNotas() {
-    const escuela = document.getElementById('escuela').value.trim();
-    const año = document.getElementById('año').value.trim();
-    const curso = document.getElementById('curso').value.trim();
-    const dni = document.getElementById('dni').value.trim();
-    
-    // Validar campos mínimos
-    if (!escuela || !año || !curso) {
-        alert('❌ Completá escuela, año y división para consultar las notas.');
-        return;
-    }
-    
-    // Redirigir a notaaula.html con parámetros
-    const params = new URLSearchParams({
-        escuela: escuela,
-        año: año,
-        curso: curso,
-        dni: dni  // opcional, para marcar al alumno
-    });
-    
-    window.location.href = `notaaula.html?${params.toString()}`;
-}
+        // ============================================
+        // CONSULTAR NOTAS DEL AULA (verifica antes de redirigir)
+        // ============================================
+        async function consultarNotas() {
+            const escuela = document.getElementById('escuela').value.trim();
+            const año = document.getElementById('año').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const dni = document.getElementById('dni').value.trim();
+            const errorDiv = document.getElementById('loginError');
+
+            // Resetear estilos
+            errorDiv.className = 'error-msg';
+            errorDiv.style.display = 'none';
+
+            // Validar campos mínimos
+            if (!escuela || !año || !curso) {
+                errorDiv.textContent = '❌ Completá escuela, año y división para consultar las notas.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Obtener nombre de la tabla
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            console.log('Consultando tabla:', nombreTabla);
+
+            try {
+                // Verificar si existe la tabla
+                const { error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .limit(1);
+
+                if (error && (
+                    error.code === '42P01' || 
+                    error.message.includes('does not exist') || 
+                    error.message.includes('schema cache')
+                )) {
+                    errorDiv.textContent = '⚠️ No existe el aula ' + escuela + ' - ' + año + '° ' + curso + '. Revisar error o solicitar Alta.';
+                    errorDiv.className = 'error-msg warning';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (error) {
+                    console.error('Error al verificar:', error);
+                    errorDiv.textContent = '❌ Error al verificar el aula. Intentá de nuevo.';
+                    errorDiv.className = 'error-msg danger';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                // Si existe, redirigir
+                const params = new URLSearchParams({
+                    escuela: escuela,
+                    año: año,
+                    curso: curso,
+                    dni: dni
+                });
+
+                window.location.href = `notaaula.html?${params.toString()}`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = '❌ Error al verificar el aula. Intentá de nuevo.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+            }
+        }
+
         // ============================================
         // ENVIAR QUIZ
         // ============================================
@@ -548,7 +596,6 @@
                 // ============================================
                 const nombreTabla = datosAlumno.tabla;
 
-                // Verificar si el alumno ya existe
                 const { data: alumnoExistente, error: errorBuscar } = await supabaseClient
                     .from(nombreTabla)
                     .select('dni')
@@ -560,7 +607,7 @@
                 }
 
                 if (alumnoExistente) {
-                    // ✅ Alumno existe: actualizar solo quiz1
+                    // Alumno existe: actualizar
                     const { error: errorUpdate } = await supabaseClient
                         .from(nombreTabla)
                         .update({
@@ -570,12 +617,12 @@
                         .eq('dni', datosAlumno.dni);
 
                     if (errorUpdate) {
-                        console.warn('Error al actualizar en tabla del curso:', errorUpdate);
+                        console.error('Error al actualizar:', errorUpdate);
                     } else {
                         console.log('✅ Actualizado en tabla del curso:', nombreTabla);
                     }
                 } else {
-                    // ✅ Alumno nuevo: insertar fila completa
+                    // Alumno nuevo: insertar
                     const { error: errorInsert } = await supabaseClient
                         .from(nombreTabla)
                         .insert({
@@ -588,8 +635,8 @@
                         });
 
                     if (errorInsert) {
-console.error('❌ Error detallado:', JSON.stringify(errorInsert, null, 2));
-alert('Error: ' + errorInsert.message + ' | Detalle: ' + JSON.stringify(errorInsert.details));                    } else {
+                        console.error('Error al insertar:', errorInsert);
+                    } else {
                         console.log('✅ Insertado en tabla del curso:', nombreTabla);
                     }
                 }
