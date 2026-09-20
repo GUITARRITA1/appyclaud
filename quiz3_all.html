@@ -1,1 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 1 - Evaluación</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .login-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .login-area input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .login-area button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .login-area button:hover {
+            background: #0056b3;
+        }
+
+        .error-msg {
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .error-msg.warning {
+            color: #856404;
+            background: #fff3cd;
+        }
+
+        .error-msg.danger {
+            color: #721c24;
+            background: #f8d7da;
+        }
+
+        .quiz-area {
+            display: none;
+        }
+
+        .pregunta {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .pregunta h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .pregunta label {
+            display: block;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .pregunta label:hover {
+            border-color: #007bff;
+            background: #e8f0fe;
+        }
+
+        .pregunta input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .btn-enviar {
+            width: 100%;
+            padding: 14px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-enviar:hover {
+            background: #1e7e34;
+        }
+
+        .resultado {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .resultado-exito {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .resultado-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .resultado-ya-realizado {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .info {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Quiz 1 - Evaluación</h1>
+        <div class="subtitulo">HOLA CHICOS! Esta prueba teórica es para Prácticar, y hacerla "Sumará 1 punto" a la Evaluación de Clase!!! NO ES POR TIEMPO, PENSAR TRANQUILOS LAS RESPUESTAS. Completá tus datos y respondé el cuestionario. Solo se guarda el primer intento.(USAR MAYÚSCULAS).</div>
+
+        <!-- Área de Login -->
+        <div id="loginArea" class="login-area">
+            <input type="text" id="apellidoNombre" placeholder="Apellido y Nombre (USAR MAYÚSCULAS)" autocomplete="off">
+            <input type="text" id="dni" placeholder="DNI" autocomplete="off">
+            <input type="number" id="escuela" placeholder="Número de Escuela" autocomplete="off">
+            <input type="text" id="año" placeholder="Año (ej: 4)" autocomplete="off">
+            <input type="text" id="curso" placeholder="División (ej: C)" autocomplete="off">
+            <button onclick="iniciarQuiz()">🔐 Iniciar Cuestionario</button>
+            <button onclick="consultarNotas()" style="background:#6c757d; margin-top:10px;">📊 Consultar notas del aula</button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+
+        <!-- Área del Quiz -->
+        <div id="quizArea" class="quiz-area">
+            <div id="preguntasContainer"></div>
+            <button class="btn-enviar" onclick="enviarQuiz()">📤 Enviar respuestas</button>
+            <div id="resultadoQuiz" class="resultado"></div>
+        </div>
+
+        <div class="info">⚠️ Solo se permite una única entrega por DNI.</div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5MTg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ============================================
+        // PREGUNTAS DEL QUIZ
+        // ============================================
+        const preguntas = [
+            {
+                pregunta: "1. ¿Cuál de las siguientes NO es una forma de energía?",
+                opciones: ["Energía Cinética", "Energía Potencial", "Energía Térmica", "Energía de Color"],
+                correcta: 3
+            },
+            {
+                pregunta: "2. La energía se define como la capacidad de:",
+                opciones: ["Realizar trabajo", "Crear materia", "Destruir materia", "Ninguna de las anteriores"],
+                correcta: 0
+            },
+            {
+                pregunta: "3. ¿Qué tipo de energía posee un cuerpo en movimiento?",
+                opciones: ["Energía Potencial", "Energía Cinética", "Energía Térmica", "Energía Química"],
+                correcta: 1
+            },
+            {
+                pregunta: "4. La energía que se almacena en los alimentos es:",
+                opciones: ["Energía Cinética", "Energía Potencial", "Energía Química", "Energía Térmica"],
+                correcta: 2
+            },
+            {
+                pregunta: "5. ¿Cuál es la unidad de energía en el Sistema Internacional?",
+                opciones: ["Newton", "Joule", "Watt", "Caloría"],
+                correcta: 1
+            },
+            {
+                pregunta: "6. Cuando una persona sube una escalera, ¿qué tipo de energía aumenta?",
+                opciones: ["Energía Cinética", "Energía Potencial Gravitatoria", "Energía Térmica", "Energía Eléctrica"],
+                correcta: 1
+            },
+            {
+                pregunta: "7. La energía se conserva, es decir:",
+                opciones: ["Se crea y se destruye", "No se crea ni se destruye, solo se transforma", "Solo se crea", "Solo se destruye"],
+                correcta: 1
+            },
+            {
+                pregunta: "8. ¿Qué tipo de energía tiene un resorte comprimido?",
+                opciones: ["Energía Cinética", "Energía Potencial Elástica", "Energía Térmica", "Energía Química"],
+                correcta: 1
+            },
+            {
+                pregunta: "9. La luz del sol es un ejemplo de energía:",
+                opciones: ["Energía Química", "Energía Térmica", "Energía Radiante", "Energía Cinética"],
+                correcta: 2
+            },
+            {
+                pregunta: "10. ¿Qué ocurre con la energía cuando se usa?",
+                opciones: ["Se pierde", "Se transforma", "Se crea", "Se destruye"],
+                correcta: 1
+            }
+        ];
+
+        let datosAlumno = null;
+        let yaRealizo = false;
+
+        // ============================================
+        // OBTENER NOMBRE DE LA TABLA DEL CURSO
+        // ============================================
+        function obtenerNombreTabla(escuela, año, curso) {
+            const añoLimpio = año.trim().replace(/[°\s]/g, '');
+            const cursoLimpio = curso.trim().toUpperCase().replace(/[°\s]/g, '');
+            return `${escuela}_${añoLimpio}_${cursoLimpio}`;
+        }
+
+        // ============================================
+        // VERIFICAR SI EXISTE LA TABLA DEL CURSO
+        // ============================================
+        async function existeTablaCurso(nombreTabla) {
+            try {
+                const { error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .limit(1);
+
+                if (error && (
+                    error.code === '42P01' || 
+                    error.message.includes('does not exist') || 
+                    error.message.includes('schema cache')
+                )) {
+                    return false;
+                }
+
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // ============================================
+        // INICIAR QUIZ
+        // ============================================
+        async function iniciarQuiz() {
+            const apellidoNombre = document.getElementById('apellidoNombre').value.trim();
+            const dni = document.getElementById('dni').value.trim();
+            const escuela = document.getElementById('escuela').value.trim();
+            const año = document.getElementById('año').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const errorDiv = document.getElementById('loginError');
+
+            // Resetear estilos del error
+            errorDiv.className = 'error-msg';
+            errorDiv.style.display = 'none';
+
+            // Validar campos
+            if (!apellidoNombre || !dni || !escuela || !año || !curso) {
+                errorDiv.textContent = '❌ Completá todos los campos.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Validar DNI
+            if (!/^\d{7,8}$/.test(dni)) {
+                errorDiv.textContent = '❌ El DNI debe tener 7 u 8 dígitos.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Obtener nombre de la tabla del curso
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            console.log('Tabla del curso:', nombreTabla);
+
+            // Guardar datos
+            datosAlumno = {
+                apellido_nombre: apellidoNombre,
+                dni: dni,
+                escuela: parseInt(escuela),
+                año: año,
+                curso: curso,
+                tabla: nombreTabla
+            };
+
+            try {
+                // ============================================
+                // 1. VERIFICAR QUE EXISTA LA TABLA DEL CURSO
+                // ============================================
+                const tablaExiste = await existeTablaCurso(nombreTabla);
+
+                if (!tablaExiste) {
+                    errorDiv.textContent = '⚠️ No se dió de Alta este curso, revisar error o solicitar Alta.';
+                    errorDiv.className = 'error-msg warning';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                // ============================================
+                // 2. VERIFICAR SI YA REALIZÓ EL QUIZ
+                // ============================================
+                const { data, error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('quiz1')
+                    .eq('dni', dni)
+                    .maybeSingle();
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error al verificar:', error);
+                }
+
+                if (data && data.quiz1 !== null && data.quiz1 !== undefined) {
+                    yaRealizo = true;
+                    document.getElementById('loginArea').style.display = 'none';
+                    document.getElementById('quizArea').style.display = 'block';
+                    document.getElementById('resultadoQuiz').style.display = 'block';
+                    document.getElementById('resultadoQuiz').className = 'resultado resultado-ya-realizado';
+                    document.getElementById('resultadoQuiz').innerHTML = `
+                        <h3>📌 Ya realizaste este quiz</h3>
+                        <p>Tu calificación: <strong>${data.quiz1}</strong></p>
+                        <p>Solo se permite una única entrega por DNI.</p>
+                    `;
+                    document.querySelector('.btn-enviar').style.display = 'none';
+                    document.querySelector('.info').textContent = '✅ Ya completaste el quiz.';
+                    return;
+                }
+
+                // Mostrar el quiz
+                document.getElementById('loginArea').style.display = 'none';
+                document.getElementById('quizArea').style.display = 'block';
+                mostrarPreguntas();
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = '❌ Error al verificar. Intentá de nuevo.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // MOSTRAR PREGUNTAS
+        // ============================================
+        function mostrarPreguntas() {
+            const container = document.getElementById('preguntasContainer');
+            container.innerHTML = '';
+
+            preguntas.forEach((p, index) => {
+                const div = document.createElement('div');
+                div.className = 'pregunta';
+                div.innerHTML = `<h3>${p.pregunta}</h3>`;
+
+                p.opciones.forEach((opcion, i) => {
+                    div.innerHTML += `
+                        <label>
+                            <input type="radio" name="pregunta_${index}" value="${i}">
+                            ${opcion}
+                        </label>
+                    `;
+                });
+
+                container.appendChild(div);
+            });
+        }
+
+        // ============================================
+        // CONSULTAR NOTAS DEL AULA (verifica antes de redirigir)
+        // ============================================
+        async function consultarNotas() {
+            const escuela = document.getElementById('escuela').value.trim();
+            const año = document.getElementById('año').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const dni = document.getElementById('dni').value.trim();
+            const errorDiv = document.getElementById('loginError');
+
+            // Resetear estilos
+            errorDiv.className = 'error-msg';
+            errorDiv.style.display = 'none';
+
+            // Validar campos mínimos
+            if (!escuela || !año || !curso) {
+                errorDiv.textContent = '❌ Completá escuela, año y división para consultar las notas.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Obtener nombre de la tabla
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            console.log('Consultando tabla:', nombreTabla);
+
+            try {
+                // Verificar si existe la tabla
+                const { error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .limit(1);
+
+                if (error && (
+                    error.code === '42P01' || 
+                    error.message.includes('does not exist') || 
+                    error.message.includes('schema cache')
+                )) {
+                    errorDiv.textContent = '⚠️ No existe el aula ' + escuela + ' - ' + año + '° ' + curso + '. Revisar error o solicitar Alta.';
+                    errorDiv.className = 'error-msg warning';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (error) {
+                    console.error('Error al verificar:', error);
+                    errorDiv.textContent = '❌ Error al verificar el aula. Intentá de nuevo.';
+                    errorDiv.className = 'error-msg danger';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                // Si existe, redirigir
+                const params = new URLSearchParams({
+                    escuela: escuela,
+                    año: año,
+                    curso: curso,
+                    dni: dni
+                });
+
+                window.location.href = `notaaula.html?${params.toString()}`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = '❌ Error al verificar el aula. Intentá de nuevo.';
+                errorDiv.className = 'error-msg danger';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // ENVIAR QUIZ
+        // ============================================
+        async function enviarQuiz() {
+            if (!datosAlumno) {
+                alert('No hay datos del alumno. Reiniciá la página.');
+                return;
+            }
+
+            if (yaRealizo) {
+                alert('Ya realizaste este quiz. Solo se permite una entrega.');
+                return;
+            }
+
+            // Verificar que todas las preguntas estén respondidas
+            let todasRespondidas = true;
+            let respuestas = [];
+            for (let i = 0; i < preguntas.length; i++) {
+                const radios = document.getElementsByName(`pregunta_${i}`);
+                let respondida = false;
+                let seleccionada = -1;
+                for (let r of radios) {
+                    if (r.checked) {
+                        respondida = true;
+                        seleccionada = parseInt(r.value);
+                        break;
+                    }
+                }
+                if (!respondida) {
+                    todasRespondidas = false;
+                    alert(`Respondé la pregunta ${i+1} antes de enviar.`);
+                    break;
+                }
+                respuestas.push(seleccionada);
+            }
+
+            if (!todasRespondidas) return;
+
+            // Calcular nota
+            let correctas = 0;
+            for (let i = 0; i < preguntas.length; i++) {
+                if (respuestas[i] === preguntas[i].correcta) {
+                    correctas++;
+                }
+            }
+
+            const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
+
+            if (!confirm(`¿Seguro que querés enviar? Solo se permite una entrega.`)) {
+                return;
+            }
+
+            try {
+                // ============================================
+                // 1. GUARDAR EN QUIZ1_ALL (registro general)
+                // ============================================
+                const { error: errorResp } = await supabaseClient
+                    .from('quiz1_all')
+                    .insert({
+                        apellido_nombre: datosAlumno.apellido_nombre,
+                        dni: datosAlumno.dni,
+                        escuela: datosAlumno.escuela,
+                        año: datosAlumno.año,
+                        curso: datosAlumno.curso,
+                        r1: respuestas[0],
+                        r2: respuestas[1],
+                        r3: respuestas[2],
+                        r4: respuestas[3],
+                        r5: respuestas[4],
+                        r6: respuestas[5],
+                        r7: respuestas[6],
+                        r8: respuestas[7],
+                        r9: respuestas[8],
+                        r10: respuestas[9],
+                        nota: nota
+                    });
+
+                if (errorResp) {
+                    if (errorResp.code === '23505') {
+                        alert('❌ Ya realizaste este quiz con ese DNI.');
+                        return;
+                    }
+                    console.warn('Error al guardar en quiz1_all:', errorResp);
+                }
+
+                // ============================================
+                // 2. GUARDAR EN LA TABLA DEL CURSO
+                // ============================================
+                const nombreTabla = datosAlumno.tabla;
+
+                const { data: alumnoExistente, error: errorBuscar } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .eq('dni', datosAlumno.dni)
+                    .maybeSingle();
+
+                if (errorBuscar && errorBuscar.code !== 'PGRST116') {
+                    console.warn('Error al buscar en tabla del curso:', errorBuscar);
+                }
+
+                if (alumnoExistente) {
+                    // Alumno existe: actualizar
+                    const { error: errorUpdate } = await supabaseClient
+                        .from(nombreTabla)
+                        .update({
+                            quiz1: nota,
+                            apellido_nombre: datosAlumno.apellido_nombre
+                        })
+                        .eq('dni', datosAlumno.dni);
+
+                    if (errorUpdate) {
+                        console.error('Error al actualizar:', errorUpdate);
+                    } else {
+                        console.log('✅ Actualizado en tabla del curso:', nombreTabla);
+                    }
+                } else {
+                    // Alumno nuevo: insertar
+                    const { error: errorInsert } = await supabaseClient
+                        .from(nombreTabla)
+                        .insert({
+                            apellido_nombre: datosAlumno.apellido_nombre,
+                            dni: datosAlumno.dni,
+                            escuela: datosAlumno.escuela,
+                            año: datosAlumno.año,
+                            curso: datosAlumno.curso,
+                            quiz1: nota
+                        });
+
+                    if (errorInsert) {
+                        console.error('Error al insertar:', errorInsert);
+                    } else {
+                        console.log('✅ Insertado en tabla del curso:', nombreTabla);
+                    }
+                }
+
+                // ============================================
+                // MOSTRAR RESULTADO
+                // ============================================
+                yaRealizo = true;
+                const resultadoDiv = document.getElementById('resultadoQuiz');
+                resultadoDiv.style.display = 'block';
+
+                if (nota >= 7) {
+                    resultadoDiv.className = 'resultado resultado-exito';
+                    resultadoDiv.innerHTML = `
+                        <h3>✅ ¡Quiz completado!</h3>
+                        <p>Tu calificación: <strong>${nota}/10</strong></p>
+                        <p>🎉 ¡Aprobado!</p>
+                        <p><small>Resultado guardado en tu historial.</small></p>
+                    `;
+                } else {
+                    resultadoDiv.className = 'resultado resultado-error';
+                    resultadoDiv.innerHTML = `
+                        <h3>❌ Quiz completado</h3>
+                        <p>Tu calificación: <strong>${nota}/10</strong></p>
+                        <p>📚 No alcanzaste el 7. Podés mejorar revisando los temas.</p>
+                        <p><small>Resultado guardado en tu historial.</small></p>
+                    `;
+                }
+                document.querySelector('.btn-enviar').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error al guardar:', error);
+                alert('❌ Error al guardar el resultado. Intentá de nuevo.');
+            }
+        }
+
+        // ============================================
+        // ENTER PARA INICIAR
+        // ============================================
+        document.getElementById('curso').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                iniciarQuiz();
+            }
+        });
+        document.getElementById('año').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                iniciarQuiz();
+            }
+        });
+    </script>
+</body>
+</html>
