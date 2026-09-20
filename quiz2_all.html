@@ -223,57 +223,108 @@
         // PREGUNTAS DEL QUIZ
         // ============================================
         const preguntas = [
-            {
-                pregunta: "1. ¿Cuál de las siguientes NO es una forma de energía?",
-                opciones: ["Energía Cinética", "Energía Potencial", "Energía Térmica", "Energía de Color"],
-                correcta: 3
+                        {
+                pregunta: "1. El número másico es:",
+                opciones: ["Neutrones + Protones Z=N+P", "Número Atómico + Protones Z=A+P", "Número Atómico + Neutrones A=Z+N", "Número másico + Electrones"],
+                correcta: 2
             },
             {
-                pregunta: "2. La energía se define como la capacidad de:",
-                opciones: ["Realizar trabajo", "Crear materia", "Destruir materia", "Ninguna de las anteriores"],
+                pregunta: "2. Plantaciones para la obtención de alcohol, Plantaciones de oleaginosas... ",
+                opciones: ["Son Cultivos energéticos", "Consumen energía de Biomasa", "Generan gases de efecto ivernadero", "Son residuos reactivos"],
                 correcta: 0
             },
             {
-                pregunta: "3. ¿Qué tipo de energía posee un cuerpo en movimiento?",
-                opciones: ["Energía Potencial", "Energía Cinética", "Energía Térmica", "Energía Química"],
-                correcta: 1
+                pregunta: "3. La Fisión separa nucleones de _______ tamaño y la Fusión _______ nucleones menores",
+                opciones: ["gran-une", "bajo-fisiona", "pequeño-expande", "muy pequeño-funde"],
+                correcta: 0
             },
             {
-                pregunta: "4. La energía que se almacena en los alimentos es:",
-                opciones: ["Energía Cinética", "Energía Potencial", "Energía Química", "Energía Térmica"],
+                pregunta: "4. ¿Cuales componen una Central Hidroeléctrica?",
+                opciones: ["Embalse-Turbina-Generador-Subestación", "Conducto-Casa de Máquinas", "Línea de Transmisión", "Todas las anteriores"],
+                correcta: 3
+            },
+            {
+                pregunta: "5. La Fuerza nuclear fuerte está entre los nucleones de _______ átomo/s, y Energía de Enlace están presentes entre ________ átomo/s",
+                opciones: ["distintos-distintos ", "mismos-mismos", "distintos-mismos", "mismos-distintos"],
+                correcta: 3
+            },
+            {
+                pregunta: "6. Las oscilaciones grandes de las mareas en un oceano se denominan:",
+                opciones: ["Bajamar", "Energia de Olas Undimotriz", "Pleamar", "Olas"],
                 correcta: 2
             },
             {
-                pregunta: "5. ¿Cuál es la unidad de energía en el Sistema Internacional?",
-                opciones: ["Newton", "Joule", "Watt", "Caloría"],
+                pregunta: "7. Los núcleos atómicos almacenan Energía ___________ y liberan Energía __________",
+                opciones: ["Lumínica y Atómica", "Lumínica y Eólica", "Térmica y Radiactiva", "Potencial Nuclear y Radiactiva"],
+                correcta: 3
+            },
+            {
+                pregunta: "8. En una Central Nuclear, el reactor necesita una masa crítica minima para lograr la fisión por reacción en cadena. El moderador:",
+                opciones: ["Acelera la velocidad de la reacción en cadena", "Evita que se liberen neutrones", "Regula la velocidad de la fisión de neutrones", "Genera como subproducto el Uranio Enriquecido"],
+                correcta: 2 
+            },
+            {
+                pregunta: "9. ¿Cual es Potencia de la radiación solar en un panel de 2 metros cuadrados?",
+                opciones: ["1 kiloWatt", "140 kW/m2", "140 kW", "280 kW"],
+                correcta: 3
+            },
+            {
+                pregunta: "10. El combustible de un reactor se va contaminando. Finalmente se reprocesa para extraer elementos útiles hasta quedar residuos radiactivos. Se clasifican en:",
+                opciones: ["Radiactividad Alfa, Beta, Gama", "Radiactividad baja, media, alta", "Protio, Deuterio, Tritio", "Ninguno de los anteriores"],
                 correcta: 1
             },
             {
-                pregunta: "6. Cuando una persona sube una escalera, ¿qué tipo de energía aumenta?",
-                opciones: ["Energía Cinética", "Energía Potencial Gravitatoria", "Energía Térmica", "Energía Eléctrica"],
+                pregunta: "11. En los inicios la Energía Solar se suponía de origen químico, Newton descartó esa hipótesis calculando que el Sol...",
+                opciones: ["Era creador de Estrellas", "Debía ser mas antiguo que los fósiles", "Se apagaría hace mucho tiempo", "Era masa por velocidad de la luz"],
                 correcta: 1
             },
-            {
-                pregunta: "7. La energía se conserva, es decir:",
-                opciones: ["Se crea y se destruye", "No se crea ni se destruye, solo se transforma", "Solo se crea", "Solo se destruye"],
-                correcta: 1
-            },
-            {
-                pregunta: "8. ¿Qué tipo de energía tiene un resorte comprimido?",
-                opciones: ["Energía Cinética", "Energía Potencial Elástica", "Energía Térmica", "Energía Química"],
-                correcta: 1
-            },
-            {
-                pregunta: "9. La luz del sol es un ejemplo de energía:",
-                opciones: ["Energía Química", "Energía Térmica", "Energía Radiante", "Energía Cinética"],
+           {
+                pregunta: "12. En una Central Térmica el Pistón es accionado por:",
+                opciones: ["La correa del motor", "El fuego de la Energía Térmica", "El vapor de la Caldera", "El movimiento del Generador"],
                 correcta: 2
             },
             {
-                pregunta: "10. ¿Qué ocurre con la energía cuando se usa?",
-                opciones: ["Se pierde", "Se transforma", "Se crea", "Se destruye"],
+                pregunta: "13. Se consideran Fuentes Macroscópicas de Energía. Unas son infinitas, inagotables en el tiempo; y otras, finitas, tendrán fin y además son contaminantes.",
+                opciones: ["Fuentes de Calor positivo y negativo", "No renovables y Renovables", "Fuente de Voltaje Contínua y Alterna", "Renovables y No Renovables"],
+                correcta: 3
+            },
+            {
+                pregunta: "14. La teoría de Helmholtz decía que la Energía del Sol provenía de una analogía al Kamme Kamme Haaaa de Goku, es decir que la concentración de masa en un punto generaba contracción e incremento Térmico. Esta hipótesis se rechazó porque:",
+                opciones: ["A Freezer no le gustó la teoría", "Al igual que con Newton, habría un origen muy anterior", "Se demostró con los Cuantos de Energía", "Se demostró con los Niveles de Energía"],
+                correcta: 1
+            },
+            {
+                pregunta: "15. Los 2 Parques Eólicos de mayor generación de Potencia Eléctrica en Argentina suman 20.000 kW. Son:",
+                opciones: ["Punta Alta y Claromecó", "Morán y Pico Truncado", "Punta Alta y Comodoro", "General Hacha y Comodoro"],
+                correcta: 2
+            },
+            {
+                pregunta: "16. ¿Cuantas veces mas Potencia que la Eólica genera la mayor Central Hidráulica en Argentina? ",
+                opciones: ["160 veces", "1,6 veces", "16 veces", "60%"],
+                correcta: 0
+            },
+             {
+                pregunta: "17. Las teorías de la Mecánica Cuántica y La Relatividad, refieren a la liberación de Energia, y son:",
+                opciones: ["Iguales, hablan de la Energía", "Distintas, Saltos de Niveles Versus Posición del Electrón", "Distintas, Cuantos de Energía Versus Tamaño del Electrón ", "Distintas, Capa del Electrón Versus Velocidad de la masa del Electrón"],
+                correcta: 3
+            },
+            {
+                pregunta: "18. La Biomasa húmeda o seca puede entregar biodiesel o biocombustibles. Se Requieren:",
+                opciones: ["Biogas y metano", "Un biodigestor y refinación de petróleo", "Etanol y azúcares", "Procesos Anaeróbicos y Aeróbicos"],
+                correcta: 3
+            },
+            {
+                pregunta: "19. En Argentina, el __% de la energía proviene de combustibles fósiles y el ___% de centrales nucleares.",
+                opciones: ["70 - 3,1", "90 - 2,5", "100 - 0", "90 - 25"],
+                correcta: 1
+            },
+            {
+                pregunta: "20. Rutherford y Chadwick modelaron el Átomo. El núcleo (protones y neutrones) tiene una masa mayor al electrón ...",
+                opciones: ["10.000 veces", "1.800 veces", "9x10^9 veces", "Ninguna de las anteriores"],
                 correcta: 1
             }
         ];
+
 
         let datosAlumno = null;
         let yaRealizo = false;
