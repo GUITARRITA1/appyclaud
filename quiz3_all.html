@@ -424,7 +424,7 @@
                 // ============================================
                 const { data, error } = await supabaseClient
                     .from(nombreTabla)
-                    .select('quiz3')
+                    .select('quiz3_all')
                     .eq('dni', dni)
                     .maybeSingle();
 
@@ -602,7 +602,7 @@
                 }
             }
 
-            const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 20;
+            const nota = Math.floor(((correctas / preguntas.length) * 10) * 10) / 10;
 
             if (!confirm(`¿Seguro que querés enviar? Solo se permite una entrega.`)) {
                 return;
@@ -648,7 +648,7 @@
                         alert('❌ Ya realizaste este quiz con ese DNI.');
                         return;
                     }
-                    console.warn('Error al guardar en quiz1_all:', errorResp);
+                    console.warn('Error al guardar en quiz3_all:', errorResp);
                 }
 
                 // ============================================
