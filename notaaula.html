@@ -205,7 +205,7 @@
                                     <th>MC1</th><th>MC2</th><th>MC3</th><th>MC4</th>
                                     <th>MC5</th><th>MC6</th><th>MC7</th><th>MC8</th>
                                     <th>MC9</th><th>MC10</th><th>MC11</th><th>MC12</th>
-                                    <th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th><th>C7</th><th>C8</th><th>C9</th><th>C10</th><th>C11</th><th>C12</th>
+                                    <th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th>
                                     <th>Prom Quiz</th>
                                     <th>Prom Tarea</th>
                                     <th>Prom MC</th>
@@ -237,14 +237,20 @@
 
                     // MC
                     for (let i = 1; i <= 12; i++) {
-                        const nota = alumno[`MC${i}`];
+                        const nota = alumno[`mc${i}`];
+                        html += celdaNota(nota);
+                    }
+                     // Carpetas
+                    for (let i = 1; i <= 6; i++) {
+                        const nota = alumno[`c${i}`];
                         html += celdaNota(nota);
                     }
 
                     // Promedios
-                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_quiz)}</td>`;
-                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_tarea)}</td>`;
-                    html += `<td class="promedio-col">${formatoNota(alumno.Promedio_MC)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_quiz)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_tarea)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_mc)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_c)}</td>`;
 
                     html += `</tr>`;
                 });
