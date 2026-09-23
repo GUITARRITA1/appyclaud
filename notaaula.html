@@ -210,7 +210,7 @@
                                     <th>Prom Tarea</th>
                                     <th>Prom MC</th>
                                     <th>Prom C</th>
-                                     <th>Prom Global</th>
+                                     <th>Global</th>
                                      </tr>
                             </thead>
                             <tbody>
@@ -243,6 +243,11 @@
                      // Carpetas
                     for (let i = 1; i <= 6; i++) {
                         const nota = alumno[`c${i}`];
+                        html += celdaNota(nota);
+                    }
+                     // global
+                    for (let i = 1; i <= 1; i++) {
+                        const nota = alumno[`Global${i}`];
                         html += celdaNota(nota);
                     }
 
