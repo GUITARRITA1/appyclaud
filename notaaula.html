@@ -8,7 +8,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* Globo de participación */
+     /* Globo 1 - Participación por alumnos */
 .globo-participacion {
     position: fixed;
     top: 20px;
@@ -30,22 +30,48 @@
     text-align: center;
 }
 
-.globo-participacion small {
-    font-size: 0.6rem;
+/* Globo 2 - Participación por entregas */
+.globo-entregas {
+    position: fixed;
+    top: 20px;
+    left: 110px;   /* ← Al lado del primero */
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-direction: column;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.globo-participacion small,
+.globo-entregas small {
+    font-size: 0.55rem;
     font-weight: normal;
     display: block;
 }
 
 @media (max-width: 768px) {
-    .globo-participacion {
+    .globo-participacion,
+    .globo-entregas {
         width: 55px;
         height: 55px;
         font-size: 0.85rem;
         top: 10px;
-        left: 10px;
     }
-    .globo-participacion small {
-        font-size: 0.5rem;
+    .globo-participacion { left: 10px; }
+    .globo-entregas { left: 75px; }
+    .globo-participacion small,
+    .globo-entregas small {
+        font-size: 0.45rem;
     }
 }
  /* hhasta aqui el globo */
@@ -175,9 +201,16 @@
     </style>
 </head>
 <body>
-    <div class="globo-participacion" id="globoParticipacion">
+   <!-- Globo 1: Participación por alumnos -->
+<div class="globo-participacion" id="globoParticipacion">
     <span id="porcentajeParticipacion">0%</span>
     <small id="detalleParticipacion">0/38</small>
+</div>
+
+<!-- Globo 2: Participación por entregas -->
+<div class="globo-entregas" id="globoEntregas">
+    <span id="porcentajeEntregas">0%</span>
+    <small id="detalleEntregas">0/1368</small>
 </div>
     <div class="container">
         <h1>📊 Notas del Aula</h1>
@@ -236,28 +269,81 @@
                     return;
                 }
 // ============================================
-// CALCULAR PORCENTAJE DE PARTICIPACIÓN
+// GLOBO 1: PARTICIPACIÓN POR ALUMNOS
 // ============================================
 const TOTAL_ALUMNOS = 38;
 const alumnosEntregaron = data.length;
-const porcentaje = Math.round((alumnosEntregaron / TOTAL_ALUMNOS) * 100);
+const porcentajeAlumnos = Math.round((alumnosEntregaron / TOTAL_ALUMNOS) * 100);
 
-// Actualizar el globo
-document.getElementById('porcentajeParticipacion').textContent = porcentaje + '%';
+document.getElementById('porcentajeParticipacion').textContent = porcentajeAlumnos + '%';
 document.getElementById('detalleParticipacion').textContent = 
     alumnosEntregaron + '/' + TOTAL_ALUMNOS;
 
-// Cambiar color según el porcentaje
-const globo = document.getElementById('globoParticipacion');
-if (porcentaje >= 75) {
-    globo.style.background = '#28a745';  // Verde
-} else if (porcentaje >= 50) {
-    globo.style.background = '#ffc107';  // Amarillo
-    globo.style.color = '#333';
+const globo1 = document.getElementById('globoParticipacion');
+if (porcentajeAlumnos >= 75) {
+    globo1.style.background = '#28a745';
+    globo1.style.color = 'white';
+} else if (porcentajeAlumnos >= 50) {
+    globo1.style.background = '#ffc107';
+    globo1.style.color = '#333';
 } else {
-    globo.style.background = '#dc3545';  // Rojo
+    globo1.style.background = '#dc3545';
+    globo1.style.color = 'white';
 }
 
+// ============================================
+// GLOBO 2: PARTICIPACIÓN POR ENTREGAS
+// ============================================
+const TOTAL_ENTREGAS = 38 * 12 + 38 * 6 + 38 * 12 + 38 * 6; // = 1368
+let entregasRealizadas = 0;
+
+data.forEach(alumno => {
+    // Quizzes
+    for (let i = 1; i <= 12; i++) {
+        if (alumno[`quiz${i}`] !== null && alumno[`quiz${i}`] !== undefined) {
+            entregasRealizadas++;
+        }
+    }
+    // Tareas
+    for (let i = 1; i <= 6; i++) {
+        if (alumno[`tarea${i}`] !== null && alumno[`tarea${i}`] !== undefined) {
+            entregasRealizadas++;
+        }
+    }
+    // MC
+    for (let i = 1; i <= 12; i++) {
+        if (alumno[`mc${i}`] !== null && alumno[`mc${i}`] !== undefined) {
+            entregasRealizadas++;
+        }
+    }
+    // Carpetas
+    for (let i = 1; i <= 6; i++) {
+        if (alumno[`c${i}`] !== null && alumno[`c${i}`] !== undefined) {
+            entregasRealizadas++;
+        }
+    }
+});
+
+const porcentajeEntregas = Math.round((entregasRealizadas / TOTAL_ENTREGAS) * 100);
+
+document.getElementById('porcentajeEntregas').textContent = porcentajeEntregas + '%';
+document.getElementById('detalleEntregas').textContent = 
+    entregasRealizadas + '/' + TOTAL_ENTREGAS;
+
+const globo2 = document.getElementById('globoEntregas');
+if (porcentajeEntregas >= 75) {
+    globo2.style.background = '#28a745';
+    globo2.style.color = 'white';
+} else if (porcentajeEntregas >= 50) {
+    globo2.style.background = '#ffc107';
+    globo2.style.color = '#333';
+} else {
+    globo2.style.background = '#dc3545';
+    globo2.style.color = 'white';
+}
+   // hasta aqui globos
+
+                
                 // Construir la tabla
                 let html = `
                     <div class="tabla-container">
