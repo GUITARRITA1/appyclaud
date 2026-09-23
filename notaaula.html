@@ -245,17 +245,13 @@
                         const nota = alumno[`c${i}`];
                         html += celdaNota(nota);
                     }
-                     // global
-                    for (let i = 1; i <= 1; i++) {
-                        const nota = alumno[`Global${i}`];
-                        html += celdaNota(nota);
-                    }
-
+                
                     // Promedios
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_quiz)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_tarea)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_mc)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_c)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.Global)}</td>`;
 
                     html += `</tr>`;
                 });
