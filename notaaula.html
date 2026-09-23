@@ -7,6 +7,48 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Globo de participación */
+.globo-participacion {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-direction: column;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.globo-participacion small {
+    font-size: 0.6rem;
+    font-weight: normal;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .globo-participacion {
+        width: 55px;
+        height: 55px;
+        font-size: 0.85rem;
+        top: 10px;
+        left: 10px;
+    }
+    .globo-participacion small {
+        font-size: 0.5rem;
+    }
+}
+ /* hhasta aqui el globo */
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -133,6 +175,10 @@
     </style>
 </head>
 <body>
+    <div class="globo-participacion" id="globoParticipacion">
+    <span id="porcentajeParticipacion">0%</span>
+    <small id="detalleParticipacion">0/38</small>
+</div>
     <div class="container">
         <h1>📊 Notas del Aula</h1>
         <div id="infoAula" class="info-aula"></div>
@@ -270,6 +316,29 @@
                 contenido.innerHTML = `<div class="error">❌ Error al cargar las notas: ${error.message}</div>`;
             }
         }
+
+// ============================================
+// CALCULAR PORCENTAJE DE PARTICIPACIÓN
+// ============================================
+const TOTAL_ALUMNOS = 38;
+const alumnosEntregaron = data.length;
+const porcentaje = Math.round((alumnosEntregaron / TOTAL_ALUMNOS) * 100);
+
+// Actualizar el globo
+document.getElementById('porcentajeParticipacion').textContent = porcentaje + '%';
+document.getElementById('detalleParticipacion').textContent = 
+    alumnosEntregaron + '/' + TOTAL_ALUMNOS;
+
+// Cambiar color según el porcentaje
+const globo = document.getElementById('globoParticipacion');
+if (porcentaje >= 75) {
+    globo.style.background = '#28a745';  // Verde
+} else if (porcentaje >= 50) {
+    globo.style.background = '#ffc107';  // Amarillo
+    globo.style.color = '#333';
+} else {
+    globo.style.background = '#dc3545';  // Rojo
+}
 
         
         // Formatear nota
