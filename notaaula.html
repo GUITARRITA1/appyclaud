@@ -235,6 +235,28 @@
                     contenido.innerHTML = `<div class="vacio">📭 Aún no hay alumnos con notas en este curso.</div>`;
                     return;
                 }
+// ============================================
+// CALCULAR PORCENTAJE DE PARTICIPACIÓN
+// ============================================
+const TOTAL_ALUMNOS = 38;
+const alumnosEntregaron = data.length;
+const porcentaje = Math.round((alumnosEntregaron / TOTAL_ALUMNOS) * 100);
+
+// Actualizar el globo
+document.getElementById('porcentajeParticipacion').textContent = porcentaje + '%';
+document.getElementById('detalleParticipacion').textContent = 
+    alumnosEntregaron + '/' + TOTAL_ALUMNOS;
+
+// Cambiar color según el porcentaje
+const globo = document.getElementById('globoParticipacion');
+if (porcentaje >= 75) {
+    globo.style.background = '#28a745';  // Verde
+} else if (porcentaje >= 50) {
+    globo.style.background = '#ffc107';  // Amarillo
+    globo.style.color = '#333';
+} else {
+    globo.style.background = '#dc3545';  // Rojo
+}
 
                 // Construir la tabla
                 let html = `
@@ -317,28 +339,6 @@
             }
         }
 
-// ============================================
-// CALCULAR PORCENTAJE DE PARTICIPACIÓN
-// ============================================
-const TOTAL_ALUMNOS = 38;
-const alumnosEntregaron = data.length;
-const porcentaje = Math.round((alumnosEntregaron / TOTAL_ALUMNOS) * 100);
-
-// Actualizar el globo
-document.getElementById('porcentajeParticipacion').textContent = porcentaje + '%';
-document.getElementById('detalleParticipacion').textContent = 
-    alumnosEntregaron + '/' + TOTAL_ALUMNOS;
-
-// Cambiar color según el porcentaje
-const globo = document.getElementById('globoParticipacion');
-if (porcentaje >= 75) {
-    globo.style.background = '#28a745';  // Verde
-} else if (porcentaje >= 50) {
-    globo.style.background = '#ffc107';  // Amarillo
-    globo.style.color = '#333';
-} else {
-    globo.style.background = '#dc3545';  // Rojo
-}
 
         
         // Formatear nota
