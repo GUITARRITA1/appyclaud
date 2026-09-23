@@ -217,6 +217,7 @@
     <div class="container">
         <h1>📊 Notas del Aula</h1>
         <div id="infoAula" class="info-aula"></div>
+        <div id="resumenParticipacion" style="text-align:center; padding:8px; background:#e9ecef; border-radius:8px; margin-bottom:10px; font-weight:bold;"></div>
         <div id="contenido">
             <div class="loading">⏳ Cargando notas...</div>
         </div>
@@ -326,6 +327,27 @@ data.forEach(alumno => {
     }
 });
 
+                // ============================================
+// RESUMEN DE PARTICIPACIÓN
+// ============================================
+const totalAlumnos = 38;
+const alumnosQueEntregaron = data.length;
+
+// Entregas hasta ítem 1 (quiz1, tarea1, mc1, c1)
+const colsHasta1 = ['quiz1', 'tarea1', 'mc1', 'c1'];
+const totalHasta1 = totalAlumnos * colsHasta1.length; // 152
+const countHasta1 = data.reduce((t, a) => t + colsHasta1.filter(c => a[c]).length, 0);
+const porcHasta1 = Math.round((countHasta1 / totalHasta1) * 100);
+
+// Mostrar
+document.getElementById('resumenParticipacion').innerHTML = 
+    `👥 Alumnos: <strong>${alumnosQueEntregaron}/${totalAlumnos}</strong> ` +
+    `(${Math.round((alumnosQueEntregaron/totalAlumnos)*100)}%) ` +
+    `| 📝 Hasta Ítem 1: <strong>${countHasta1}/${totalHasta1}</strong> ` +
+    `(${porcHasta1}%)`;
+
+
+                
 const porcentajeEntregas = Math.round((entregasRealizadas / TOTAL_ENTREGAS) * 100);
 
 document.getElementById('porcentajeEntregas').textContent = porcentajeEntregas + '%';
