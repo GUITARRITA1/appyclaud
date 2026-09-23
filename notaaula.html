@@ -251,8 +251,14 @@
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_tarea)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_mc)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_c)}</td>`;
-                    html += `<td class="promedio-col">${formatoNota(alumno.Global)}</td>`;
-
+                        // Global (con color según nota)
+                        const notaGlobal = parseFloat(alumno.Global);
+                        if (!isNaN(notaGlobal)) {
+                        const claseGlobal = notaGlobal >= 7 ? 'nota-aprobado' : 'nota-desaprobado';
+                        html += `<td class="${claseGlobal}">${notaGlobal.toFixed(1)}</td>`;
+                        } else {
+                        html += `<td class="sin-nota">--</td>`;
+                        }
                     html += `</tr>`;
                 });
 
