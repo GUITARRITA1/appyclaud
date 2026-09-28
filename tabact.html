@@ -1552,9 +1552,13 @@ alumnos.forEach((alumno, idx) => {
     // ============================================
     // RECORRER TIPOS PARA DIBUJAR CELDAS Y CALCULAR SUMA
     // ============================================
-    let suma = 0;
-    let count = 0;
-    
+     let sumaAct = 0;
+let countAct = 0;
+let sumaE = 0;
+let countE = 0;
+let sumaCarp = 0;
+let countCarp = 0;
+   
     tiposEsperados.forEach(tipo => {
         const celda = row.insertCell();
       
@@ -1579,6 +1583,12 @@ alumnos.forEach((alumno, idx) => {
         celda.style.backgroundColor = "#e9ecef";  // Gris
         celda.style.color = "#666";
     }
+            // Acumular E
+    const nE = parseFloat(valor);
+    if (!isNaN(nE) && nE > 0) {
+        sumaE += nE;
+        countE++;
+    }
     // AGREGAR ONCLICK PARA VER CORRECCIÓN
  
              celda.style.cursor = 'pointer';
@@ -1602,6 +1612,16 @@ alumnos.forEach((alumno, idx) => {
             console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, count=${count}`);        }
         
         if (entregado) {
+           // Acumular según tipo
+if (info.entregado && info.nota && typeof info.nota === 'number') {
+    if (tipo.startsWith('Act')) {
+        sumaAct += info.nota;
+        countAct++;
+    } else if (tipo.startsWith('Carp')) {
+        sumaCarp += info.nota;
+        countCarp++;
+    }
+}
             const tarde = esTarde(info.fecha, fechaLim);
             console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
             
@@ -1639,12 +1659,19 @@ alumnos.forEach((alumno, idx) => {
     // ============================================
     // AGREGAR CELDA DE PROMEDIO (después de todas las actividades)
     // ============================================
-    const celdaPromedio = row.insertCell();
-    const promedio = count > 0 ? suma / 8 : 0;  // Dividir por 18 (12 Act + 6 Carp)
-    celdaPromedio.textContent = promedio > 0 ? promedio.toFixed(2) : '--';
-    celdaPromedio.style.backgroundColor = '#f8f9fa';
-    celdaPromedio.style.fontWeight = 'bold';
-    celdaPromedio.style.textAlign = 'center';
+// ============================================
+// CALCULAR PROMEDIO DE LOS 3 GRUPOS
+// ============================================
+const promAct = countAct > 0 ? sumaAct / 12 : 0;    // Act sobre 12
+const promE = countE > 0 ? sumaE / 6 : 0;            // E sobre 6
+const promCarp = countCarp > 0 ? sumaCarp / 6 : 0;   // Carp sobre 6
+const promedio = (promAct + promE + promCarp) / 3;
+
+const celdaPromedio = row.insertCell();
+celdaPromedio.textContent = promedio > 0 ? promedio.toFixed(2) : '--';
+celdaPromedio.style.backgroundColor = '#f8f9fa';
+celdaPromedio.style.fontWeight = 'bold';
+celdaPromedio.style.textAlign = 'center';
 
         
     // Celda de Participación
