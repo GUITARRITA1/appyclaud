@@ -1447,6 +1447,44 @@ function mostrarModalConEstado(alumno, tipo, entregado, esTardeEntrega, estadoTe
     "EJEMPLO10": { "E1": "10", "E2": "10", "E3": "10", "E4": "10", "E5": "10", "E6": "10" }
 };
 
+      // ============================================
+// FUNCIÓN AUXILIAR PARA MOSTRAR ESTADO POR VALOR
+// ============================================
+function mostrarEstadoPorValor(alumno, tipo, valor) {
+    if (valor === "A" || valor === "a") {
+        mostrarModalConEstado(alumno, tipo, false, false, "⛈️⛈️⛈️AUSENTE");
+        return;
+    }
+    
+    if (valor === "" || valor === null || valor === undefined) {
+        mostrarModalConEstado(alumno, tipo, false, false, "⛈️⛈️⛈️AUSENTE");
+        return;
+    }
+    
+    let n;
+    if (typeof valor === "string" && valor.includes("/")) {
+        n = parseFloat(valor.split("/")[0]);
+    } else {
+        n = parseFloat(valor);
+    }
+    
+    if (isNaN(n)) {
+        mostrarModalConEstado(alumno, tipo, false, false, "⛈️⛈️⛈️AUSENTE");
+        return;
+    }
+    
+    if (n >= 7) {
+        mostrarModalConEstado(alumno, tipo, true, false, "🌞🌞🌞🌞🌞APROBADO - ENTREGADO EN TIEMPO Y FORMA");
+    }
+    else if (n === 0) {
+        mostrarModalConEstado(alumno, tipo, true, false, "🪫🪫🪫🪫ESTUVO PRESENTE Y NO ENTREGÓ NADA");
+    }
+    else if (n >= 1 && n <= 6) {
+        mostrarModalConEstado(alumno, tipo, true, false, "⚠️⚠️⚠️INCOMPLETO");
+    }
+}
+// HASTA ACA ES PARA LAS ENTREGAS E
+
         
         async function cargarEntregas() {
             const tbody = document.getElementById('cuerpoTabla');
@@ -1543,42 +1581,12 @@ alumnos.forEach((alumno, idx) => {
     }
     // AGREGAR ONCLICK PARA VER CORRECCIÓN
  
-        celda.style.cursor = 'pointer';
-celda.onclick = (function(a, t, v) {
-    return function() { 
-        mostrarEstadoPorValor(a, t, v);
-    };
-})(alumno, tipo, valor);
-
-// Función auxiliar
-function mostrarEstadoPorValor(alumno, tipo, valor) {
-    // Si es "A" o "a": AUSENTE
-    if (valor === "A" || valor === "a") {
-        mostrarModalConEstado(alumno, tipo, false, false, "⛈️⛈️⛈️AUSENTE");
-        return;
-    }
-    
-    // Si es vacío, null o no es número: AUSENTE
-    if (valor === "" || valor === null || valor === undefined || isNaN(valor)) {
-        mostrarModalConEstado(alumno, tipo, false, false, "⛈️⛈️⛈️AUSENTE");
-        return;
-    }
-    
-    const n = parseFloat(valor);
-    
-    // 7 o más: APROBADO
-    if (n >= 7) {
-        mostrarModalConEstado(alumno, tipo, true, false, "🌞🌞🌞🌞🌞APROBADO - ENTREGADO EN TIEMPO Y FORMA");
-    }
-    // 0: PRESENTE Y NO ENTREGÓ
-    else if (n === 0) {
-        mostrarModalConEstado(alumno, tipo, true, false, "🪫🪫🪫🪫ESTUVO PRESENTE Y NO ENTREGÓ NADA");
-    }
-    // 1 a 6: INCOMPLETO
-    else if (n >= 1 && n <= 6) {
-        mostrarModalConEstado(alumno, tipo, true, false, "⚠️⚠️⚠️INCOMPLETO");
-    }
-}
+             celda.style.cursor = 'pointer';
+        celda.onclick = (function(a, t, v) {
+            return function() { 
+                mostrarEstadoPorValor(a, t, v);
+            };
+        })(alumno, tipo, valor);
 /* hasta aca*/
         
         const info = entregasMap[alumno][tipo];
