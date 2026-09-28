@@ -1605,23 +1605,18 @@ let countCarp = 0;
         const fechaLim = fechasLimite[tipo];
         const entregado = info.entregado;
         
-        // Acumular para el promedio
-        if (info.entregado && info.nota && typeof info.nota === 'number') {
-            suma += info.nota;
-            count++;
-            console.log(`📊 ${alumno} - ${tipo}: nota=${info.nota}, suma parcial=${suma}, count=${count}`);        }
-        
         if (entregado) {
-           // Acumular según tipo
-if (info.entregado && info.nota && typeof info.nota === 'number') {
-    if (tipo.startsWith('Act')) {
-        sumaAct += info.nota;
-        countAct++;
-    } else if (tipo.startsWith('Carp')) {
-        sumaCarp += info.nota;
-        countCarp++;
-    }
-}
+            // Acumular según tipo
+            if (info.entregado && info.nota && typeof info.nota === 'number') {
+                if (tipo.startsWith('Act')) {
+                    sumaAct += info.nota;
+                    countAct++;
+                } else if (tipo.startsWith('Carp')) {
+                    sumaCarp += info.nota;
+                    countCarp++;
+                }
+            }
+            
             const tarde = esTarde(info.fecha, fechaLim);
             console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
             
@@ -1653,8 +1648,7 @@ if (info.entregado && info.nota && typeof info.nota === 'number') {
         }
     }); // ← cierra tiposEsperados.forEach
 
-    console.log(`📈 ${alumno} - TOTAL: suma=${suma}, count=${count}, promedio/18=${suma/18}`);
-
+    console.log(`📈 ${alumno} - Act: ${sumaAct}/${countAct}, E: ${sumaE}/${countE}, Carp: ${sumaCarp}/${countCarp}`);
     
     // ============================================
     // AGREGAR CELDA DE PROMEDIO (después de todas las actividades)
