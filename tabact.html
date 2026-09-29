@@ -1536,7 +1536,7 @@ function mostrarEstadoPorValor(alumno, tipo, valor) {
                         if (entregasMap[alumno][tipo].entregado) totalEntregas++;
                     }
                 }
-                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas | 🖱️ Click en ✅ o ❌ para ver corrección`;
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} entregas | 🖱️ Click en ✅ o ❌ para ver corrección || Nota conceptual = (Promedio de [Prom Actividades + Prom Entregas en clase + Prom Carpetas] + Participación ) / 2`;
                 
         // Generar tabla
 tbody.innerHTML = '';
