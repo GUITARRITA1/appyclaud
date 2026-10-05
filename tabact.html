@@ -1535,10 +1535,7 @@ function mostrarEstadoPorValor(alumno, tipo, valor) {
                 }
                 contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} /720 entregas`;
 
-                // Array para guardar conceptuales después
-                const conceptualesParaGuardar = [];
-
-                // Generar tabla
+                              // Generar tabla
                 tbody.innerHTML = '';
                 alumnos.forEach((alumno, idx) => {
                     const row = tbody.insertRow();
