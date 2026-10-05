@@ -1502,61 +1502,30 @@ function mostrarEstadoPorValor(alumno, tipo, valor) {
 
                 const conceptualesParaGuardar = [];
 
-                // Crear mapa de entregas
+                                // Crear mapa de entregas
                 const entregasMap = {};
                 alumnos.forEach(alumno => {
                     entregasMap[alumno] = {};
                     tiposEsperados.forEach(tipo => {
                         entregasMap[alumno][tipo] = { entregado: false, fecha: null };
-                    }); // ← cierra alumnos.forEach
-
-// ============================================
-// GUARDAR CONCEPTUALES EN SUPABASE
-// ============================================
-console.log('📤 Guardando conceptuales...');
-for (const item of conceptualesParaGuardar) {
-    if (item.conceptual !== null) {
-        const { error } = await supabaseClient
-            .from('notas')
-            .update({ conceptual: item.conceptual })
-            .eq('nombre_alumno', item.nombre_alumno);
-        
-        if (error) {
-            console.error(`❌ Error con ${item.nombre_alumno}:`, error);
-        }
-    }
-}
-console.log('✅ Conceptuales guardados');
-
-} catch (error) {
-    console.error('Error:', error);
-    tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
-    contador.textContent = '⚠️ Error de conexión';
-}
-}
+                    });
                 });
-                
+
                 // Marcar entregas
                 entregas.forEach(entrega => {
                     const alumnoOriginal = entrega.nombre_alumno?.trim().toUpperCase();
                     const tipoOriginal = entrega.tipo?.trim();
                     const fechaEntrega = entrega.created_at;
 
-                    console.log(`Procesando: Alumno="${alumnoOriginal}", Tipo="${tipoOriginal}", Fecha="${fechaEntrega}"`);
-                    
                     if (alumnos.includes(alumnoOriginal) && tiposEsperados.includes(tipoOriginal)) {
                         entregasMap[alumnoOriginal][tipoOriginal] = {
                             entregado: true,
                             fecha: fechaEntrega,
-                            nota: entrega.NOTA ? Number(entrega.NOTA) : null  // ← Convertir a número
+                            nota: entrega.NOTA ? Number(entrega.NOTA) : null
                         };
-                        console.log(`  ✅ MARCADO: ${alumnoOriginal} - ${tipoOriginal} - ${fechaEntrega}`);
-                    } else {
-                        console.log(`  ❌ No match: ${alumnoOriginal} - ${tipoOriginal}`);
                     }
-                    console.log("EntregasMap:", entregasMap);
                 });
-                
+
                 // Contar entregas
                 let totalEntregas = 0;
                 for (const alumno in entregasMap) {
@@ -1564,195 +1533,193 @@ console.log('✅ Conceptuales guardados');
                         if (entregasMap[alumno][tipo].entregado) totalEntregas++;
                     }
                 }
-                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} /720 entregas | 🖱️ Click en ✅ o ❌ para ver corrección || Nota conceptual = ({Promedio de [Prom Actividades + Prom Entregas en clase + Prom Carpetas]} + Participación ) / 2`;
-                
-        // Generar tabla
-tbody.innerHTML = '';
-alumnos.forEach((alumno, idx) => {
-    const row = tbody.insertRow();
-    row.insertCell(0).textContent = idx + 1;
-    
-    const celdaAlumno = row.insertCell(1);
-    celdaAlumno.textContent = alumno;
-    celdaAlumno.style.textAlign = 'left';
-    celdaAlumno.style.fontWeight = 'bold';
-    
-    // ============================================
-    // RECORRER TIPOS PARA DIBUJAR CELDAS Y CALCULAR SUMA
-    // ============================================
-     let sumaAct = 0;
-let countAct = 0;
-let sumaE = 0;
-let countE = 0;
-let sumaCarp = 0;
-let countCarp = 0;
-   
-    tiposEsperados.forEach(tipo => {
-        const celda = row.insertCell();
-      
-        /* para tipear x,-,+ en tp de clase */   
-        if (tipo === "E1" || tipo === "E2" || tipo === "E3" || tipo === "E4" || tipo === "E5" || tipo === "E6") {
-    const valor = (valoresE[alumno] && valoresE[alumno][tipo]) || "-";
-    celda.textContent = valor;
-    celda.style.backgroundColor = "#fff9e6";
-    celda.style.fontWeight = "bold";
-              celda.style.textAlign = "center";
-            // Colores según el valor
-    if (valor === "x" || valor === "X") {
-        celda.style.backgroundColor = "#ffcccc";  // Rojo claro
-        celda.style.color = "#cc0000";
-    } else if (valor === "+") {
-        celda.style.backgroundColor = "#ccffcc";  // Verde claro
-        celda.style.color = "#006600";
-    } else if (valor === "-") {
-        celda.style.backgroundColor = "#fff3cd";  // Amarillo claro
-        celda.style.color = "#856404";
-    } else {
-        celda.style.backgroundColor = "#e9ecef";  // Gris
-        celda.style.color = "#666";
-    }
-            // Acumular E
-    const nE = parseFloat(valor);
-    if (!isNaN(nE) && nE > 0) {
-        sumaE += nE;
-        countE++;
-    }
-    // AGREGAR ONCLICK PARA VER CORRECCIÓN
- 
-             celda.style.cursor = 'pointer';
-        celda.onclick = (function(a, t, v) {
-            return function() { 
-                mostrarEstadoPorValor(a, t, v);
-            };
-        })(alumno, tipo, valor);
-            return; 
-        }
-/* hasta aca*/
-        
-        const info = entregasMap[alumno][tipo];
-        const fechaLim = fechasLimite[tipo];
-        const entregado = info.entregado;
-        
-        if (entregado) {
-            // Acumular según tipo
-            if (info.entregado && info.nota && typeof info.nota === 'number') {
-                if (tipo.startsWith('Act')) {
-                    sumaAct += info.nota;
-                    countAct++;
-                } else if (tipo.startsWith('Carp')) {
-                    sumaCarp += info.nota;
-                    countCarp++;
+                contador.textContent = `📋 ${alumnos.length} alumnos | ✅ ${totalEntregas} /720 entregas`;
+
+                // Array para guardar conceptuales después
+                const conceptualesParaGuardar = [];
+
+                // Generar tabla
+                tbody.innerHTML = '';
+                alumnos.forEach((alumno, idx) => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = idx + 1;
+
+                    const celdaAlumno = row.insertCell(1);
+                    celdaAlumno.textContent = alumno;
+                    celdaAlumno.style.textAlign = 'left';
+                    celdaAlumno.style.fontWeight = 'bold';
+
+                    let sumaAct = 0;
+                    let countAct = 0;
+                    let sumaE = 0;
+                    let countE = 0;
+                    let sumaCarp = 0;
+                    let countCarp = 0;
+
+                    tiposEsperados.forEach(tipo => {
+                        const celda = row.insertCell();
+
+                        // Bloque E
+                        if (tipo === "E1" || tipo === "E2" || tipo === "E3" || tipo === "E4" || tipo === "E5" || tipo === "E6") {
+                            const valor = (valoresE[alumno] && valoresE[alumno][tipo]) || "-";
+                            celda.textContent = valor;
+                            celda.style.backgroundColor = "#fff9e6";
+                            celda.style.fontWeight = "bold";
+                            celda.style.textAlign = "center";
+
+                            if (valor === "x" || valor === "X") {
+                                celda.style.backgroundColor = "#ffcccc";
+                                celda.style.color = "#cc0000";
+                            } else if (valor === "+") {
+                                celda.style.backgroundColor = "#ccffcc";
+                                celda.style.color = "#006600";
+                            } else if (valor === "-") {
+                                celda.style.backgroundColor = "#fff3cd";
+                                celda.style.color = "#856404";
+                            } else {
+                                celda.style.backgroundColor = "#e9ecef";
+                                celda.style.color = "#666";
+                            }
+
+                            const nE = parseFloat(valor);
+                            if (!isNaN(nE) && nE > 0) {
+                                sumaE += nE;
+                                countE++;
+                            }
+
+                            celda.style.cursor = 'pointer';
+                            celda.onclick = (function(a, t, v) {
+                                return function() { mostrarEstadoPorValor(a, t, v); };
+                            })(alumno, tipo, valor);
+                            return;
+                        }
+
+                        // Bloque Act/Carp
+                        const info = entregasMap[alumno][tipo];
+                        const fechaLim = fechasLimite[tipo];
+                        const entregado = info.entregado;
+
+                        if (entregado) {
+                            if (info.entregado && info.nota && typeof info.nota === 'number') {
+                                if (tipo.startsWith('Act')) {
+                                    sumaAct += info.nota;
+                                    countAct++;
+                                } else if (tipo.startsWith('Carp')) {
+                                    sumaCarp += info.nota;
+                                    countCarp++;
+                                }
+                            }
+
+                            const tarde = esTarde(info.fecha, fechaLim);
+
+                            if (info.nota && info.nota > 0) {
+                                celda.innerHTML = info.nota;
+                            } else {
+                                celda.innerHTML = '<span class="check">✅</span>';
+                            }
+
+                            if (tarde) {
+                                celda.className = 'entregado-tarde';
+                            } else {
+                                celda.className = 'entregado';
+                            }
+
+                            celda.style.cursor = 'pointer';
+                            celda.onclick = (function(a, t, e, esT) {
+                                return function() { mostrarModal(a, t, e, esT); };
+                            })(alumno, tipo, entregado, tarde);
+                        } else {
+                            celda.innerHTML = '❌';
+                            celda.className = 'no-entregado';
+                            celda.style.cursor = 'pointer';
+                            celda.onclick = (function(a, t, e, esT) {
+                                return function() { mostrarModal(a, t, e, false); };
+                            })(alumno, tipo, false, false);
+                        }
+                    });
+
+                    // Promedios
+                    const promAct = countAct > 0 ? sumaAct / 12 : 0;
+                    const promE = countE > 0 ? sumaE / 6 : 0;
+                    const promCarp = countCarp > 0 ? sumaCarp / 6 : 0;
+                    const promedio = (promAct + promE + promCarp) / 3;
+
+                    const celdaPromedio = row.insertCell();
+                    celdaPromedio.textContent = promedio > 0 ? promedio.toFixed(2) : '--';
+                    celdaPromedio.style.backgroundColor = '#f8f9fa';
+                    celdaPromedio.style.fontWeight = 'bold';
+                    celdaPromedio.style.textAlign = 'center';
+
+                    // Participación
+                    const celdaParticip = row.insertCell();
+                    const notaParticip = notasParticipacion[alumno] || 0;
+                    celdaParticip.textContent = notaParticip > 0 ? notaParticip : '--';
+                    celdaParticip.style.backgroundColor = '#f8f9fa';
+                    celdaParticip.style.fontWeight = 'bold';
+                    celdaParticip.style.textAlign = 'center';
+
+                    // Conceptual
+                    const celdaConceptual = row.insertCell();
+                    let conceptual = 0;
+                    const promAC = promedio > 0 ? promedio : 0;
+                    const notaPart = notaParticip > 0 ? notaParticip : 0;
+
+                    if (promAC > 0 && notaPart > 0) {
+                        conceptual = (promAC + notaPart) / 2;
+                    } else if (promAC > 0) {
+                        conceptual = promAC / 2;
+                    } else if (notaPart > 0) {
+                        conceptual = notaPart / 2;
+                    } else {
+                        conceptual = 0;
+                    }
+
+                    celdaConceptual.textContent = conceptual > 0 ? conceptual.toFixed(2) : '--';
+                    celdaConceptual.style.backgroundColor = '#f8f9fa';
+                    celdaConceptual.style.fontWeight = 'bold';
+                    celdaConceptual.style.textAlign = 'center';
+
+                    if (conceptual >= 7) {
+                        celdaConceptual.style.backgroundColor = '#d4edda';
+                        celdaConceptual.style.color = '#155724';
+                    } else {
+                        celdaConceptual.style.backgroundColor = '#ffff00';
+                        celdaConceptual.style.color = '#333';
+                    }
+
+                    // Acumular para guardar después
+                    conceptualesParaGuardar.push({
+                        nombre_alumno: alumno,
+                        conceptual: conceptual > 0 ? parseFloat(conceptual.toFixed(2)) : null
+                    });
+                }); // ← cierra alumnos.forEach
+
+                // ============================================
+                // GUARDAR CONCEPTUALES EN SUPABASE (DESPUÉS del forEach)
+                // ============================================
+                console.log('📤 Guardando conceptuales...');
+                for (const item of conceptualesParaGuardar) {
+                    if (item.conceptual !== null) {
+                        const { error } = await supabaseClient
+                            .from('notas')
+                            .update({ conceptual: item.conceptual })
+                            .eq('nombre_alumno', item.nombre_alumno);
+                        
+                        if (error) {
+                            console.error(`❌ Error con ${item.nombre_alumno}:`, error);
+                        }
+                    }
                 }
+                console.log('✅ Conceptuales guardados');
+
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+                contador.textContent = '⚠️ Error de conexión';
             }
-            
-            const tarde = esTarde(info.fecha, fechaLim);
-            console.log(`Alumno: ${alumno}, Tipo: ${tipo}, Fecha: ${info.fecha}, ¿Tarde? ${tarde}`);
-            
-            // Asignar contenido (número o tilde)
-            if (info.nota && info.nota > 0) {
-                celda.innerHTML = info.nota;  // Muestra el número
-            } else {
-                celda.innerHTML = '<span class="check">✅</span>';  // Muestra tilde
-            }
-            
-            // Asignar clase según si es tarde o no
-            if (tarde) {
-                celda.className = 'entregado-tarde';
-            } else {
-                celda.className = 'entregado';
-            }
-            
-            celda.style.cursor = 'pointer';
-            celda.onclick = (function(a, t, e, esT) {
-                return function() { mostrarModal(a, t, e, esT); };
-            })(alumno, tipo, entregado, tarde);
-        } else {
-            celda.innerHTML = '❌';
-            celda.className = 'no-entregado';
-            celda.style.cursor = 'pointer';
-            celda.onclick = (function(a, t, e, esT) {
-                return function() { mostrarModal(a, t, e, false); };
-            })(alumno, tipo, false, false);
         }
-    }); // ← cierra tiposEsperados.forEach
 
-    console.log(`📈 ${alumno} - Act: ${sumaAct}/${countAct}, E: ${sumaE}/${countE}, Carp: ${sumaCarp}/${countCarp}`);
-    
-    // ============================================
-    // AGREGAR CELDA DE PROMEDIO (después de todas las actividades)
-    // ============================================
-// ============================================
-// CALCULAR PROMEDIO DE LOS 3 GRUPOS
-// ============================================
-const promAct = countAct > 0 ? sumaAct / 12 : 0;    // Act sobre 12
-const promE = countE > 0 ? sumaE / 6 : 0;            // E sobre 6
-const promCarp = countCarp > 0 ? sumaCarp / 6 : 0;   // Carp sobre 6
-const promedio = (promAct + promE + promCarp) / 3;
-
-const celdaPromedio = row.insertCell();
-celdaPromedio.textContent = promedio > 0 ? promedio.toFixed(2) : '--';
-celdaPromedio.style.backgroundColor = '#f8f9fa';
-celdaPromedio.style.fontWeight = 'bold';
-celdaPromedio.style.textAlign = 'center';
-
-        
-    // Celda de Participación
-const celdaParticip = row.insertCell();
-const notaParticip = notasParticipacion[alumno] || 0;
-celdaParticip.textContent = notaParticip > 0 ? notaParticip : '--';
-celdaParticip.style.backgroundColor = '#f8f9fa';
-celdaParticip.style.fontWeight = 'bold';
-celdaParticip.style.textAlign = 'center';
-
-    // Celda Conceptual (promedio entre Prom(A+C) y Particip)
-const celdaConceptual = row.insertCell();
-let conceptual = 0;
-const promAC = promedio > 0 ? promedio : 0;
-const notaPart = notaParticip > 0 ? notaParticip : 0;
-
-if (promAC > 0 && notaPart > 0) {
-    conceptual = (promAC + notaPart) / 2;
-} else if (promAC > 0) {
-    conceptual = promAC /2;
-} else if (notaPart > 0) {
-    conceptual = notaPart/2;
-} else {
-    conceptual = 0;
-}
-
-celdaConceptual.textContent = conceptual > 0 ? conceptual.toFixed(2) : '--';
-celdaConceptual.style.backgroundColor = '#f8f9fa';
-celdaConceptual.style.fontWeight = 'bold';
-celdaConceptual.style.textAlign = 'center';
-    // AGREGAR FONDO VERDE SI Conceptual >= 7
-// ============================================
-if (conceptual >= 7) {
-    celdaConceptual.style.backgroundColor = '#d4edda';  // Verde
-    celdaConceptual.style.color = '#155724';
-} else {
-    celdaConceptual.style.backgroundColor = '#ffff00';  // Gris claro
-    celdaConceptual.style.color = '#333';
-}
-    // Acumular para guardar después (SIN await)
-conceptualesParaGuardar.push({
-    nombre_alumno: alumno,
-    conceptual: conceptual > 0 ? parseFloat(conceptual.toFixed(2)) : null
-});
-});
-     // ← cierra alumnos.forEach
-
-
-} catch (error) {
-    console.error('Error:', error);
-    tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
-    contador.textContent = '⚠️ Error de conexión';
-}
-}
-
-  
-        
-cargarEntregas();
-
+        cargarEntregas();
     </script>
 </body>
 </html>
