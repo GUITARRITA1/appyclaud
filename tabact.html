@@ -1706,6 +1706,12 @@ if (conceptual >= 7) {
     celdaConceptual.style.backgroundColor = '#ffff00';  // Gris claro
     celdaConceptual.style.color = '#333';
 }
+    // Guardar conceptual en Supabase (tabla notas)
+await supabaseClient
+    .from('notas')
+    .update({ conceptual: parseFloat(conceptual.toFixed(2)) })
+    .eq('nombre_alumno', alumno);
+    
 }); // ← cierra alumnos.forEach
 
 
