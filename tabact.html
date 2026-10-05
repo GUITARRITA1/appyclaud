@@ -1508,7 +1508,32 @@ function mostrarEstadoPorValor(alumno, tipo, valor) {
                     entregasMap[alumno] = {};
                     tiposEsperados.forEach(tipo => {
                         entregasMap[alumno][tipo] = { entregado: false, fecha: null };
-                    });
+                    }); // ← cierra alumnos.forEach
+
+// ============================================
+// GUARDAR CONCEPTUALES EN SUPABASE
+// ============================================
+console.log('📤 Guardando conceptuales...');
+for (const item of conceptualesParaGuardar) {
+    if (item.conceptual !== null) {
+        const { error } = await supabaseClient
+            .from('notas')
+            .update({ conceptual: item.conceptual })
+            .eq('nombre_alumno', item.nombre_alumno);
+        
+        if (error) {
+            console.error(`❌ Error con ${item.nombre_alumno}:`, error);
+        }
+    }
+}
+console.log('✅ Conceptuales guardados');
+
+} catch (error) {
+    console.error('Error:', error);
+    tbody.innerHTML = `<tr><td colspan="14" class="error">❌ Error: ${error.message}</td></tr>`;
+    contador.textContent = '⚠️ Error de conexión';
+}
+}
                 });
                 
                 // Marcar entregas
