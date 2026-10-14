@@ -1,159 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>AppyClaud - Bienvenido</title>
-
     <style>
+        /* Modal de imagen */
+        .modal-imagen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
 
-      
- <!-- primero mensaje emergente -->
-/* Modal de imagen */
-.modal-imagen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 950%;
-    background: rgba(0,0,0,0.9);
-    z-index: 2000;
-}
+        .modal-imagen-contenido {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 90%;
+            max-height: 90%;
+        }
 
-.modal-imagen-contenido {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 90%;
-    max-height: 90%;
-}
+        .modal-imagen-contenido img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
 
-.modal-imagen-contenido img {
-    max-width: 100%;
-    max-height: 80vh;
-    border-radius: 8px;
-}
+        .cerrar-modal-img {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-.cerrar-modal-img {
-    background: #ff4757;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 10px;
-}
+        .cerrar-modal-img:hover {
+            background: #e84118;
+        }
 
-.cerrar-modal-img:hover {
-    background: #e84118;
-}
-      @media (max-width: 900px) {
-    .modal-imagen-contenido {
-        width: 100%;
-        max-width: 100%;
-        padding: 50px;
-    }
-    
-    .modal-imagen-contenido img {
-        max-width: 100%;
-        max-height: 100vh;
-    }
-    
-    .cerrar-modal-img {
-        padding: 20px 50px;
-        font-size: 1.1rem;
-    }
-}
-/* hasta aca para el menssaje emergente*/
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('APPYC.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
 
-
-     
-      body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    /* ✅ FONDO SIEMPRE VISIBLE */
-    background-image: url('APPYC.png');
-    background-size: cover;        /* Cubre toda pantalla */
-    background-position: center;   /* Centrado */
-    background-repeat: no-repeat;  /* No repetir */
-    background-attachment: fixed;  /* Fijo al scroll */
-    min-height: 100vh;             /* Altura completa */
-    </style>
-
-     <style>
         .ingresar-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    padding: 30px 80px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-    text-decoration: none;
-    display: block;        /* ← Cambiar de inline-block a block */
-    margin: 0 auto;        /* ← Ahora sí funciona */
-    width: fit-content;    /* ← Para que no ocupe todo el ancho */
-}
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 30px 80px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: block;
+            margin: 0 auto;
+            width: fit-content;
+        }
 
         .ingresar-btn:hover {
             transform: scale(1.05);
         }
+
+        @media (max-width: 900px) {
+            .modal-imagen-contenido {
+                width: 95%;
+                max-width: 95%;
+                padding: 10px;
+            }
+            .modal-imagen-contenido img {
+                max-width: 100%;
+                max-height: 70vh;
+            }
+            .cerrar-modal-img {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
-  <body>
+<body>
     <a href="inicio.html" class="ingresar-btn">INGRESAR</a>
 
-   <!-- para el mensaje emergente -->
-  <div id="modalEmergente" class="modal-imagen">
-    <div class="modal-imagen-contenido">
-        <img src="emergente.jpg" alt="Información importante">
-        <br>
-        <button class="cerrar-modal-img" onclick="cerrarModalImg()">Cerrar</button>
+    <!-- Modal emergente -->
+    <div id="modalEmergente" class="modal-imagen">
+        <div class="modal-imagen-contenido">
+            <img src="emergente.jpg" alt="Información importante">
+            <br>
+            <button class="cerrar-modal-img" onclick="cerrarModalImg()">Cerrar</button>
+        </div>
     </div>
-</div>
-<!-- fin emergemte -->
- <!-- Segundo Modal -->
-<!-- <div id="modal2Emergente" class="modal-imagen">
-    <div class="modal-imagen-contenido">
-        <img src="emergente2.png" alt="Información importante">
-        <br>
-        <button class="cerrar-modal-img" onclick="cerrar2ModalImg()">Cerrar</button>
-    </div>
-</div> -->
-    
-  </body>
-  
- 
 
+    <script>
+        function mostrarModalImg() {
+            document.getElementById('modalEmergente').style.display = 'flex';
+        }
 
- <!-- mns emergente -->
+        function cerrarModalImg() {
+            document.getElementById('modalEmergente').style.display = 'none';
+        }
 
- <script>
-   function mostrarModalImg() {
-    document.getElementById('modalEmergente').style.display = 'flex';
-}
-
-function cerrarModalImg() {
-    document.getElementById('modalEmergente').style.display = 'none';
-    document.getElementById('modal2Emergente').style.display = 'flex'; 
-}
-
-/* function cerrar2ModalImg() {
-    document.getElementById('modal2Emergente').style.display = 'none';
-}  */
-
-    // Iniciar la secuencia cuando la página cargue
-    setTimeout(mostrarModalImg, 500);
-</script>
-  
+        setTimeout(mostrarModalImg, 500);
+    </script>
+</body>
 </html>
