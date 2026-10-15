@@ -445,7 +445,8 @@ if (porcentajeEntregas >= 75) {
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_c)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_ev)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_tp)}</td>`;
-                        // Global (con color según nota)
+                    
+                    // Global (con color según nota)
                         const notaGlobal = parseFloat(alumno.Global);
                         if (!isNaN(notaGlobal)) {
                         const claseGlobal = notaGlobal >= 7 ? 'nota-aprobado' : 'nota-desaprobado';
