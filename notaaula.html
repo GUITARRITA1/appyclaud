@@ -297,7 +297,7 @@ if (porcentajeAlumnos >= 75) {
 // ============================================
 // GLOBO 2: PARTICIPACIÓN POR ENTREGAS
 // ============================================
-const TOTAL_ENTREGAS = 38 * 12 + 38 * 6 + 38 * 12 + 38 * 6; // = 1368
+const TOTAL_ENTREGAS = 38 * (12 + 6 + 12 + 6 + 6 + 6); // = 1824
 let entregasRealizadas = 0;
 
 data.forEach(alumno => {
@@ -334,8 +334,8 @@ const totalAlumnos = 38;
 const alumnosQueEntregaron = data.length;
 
 // Entregas hasta ítem 1 (quiz1, tarea1, mc1, c1)
-const colsHasta1 = ['quiz1', 'tarea1', 'mc1', 'c1'];
-const totalHasta1 = totalAlumnos * colsHasta1.length; // 152
+const colsHasta1 = ['quiz1', 'tarea1', 'mc1', 'c1', 'ev1', 'tp1'];
+const totalHasta1 = totalAlumnos * colsHasta1.length; // 38x6=228
 const countHasta1 = data.reduce((t, a) => t + colsHasta1.filter(c => a[c]).length, 0);
 const porcHasta1 = Math.round((countHasta1 / totalHasta1) * 100);
 
@@ -427,12 +427,24 @@ if (porcentajeEntregas >= 75) {
                         const nota = alumno[`c${i}`];
                         html += celdaNota(nota);
                     }
-                
+                  // evaluaciones
+                    for (let i = 1; i <= 6; i++) {
+                        const nota = alumno[`ev${i}`];
+                        html += celdaNota(nota);
+                    }
+                      // tps
+                    for (let i = 1; i <= 6; i++) {
+                        const nota = alumno[`tp${i}`];
+                        html += celdaNota(nota);
+                    }
+                    
                     // Promedios
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_quiz)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_tarea)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_mc)}</td>`;
                     html += `<td class="promedio-col">${formatoNota(alumno.promedio_c)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_ev)}</td>`;
+                    html += `<td class="promedio-col">${formatoNota(alumno.promedio_tp)}</td>`;
                         // Global (con color según nota)
                         const notaGlobal = parseFloat(alumno.Global);
                         if (!isNaN(notaGlobal)) {
