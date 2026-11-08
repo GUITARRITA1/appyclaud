@@ -1,102 +1,102 @@
  [
                         {
-                pregunta: "1. Desde el punto de vista Natural, un proceso Espontáneo, es aque le depende de:",
-                opciones: ["La intervención Humana", "Los Volcanes", "El Universo", "Ninguna de las anteriores"],
-                correcta: 3
+                "pregunta": "1. Desde el punto de vista Natural, un proceso Espontáneo, es aque le depende de:",
+                "opciones": ["La intervención Humana", "Los Volcanes", "El Universo", "Ninguna de las anteriores"],
+                "correcta": 3
             },
             {
-                pregunta: "2. Desde el punto de vista Físico, un proceso Espontáneo, es aque le depende de:",
-                opciones: ["La propia energía del Sistema", "Absorver Energía del Entorno", "La Naturaleza", "Ninguna de las anteriores"],
-                correcta: 0
+                "pregunta": "2. Desde el punto de vista Físico, un proceso Espontáneo, es aque le depende de:",
+                "opciones": ["La propia energía del Sistema", "Absorver Energía del Entorno", "La Naturaleza", "Ninguna de las anteriores"],
+                "correcta": 0
             },
             {
-                pregunta: "3. Ordene el progreso: a.Petróleo b.Electricidad c.Agricultura d.Nuclear e.Vapor f.Eólica g.Ruedas h.Potencia Animal i.fuego ",
-                opciones: ["Así como está", "c,a,b,f,g,i,e,h", "A la inversa", "i,c,g,h,f,e,b,a,d"],
-                correcta: 3
+                "pregunta": "3. Ordene el progreso: a.Petróleo b.Electricidad c.Agricultura d.Nuclear e.Vapor f.Eólica g.Ruedas h.Potencia Animal i.fuego ",
+                "opciones": ["Así como está", "c,a,b,f,g,i,e,h", "A la inversa", "i,c,g,h,f,e,b,a,d"],
+                "correcta": 3
             },
             {
-                pregunta: "4. La Energía por Trabajo implica:",
-                opciones: ["Un desplazamiento", "Una dirección", "Un vector fuerza L=F.d", "Todas las anteriores"],
-                correcta: 3
+                "pregunta": "4. La Energía por Trabajo implica:",
+                "opciones": ["Un desplazamiento", "Una dirección", "Un vector fuerza L=F.d", "Todas las anteriores"],
+                "correcta": 3
             },
             {
-                pregunta: "5. La Fuerza de Rozamiento depende de:",
-                opciones: ["Las Superficies", "La Energía Térmica", "La Energía Cinética", "Todas"],
-                correcta: 0
+                "pregunta": "5. La Fuerza de Rozamiento depende de:",
+                "opciones": ["Las Superficies", "La Energía Térmica", "La Energía Cinética", "Todas"],
+                "correcta": 0
             },
             {
-                pregunta: "6. Si convierto Energía por Trabajo en E. Cinética expresamos:",
-                opciones: ["L=F.d", "F.d=Ec", "F=1/2.m.v^2", "F.d=Ecf-Eci"],
-                correcta: 3
+                "pregunta": "6. Si convierto Energía por Trabajo en E. Cinética expresamos:",
+                "opciones": ["L=F.d", "F.d=Ec", "F=1/2.m.v^2", "F.d=Ecf-Eci"],
+                "correcta": 3
             },
             {
-                pregunta: "7. En el Sistema Internacional o MKS, la ENERGIA es:",
-                opciones: ["Newton", "kg.m/s^2", "kg.m^2/s^2", "kgf"],
-                correcta: 2
+                "pregunta": "7. En el Sistema Internacional o MKS, la ENERGIA es:",
+                "opciones": ["Newton", "kg.m/s^2", "kg.m^2/s^2", "kgf"],
+                "correcta": 2
             },
             {
-                pregunta: "8. Si convierto E. Potencial Gravitatoria en Energía por Trabajo expresamos:",
-                opciones: ["L=m.g.h", "F.d=m.g.d", "F.d=P.(hf-hi)", "Todas las anteriores"],
-                correcta: 3
+                "pregunta": "8. Si convierto E. Potencial Gravitatoria en Energía por Trabajo expresamos:",
+                "opciones": ["L=m.g.h", "F.d=m.g.d", "F.d=P.(hf-hi)", "Todas las anteriores"],
+                "correcta": 3
             },
             {
-                pregunta: "9. El Trabajo Final no depende:",
-                opciones: ["de la E. Cinética", "del camino recorrido", "del peso final", "del Rozamiento"],
-                correcta: 1
+                "pregunta": "9. El Trabajo Final no depende:",
+                "opciones": ["de la E. Cinética", "del camino recorrido", "del peso final", "del Rozamiento"],
+                "correcta": 1
             },
             {
-                pregunta: "10. El plano inclinado reduce __________ y ___________ el trabajo aplicado.",
-                opciones: ["La fricción y reduce", "La temperatura y mantiene", "La fuerza y aumenta", "La fuerza y mantiene"],
-                correcta: 3
+                "pregunta": "10. El plano inclinado reduce __________ y ___________ el trabajo aplicado.",
+                "opciones": ["La fricción y reduce", "La temperatura y mantiene", "La fuerza y aumenta", "La fuerza y mantiene"],
+                "correcta": 3
             },
             {
-                pregunta: "11. "Denme una palanca y moveré al mundo",
-                opciones: ["Newton", "Arquímedes", "Pascal", "Einstein"],
-                correcta: 1
+                "pregunta": "11. "Denme una palanca y moveré al mundo",
+                "opciones": ["Newton", "Arquímedes", "Pascal", "Einstein"],
+                "correcta": 1
             },
            {
-                pregunta: "12. La Polea del tractor se mueve 2 metros y el Bloque se desplaza:",
-                opciones: ["4m", "No desplaza", "1m", "2m"],
-                correcta: 2
+                "pregunta": "12. La Polea del tractor se mueve 2 metros y el Bloque se desplaza:",
+                "opciones": ["4m", "No desplaza", "1m", "2m"],
+                "correcta": 2
             },
             {
-                pregunta: "13. Si la Energía útil es 30 y la total es 30, la Eficiencia es:",
-                opciones: ["200 %", "100 %", "1", "Debería decir 30 [Joule] y resultaría en 100%"],
-                correcta: 3
+                "pregunta": "13. Si la Energía útil es 30 y la total es 30, la Eficiencia es:",
+                "opciones": ["200 %", "100 %", "1", "Debería decir 30 [Joule] y resultaría en 100%"],
+                "correcta": 3
             },
             {
-                pregunta: "14. La Eficiencia de los motores de combustión es importante mejorarla porque:",
-                opciones: ["Colapinto los choca todos", "El Chano es mas que el anterior", "La combustión ineficiente genera contaminación", "El precio subió de 300 a 2200"],
-                correcta: 2
+                "pregunta": "14. La Eficiencia de los motores de combustión es importante mejorarla porque:",
+                "opciones": ["Colapinto los choca todos", "El Chano es mas que el anterior", "La combustión ineficiente genera contaminación", "El precio subió de 300 a 2200"],
+                "correcta": 2
             },
             {
-                pregunta: "15. La Energía primaria mundial es la de Petróleo, Gas y Carbón (90%), se consume un total de 12000 Mtep. El promedio Per Cápita es:",
-                opciones: ["6000 Millones", "2000kg/año", "2kg/año", "6000ton/año"],
-                correcta: 1
+                "pregunta": "15. La Energía primaria mundial es la de Petróleo, Gas y Carbón (90%), se consume un total de 12000 Mtep. El promedio Per Cápita es:",
+                "opciones": ["6000 Millones", "2000kg/año", "2kg/año", "6000ton/año"],
+                "correcta": 1
             },
             {
-                pregunta: "16. El consumo de combustibles fósiles se supone que es:",
-                opciones: ["In-sostenible", "Sostenible", "Sustentable", "Renovable"],
-                correcta: 0
+                "pregunta": "16. El consumo de combustibles fósiles se supone que es:",
+                "opciones": ["In-sostenible", "Sostenible", "Sustentable", "Renovable"],
+                "correcta": 0
             },
              {
-                pregunta: "17. El problema de la sustentabilidad se enfoca desde lo:",
-                opciones: ["Ambiental", "Social", "Económico", "Todas"],
-                correcta: 3
+                "pregunta": "17. El problema de la sustentabilidad se enfoca desde lo:",
+                "opciones": ["Ambiental", "Social", "Económico", "Todas"],
+                "correcta": 3
             },
             {
-                pregunta: "18. La Biosfera y Sustentabilidad Requieren:",
-                opciones: ["Recursos renovables", "Menor contaminación", "Responsabilidad de uso", "Todas"],
-                correcta: 3
+                "pregunta": "18. La Biosfera y Sustentabilidad Requieren:",
+                "opciones": ["Recursos renovables", "Menor contaminación", "Responsabilidad de uso", "Todas"],
+                "correcta": 3
             },
             {
-                pregunta: "19. Si la demanda mundial es 10 a la 18 Joules por año, y hay 6000 millones de habitantes, ¿Cual es la demanda diaria promedio en kcal para Argentina con 45 millones de habitantes? Realice los cálculos en hoja y entregue para validar puntaje",
-                opciones: ["8,6x10^4M kcal", "86kM kcal", "8,6x10^10 kcal", "Todas las anteriores"],
-                correcta: 3
+                "pregunta": "19. Si la demanda mundial es 10 a la 18 Joules por año, y hay 6000 millones de habitantes, ¿Cual es la demanda diaria promedio en kcal para Argentina con 45 millones de habitantes? Realice los cálculos en hoja y entregue para validar puntaje",
+                "opciones": ["8,6x10^4M kcal", "86kM kcal", "8,6x10^10 kcal", "Todas las anteriores"],
+                "correcta": 3
             },
             {
-                pregunta: "20. Se propone reducir las emisiones de:",
-                opciones: ["Población...", "Dióxido de Carbono (CO2)", "Consumo", "Ninguna de las anteriores"],
-                correcta: 1
+                "pregunta": "20. Se propone reducir las emisiones de:",
+                "opciones": ["Población...", "Dióxido de Carbono (CO2)", "Consumo", "Ninguna de las anteriores"],
+                "correcta": 1
             }
         ];
