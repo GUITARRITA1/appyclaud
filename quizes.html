@@ -311,65 +311,63 @@
             }
         }
 
-        // Enter para ingresar (desde cualquier campo)
+               // Enter para ingresar (desde cualquier campo)
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     ingresar();
                 }
             });
-            
-// ============================================
-// CONSULTAR NOTAS DEL AULA
-// ============================================
-async function consultarNotas() {
-    ocultarMensaje();
+        });
 
-    const escuela = document.getElementById('escuela').value.trim().replace(/\D/g, '');
-    const año = document.getElementById('año').value.trim().replace(/\D/g, '');
-    const curso = document.getElementById('curso').value.trim().toUpperCase();
-    const dni = document.getElementById('dni').value.trim().replace(/\D/g, '');
+        // ============================================
+        // CONSULTAR NOTAS DEL AULA
+        // ============================================
+        async function consultarNotas() {
+            ocultarMensaje();
 
-    // Validar campos mínimos
-    if (!escuela || !año || !curso) {
-        mostrarMensaje('❌ Completá escuela, año y división para consultar las notas.', 'danger');
-        return;
-    }
+            const escuela = document.getElementById('escuela').value.trim().replace(/\D/g, '');
+            const año = document.getElementById('año').value.trim().replace(/\D/g, '');
+            const curso = document.getElementById('curso').value.trim().toUpperCase();
+            const dni = document.getElementById('dni').value.trim().replace(/\D/g, '');
 
-    const nombreTabla = obtenerNombreTabla(escuela, año, curso);
-    const btn = document.getElementById('btnVerNotas');
+            if (!escuela || !año || !curso) {
+                mostrarMensaje('❌ Completá escuela, año y división para consultar las notas.', 'danger');
+                return;
+            }
 
-    btn.disabled = true;
-    btn.textContent = '⏳ Verificando...';
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            const btn = document.getElementById('btnVerNotas');
 
-    try {
-        const tablaExiste = await existeTablaCurso(nombreTabla);
+            btn.disabled = true;
+            btn.textContent = '⏳ Verificando...';
 
-        if (!tablaExiste) {
-            mostrarMensaje(`⚠️ No existe el aula ${escuela} - ${año}° ${curso}. Revisar error o solicitar Alta.`, 'warning');
-            btn.disabled = false;
-            btn.textContent = '📊 Consultar notas del aula';
-            return;
+            try {
+                const tablaExiste = await existeTablaCurso(nombreTabla);
+
+                if (!tablaExiste) {
+                    mostrarMensaje(`⚠️ No existe el aula ${escuela} - ${año}° ${curso}. Revisar error o solicitar Alta.`, 'warning');
+                    btn.disabled = false;
+                    btn.textContent = '📊 Consultar notas del aula';
+                    return;
+                }
+
+                const params = new URLSearchParams({
+                    escuela: escuela,
+                    año: año,
+                    curso: curso,
+                    dni: dni
+                });
+
+                window.location.href = `notaaula.html?${params.toString()}`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('❌ Error al verificar el aula. Intentá de nuevo.', 'danger');
+                btn.disabled = false;
+                btn.textContent = '📊 Consultar notas del aula';
+            }
         }
-
-        // Si existe, redirigir a notaaula.html
-        const params = new URLSearchParams({
-            escuela: escuela,
-            año: año,
-            curso: curso,
-            dni: dni
-        });
-
-        window.location.href = `notaaula.html?${params.toString()}`;
-
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarMensaje('❌ Error al verificar el aula. Intentá de nuevo.', 'danger');
-        btn.disabled = false;
-        btn.textContent = '📊 Consultar notas del aula';
-    }
-}
-        });
     </script>
 </body>
 </html>
