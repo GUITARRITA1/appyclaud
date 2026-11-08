@@ -1,11 +1,11 @@
  [
                         {
-                "pregunta": "1. Desde el punto de vista Natural, un proceso Espontáneo, es aque le depende de:",
+                "pregunta": "1. Desde el punto de vista Natural, un proceso Espontáneo, es aque depende de:",
                 "opciones": ["La intervención Humana", "Los Volcanes", "El Universo", "Ninguna de las anteriores"],
                 "correcta": 3
             },
             {
-                "pregunta": "2. Desde el punto de vista Físico, un proceso Espontáneo, es aque le depende de:",
+                "pregunta": "2. Desde el punto de vista Físico, un proceso Espontáneo, es aque depende de:",
                 "opciones": ["La propia energía del Sistema", "Absorver Energía del Entorno", "La Naturaleza", "Ninguna de las anteriores"],
                 "correcta": 0
             },
