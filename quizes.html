@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes - AppyClaud</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .login-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.85rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-msg {
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .error-msg.warning {
+            color: #856404;
+            background: #fff3cd;
+        }
+
+        .error-msg.danger {
+            color: #721c24;
+            background: #f8d7da;
+        }
+
+        .error-msg.success {
+            color: #155724;
+            background: #d4edda;
+        }
+
+        .info {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .cargando {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 CUESTIONARIOS EVALUATIVOS DE IAF 4° AÑO</h1>
+        <div class="subtitulo">Completá tus datos y elegí el quiz que vas a responder</div>
+
+        <div class="login-area">
+            <label for="apellidoNombre">Apellido y Nombre</label>
+            <input type="text" id="apellidoNombre" placeholder="USAR MAYÚSCULAS" autocomplete="off" autocapitalize="characters">
+
+            <label for="dni">DNI</label>
+            <input type="text" id="dni" placeholder="7 u 8 dígitos" inputmode="numeric" autocomplete="off">
+
+            <label for="escuela">Número de Escuela</label>
+            <input type="text" id="escuela" placeholder="Ej: 113" inputmode="numeric" autocomplete="off">
+
+            <label for="año">Año</label>
+            <input type="text" id="año" placeholder="Ej: 4" inputmode="numeric" autocomplete="off">
+
+            <label for="curso">División</label>
+            <input type="text" id="curso" placeholder="Ej: C" autocomplete="off" autocapitalize="characters">
+
+            <label for="quizSelect">Elegí el Quiz a responder</label>
+            <select id="quizSelect">
+                <option value="1">Quiz 1</option>
+                <option value="2">Quiz 2</option>
+                <option value="3">Quiz 3</option>
+                <option value="4">Quiz 4</option>
+                <option value="5">Quiz 5</option>
+                <option value="6">Quiz 6</option>
+                <option value="7">Quiz 7</option>
+                <option value="8">Quiz 8</option>
+                <option value="9">Quiz 9</option>
+                <option value="10">Quiz 10</option>
+                <option value="11">Quiz 11</option>
+                <option value="12">Quiz 12</option>
+            </select>
+
+            <button id="btnIngresar" onclick="ingresar()">🔐 Ingresar al Quiz</button>
+            <div id="mensaje" class="error-msg"></div>
+        </div>
+
+        <div class="info">⚠️ Solo se permite una única entrega por DNI y por quiz.</div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        const SUPABASE_URL = "https://zfmoopsktswvsklsudvy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbW9vcHNrdHN3dnNrbHN1ZHZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNzI1NDYsImV4cCI6MjA5Ojg0ODU0Nn0.68FZfRbWop0UY4psHQEwMWGKyF40bHHBucOGjpxs0JQ";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ============================================
+        // FUNCIONES AUXILIARES
+        // ============================================
+        function obtenerNombreTabla(escuela, año, curso) {
+            const añoLimpio = año.trim().replace(/[°\s]/g, '');
+            const cursoLimpio = curso.trim().toUpperCase().replace(/[°\s]/g, '');
+            return `${escuela}_${añoLimpio}_${cursoLimpio}`;
+        }
+
+        async function existeTablaCurso(nombreTabla) {
+            try {
+                const { error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select('dni')
+                    .limit(1);
+                return !(error && (
+                    error.code === '42P01' ||
+                    error.message.includes('does not exist') ||
+                    error.message.includes('schema cache')
+                ));
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function mostrarMensaje(texto, tipo) {
+            const div = document.getElementById('mensaje');
+            div.textContent = texto;
+            div.className = `error-msg ${tipo}`;
+            div.style.display = 'block';
+        }
+
+        function ocultarMensaje() {
+            const div = document.getElementById('mensaje');
+            div.style.display = 'none';
+        }
+
+        // ============================================
+        // INGRESAR AL QUIZ
+        // ============================================
+        async function ingresar() {
+            ocultarMensaje();
+
+            const apellidoNombre = document.getElementById('apellidoNombre').value.trim().toUpperCase();
+            const dni = document.getElementById('dni').value.trim().replace(/\D/g, '');
+            const escuela = document.getElementById('escuela').value.trim().replace(/\D/g, '');
+            const año = document.getElementById('año').value.trim().replace(/\D/g, '');
+            const curso = document.getElementById('curso').value.trim().toUpperCase();
+            const numeroQuiz = document.getElementById('quizSelect').value;
+
+            // Validaciones
+            if (!apellidoNombre || !dni || !escuela || !año || !curso) {
+                mostrarMensaje('❌ Completá todos los campos.', 'danger');
+                return;
+            }
+
+            if (!/^\d{7,8}$/.test(dni)) {
+                mostrarMensaje('❌ El DNI debe tener 7 u 8 dígitos.', 'danger');
+                return;
+            }
+
+            const nombreTabla = obtenerNombreTabla(escuela, año, curso);
+            const btn = document.getElementById('btnIngresar');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Verificando...';
+
+            try {
+                // 1. Verificar que existe la tabla del aula
+                const tablaExiste = await existeTablaCurso(nombreTabla);
+
+                if (!tablaExiste) {
+                    mostrarMensaje(`⚠️ No se dió de Alta el aula ${escuela} - ${año}° ${curso}. Revisar error o solicitar Alta.`, 'warning');
+                    btn.disabled = false;
+                    btn.textContent = '🔐 Ingresar al Quiz';
+                    return;
+                }
+
+                // 2. Verificar si ya realizó ese quiz
+                const campoQuiz = `quiz${numeroQuiz}`;
+                const { data, error } = await supabaseClient
+                    .from(nombreTabla)
+                    .select(campoQuiz)
+                    .eq('dni', dni)
+                    .maybeSingle();
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error al verificar:', error);
+                }
+
+                if (data && data[campoQuiz] !== null && data[campoQuiz] !== undefined) {
+                    mostrarMensaje(`📌 Ya realizaste el Quiz ${numeroQuiz}. Tu nota: ${data[campoQuiz]}`, 'warning');
+                    btn.disabled = false;
+                    btn.textContent = '🔐 Ingresar al Quiz';
+                    return;
+                }
+
+                // 3. Todo OK: redirigir al quiz con los datos
+                mostrarMensaje('✅ Todo listo. Redirigiendo...', 'success');
+
+                const params = new URLSearchParams({
+                    n: numeroQuiz,
+                    nombre: apellidoNombre,
+                    dni: dni,
+                    escuela: escuela,
+                    año: año,
+                    curso: curso
+                });
+
+                // Redirigir después de un instante
+                setTimeout(() => {
+                    window.location.href = `quiz.html?${params.toString()}`;
+                }, 500);
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('❌ Error al verificar. Intentá de nuevo.', 'danger');
+                btn.disabled = false;
+                btn.textContent = '🔐 Ingresar al Quiz';
+            }
+        }
+
+        // Enter para ingresar (desde cualquier campo)
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    ingresar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
