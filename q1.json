@@ -8,5 +8,55 @@
         "pregunta": "2. La energía se define como la capacidad de:",
         "opciones": ["Realizar trabajo", "Crear materia", "Destruir materia", "Ninguna de las anteriores"],
         "correcta": 0
-    }
-]
+    },
+{
+                pregunta: "1. ¿Cuál de las siguientes NO es una forma de energía?",
+                opciones: ["Energía Cinética", "Energía Potencial", "Energía Térmica", "Energía de Color"],
+                correcta: 3
+            },
+            {
+                pregunta: "2. La energía se define como la capacidad de:",
+                opciones: ["Realizar trabajo", "Crear materia", "Destruir materia", "Ninguna de las anteriores"],
+                correcta: 0
+            },
+            {
+                pregunta: "3. ¿Qué tipo de energía posee un cuerpo en movimiento?",
+                opciones: ["Energía Potencial", "Energía Cinética", "Energía Térmica", "Energía Química"],
+                correcta: 1
+            },
+            {
+                pregunta: "4. La energía que se almacena en los alimentos es:",
+                opciones: ["Energía Cinética", "Energía Potencial", "Energía Química", "Energía Térmica"],
+                correcta: 2
+            },
+            {
+                pregunta: "5. ¿Cuál es la unidad de energía en el Sistema Internacional?",
+                opciones: ["Newton", "Joule", "Watt", "Caloría"],
+                correcta: 1
+            },
+            {
+                pregunta: "6. Cuando una persona sube una escalera, ¿qué tipo de energía aumenta?",
+                opciones: ["Energía Cinética", "Energía Potencial Gravitatoria", "Energía Térmica", "Energía Eléctrica"],
+                correcta: 1
+            },
+            {
+                pregunta: "7. La energía se conserva, es decir:",
+                opciones: ["Se crea y se destruye", "No se crea ni se destruye, solo se transforma", "Solo se crea", "Solo se destruye"],
+                correcta: 1
+            },
+            {
+                pregunta: "8. ¿Qué tipo de energía tiene un resorte comprimido?",
+                opciones: ["Energía Cinética", "Energía Potencial Elástica", "Energía Térmica", "Energía Química"],
+                correcta: 1
+            },
+            {
+                pregunta: "9. La luz del sol es un ejemplo de energía:",
+                opciones: ["Energía Química", "Energía Térmica", "Energía Radiante", "Energía Cinética"],
+                correcta: 2
+            },
+            {
+                pregunta: "10. ¿Qué ocurre con la energía cuando se usa?",
+                opciones: ["Se pierde", "Se transforma", "Se crea", "Se destruye"],
+                correcta: 1
+            }
+        ]
