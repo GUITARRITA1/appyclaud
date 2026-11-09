@@ -1,0 +1,55 @@
+[
+   {
+                "pregunta": "1. En una Central Térmica el Pistón es accionado por:",
+                "opciones": ["La correa del motor", "El fuego de la Energía Térmica", "El vapor de la Caldera", "El movimiento del Generador"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "2. Se consideran Fuentes Macroscópicas de Energía. Unas son infinitas, inagotables en el tiempo; y otras, finitas, tendrán fin y además son contaminantes.",
+                "opciones": ["Fuentes de Calor positivo y negativo", "No renovables y Renovables", "Fuente de Voltaje Contínua y Alterna", "Renovables y No Renovables"],
+                "correcta": 3
+            },
+           
+            {
+                "pregunta": "3. Los 2 Parques Eólicos de mayor generación de Potencia Eléctrica en Argentina suman 20.000 kW. Son:",
+                "opciones": ["Punta Alta y Claromecó", "Morán y Pico Truncado", "Punta Alta y Comodoro", "General Hacha y Comodoro"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "4. ¿Cuantas veces mas Potencia que la Eólica genera la mayor Central Hidráulica en Argentina? ",
+                "opciones": ["160 veces", "1,6 veces", "16 veces", "60%"],
+                "correcta": 0
+            },
+           
+            {
+                "pregunta": "5. La Biomasa húmeda o seca puede entregar biodiesel o biocombustibles. Se Requieren:",
+                "opciones": ["Biogas y metano", "Un biodigestor y refinación de petróleo", "Etanol y azúcares", "Procesos Anaeróbicos y Aeróbicos"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "6. En Argentina, el __% de la energía proviene de combustibles fósiles y el ___% de centrales nucleares.",
+                "opciones": ["70 - 3,1", "90 - 2,5", "100 - 0", "90 - 25"],
+                "correcta": 1
+            },
+           
+       {
+                "pregunta": "7. Plantaciones para la obtención de alcohol, Plantaciones de oleaginosas... ",
+                "opciones": ["Son Cultivos energéticos", "Consumen energía de Biomasa", "Generan gases de efecto ivernadero", "Son residuos reactivos"],
+                "correcta": 0
+            }, 
+ {
+                "pregunta": "8. ¿Cuales componen una Central Hidroeléctrica?",
+                "opciones": ["Embalse-Turbina-Generador-Subestación", "Conducto-Casa de Máquinas", "Línea de Transmisión", "Todas las anteriores"],
+                "correcta": 3
+            },
+{
+                "pregunta": "9. Las oscilaciones grandes de las mareas en un oceano se denominan:",
+                "opciones": ["Bajamar", "Energia de Olas Undimotriz", "Pleamar", "Olas"],
+                "correcta": 2
+            },
+ {
+                "pregunta": "10. ¿Cual es Potencia de la radiación solar en un panel de 2 metros cuadrados?",
+                "opciones": ["1 kiloWatt", "140 kW/m2", "140 kW", "280 kW"],
+                "correcta": 3
+            }
+]
