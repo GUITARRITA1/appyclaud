@@ -1,1 +1,55 @@
-
+[
+                        {
+                "pregunta": "1. El número másico es:",
+                "opciones": ["Neutrones + Protones Z=N+P", "Número Atómico + Protones Z=A+P", "Número Atómico + Neutrones A=Z+N", "Número másico + Electrones"],
+                "correcta": 2
+            },
+           
+            {
+                "pregunta": "2. La Fisión separa nucleones de _______ tamaño y la Fusión _______ nucleones menores",
+                "opciones": ["gran-une", "bajo-fisiona", "pequeño-expande", "muy pequeño-funde"],
+                "correcta": 0
+            },
+           
+            {
+                "pregunta": "3. La Fuerza nuclear fuerte está entre los nucleones de _______ átomo/s, y Energía de Enlace están presentes entre ________ átomo/s",
+                "opciones": ["distintos-distintos ", "mismos-mismos", "distintos-mismos", "mismos-distintos"],
+                "correcta": 3
+            },
+            
+            {
+                "pregunta": "4. Los núcleos atómicos almacenan Energía ___________ y liberan Energía __________",
+                "opciones": ["Lumínica y Atómica", "Lumínica y Eólica", "Térmica y Radiactiva", "Potencial Nuclear y Radiactiva"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "5. En una Central Nuclear, el reactor necesita una masa crítica minima para lograr la fisión por reacción en cadena. El moderador:",
+                "opciones": ["Acelera la velocidad de la reacción en cadena", "Evita que se liberen neutrones", "Regula la velocidad de la fisión de neutrones", "Genera como subproducto el Uranio Enriquecido"],
+                "correcta": 2 
+            },
+           {
+                "pregunta": "6. La teoría de Helmholtz decía que la Energía del Sol provenía de una analogía al Kamme Kamme Haaaa de Goku, es decir que la concentración de masa en un punto generaba contracción e incremento Térmico. Esta hipótesis se rechazó porque:",
+                "opciones": ["A Freezer no le gustó la teoría", "Al igual que con Newton, habría un origen muy anterior", "Se demostró con los Cuantos de Energía", "Se demostró con los Niveles de Energía"],
+                "correcta": 1
+            },
+             {
+                "pregunta": "7. Las teorías de la Mecánica Cuántica y La Relatividad, refieren a la liberación de Energia, y son:",
+                "opciones": ["Iguales, hablan de la Energía", "Distintas, Saltos de Niveles Versus Posición del Electrón", "Distintas, Cuantos de Energía Versus Tamaño del Electrón ", "Distintas, Capa del Electrón Versus Velocidad de la masa del Electrón"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "8. El combustible de un reactor se va contaminando. Finalmente se reprocesa para extraer elementos útiles hasta quedar residuos radiactivos. Se clasifican en:",
+                "opciones": ["Radiactividad Alfa, Beta, Gama", "Radiactividad baja, media, alta", "Protio, Deuterio, Tritio", "Ninguno de los anteriores"],
+                "correcta": 1
+            },
+            {
+                "pregunta": "9. En los inicios la Energía Solar se suponía de origen químico, Newton descartó esa hipótesis calculando que el Sol...",
+                "opciones": ["Era creador de Estrellas", "Debía ser mas antiguo que los fósiles", "Se apagaría hace mucho tiempo", "Era masa por velocidad de la luz"],
+                "correcta": 1
+            },
+           {
+                "pregunta": "10. Rutherford y Chadwick modelaron el Átomo. El núcleo (protones y neutrones) tiene una masa mayor al electrón ...",
+                "opciones": ["10.000 veces", "1.800 veces", "9x10^9 veces", "Ninguna de las anteriores"],
+                "correcta": 1
+            }
+           ]
