@@ -1,5 +1,5 @@
 [
-                        {
+  {
                 "pregunta": "1. El número másico es:",
                 "opciones": ["Neutrones + Protones Z=N+P", "Número Atómico + Protones Z=A+P", "Número Atómico + Neutrones A=Z+N", "Número másico + Electrones"],
                 "correcta": 2
