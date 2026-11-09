@@ -4,17 +4,17 @@
                 "opciones": ["Neutrones + Protones Z=N+P", "Número Atómico + Protones Z=A+P", "Número Atómico + Neutrones A=Z+N", "Número másico + Electrones"],
                 "correcta": 2
             },
-                       {
+            {
                 "pregunta": "2. La Fisión separa nucleones de _______ tamaño y la Fusión _______ nucleones menores",
                 "opciones": ["gran-une", "bajo-fisiona", "pequeño-expande", "muy pequeño-funde"],
                 "correcta": 0
             },
-                       {
+            {
                 "pregunta": "3. La Fuerza nuclear fuerte está entre los nucleones de _______ átomo/s, y Energía de Enlace están presentes entre ________ átomo/s",
                 "opciones": ["distintos-distintos ", "mismos-mismos", "distintos-mismos", "mismos-distintos"],
                 "correcta": 3
             },
-                       {
+            {
                 "pregunta": "4. Los núcleos atómicos almacenan Energía ___________ y liberan Energía __________",
                 "opciones": ["Lumínica y Atómica", "Lumínica y Eólica", "Térmica y Radiactiva", "Potencial Nuclear y Radiactiva"],
                 "correcta": 3
