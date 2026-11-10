@@ -1,5 +1,5 @@
 [
-  {
+            {
                 "pregunta": "1. El número másico es:",
                 "opciones": ["Neutrones + Protones Z=N+P", "Número Atómico + Protones Z=A+P", "Número Atómico + Neutrones A=Z+N", "Número másico + Electrones"],
                 "correcta": 2
@@ -24,12 +24,12 @@
                 "opciones": ["Acelera la velocidad de la reacción en cadena", "Evita que se liberen neutrones", "Regula la velocidad de la fisión de neutrones", "Genera como subproducto el Uranio Enriquecido"],
                 "correcta": 2 
             },
-           {
+            {
                 "pregunta": "6. La teoría de Helmholtz decía que la Energía del Sol provenía de una analogía al Kamme Kamme Haaaa de Goku, es decir que la concentración de masa en un punto generaba contracción e incremento Térmico. Esta hipótesis se rechazó porque:",
                 "opciones": ["A Freezer no le gustó la teoría", "Al igual que con Newton, habría un origen muy anterior", "Se demostró con los Cuantos de Energía", "Se demostró con los Niveles de Energía"],
                 "correcta": 1
             },
-             {
+            {
                 "pregunta": "7. Las teorías de la Mecánica Cuántica y La Relatividad, refieren a la liberación de Energia, y son:",
                 "opciones": ["Iguales, hablan de la Energía", "Distintas, Saltos de Niveles Versus Posición del Electrón", "Distintas, Cuantos de Energía Versus Tamaño del Electrón ", "Distintas, Capa del Electrón Versus Velocidad de la masa del Electrón"],
                 "correcta": 3
@@ -44,7 +44,7 @@
                 "opciones": ["Era creador de Estrellas", "Debía ser mas antiguo que los fósiles", "Se apagaría hace mucho tiempo", "Era masa por velocidad de la luz"],
                 "correcta": 1
             },
-           {
+            {
                 "pregunta": "10. Rutherford y Chadwick modelaron el Átomo. El núcleo (protones y neutrones) tiene una masa mayor al electrón ...",
                 "opciones": ["10.000 veces", "1.800 veces", "9x10^9 veces", "Ninguna de las anteriores"],
                 "correcta": 1
