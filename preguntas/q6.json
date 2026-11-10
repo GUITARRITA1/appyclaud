@@ -1,3 +1,102 @@
-  |  [
-  {
-    "pregunta": "1. 
+[
+                        {
+                "pregunta": "1. Mineral de hierro que atrae algunos metales descubierto por los griegos:",
+                "opciones": ["Magnetismo", "Atracción", "Magnetita", "Campo"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "2. Un imán origina un campo magnético, Oestered descubrió que una corriente que circula por un conductor genera:",
+                "opciones": ["Corriente", "Resistencia", "Campo Magnético (B̄)", "Cobre"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "3. Si un imán se mueve cerca de una espira de alambre, por ella circula corriente.",
+                "opciones": ["Oestered", "Faraday", "Ohm", "Tesla"],
+                "correcta": 1
+            },
+            {
+                "pregunta": "4. Si las líneas de campo electromagnético atraviesan un área de una espira varían ese flujo en el tiempo se induce:",
+                "opciones": ["Un Voltaje", "Un fotón", "Un Átomo", "Campo magnético"],
+                "correcta": 0
+            },
+            {
+                "pregunta": "5. Conjunto de espiras enrrolladas en un núcleo de hierro:",
+                "opciones": ["Motor", "Bobinado", "Rotor", "Generador"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "6. Un motor eléctrico Transforma Energía Eléctrica en:",
+                "opciones": ["Calor", "Velocidad", "E. Mecánica de Rotación", "Magnetismo"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "7. Una Central Hidroeléctrica aprovecha:",
+                "opciones": ["El agua", "Rayos", "Energía Potencial del agua elevada", "Radiación"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "8. Una Central Térmica aprovecha:",
+                "opciones": ["Calor", "Energia Térmica", "Los grados centígrados", "La Energía de Trabajo de la Presión del vapor del agua"],
+                "correcta": 1 
+            },
+            {
+                "pregunta": "9. Una Central Nuclear aprovecha:",
+                "opciones": ["Los Nucleones", "La Energía de Enlace", "El plutonio", "La Energía de liberación de la Fisión"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "10. Abastecen Energía Eléctrica para un consumo vital y constante, para cubrir las necesidades de la sociedad:",
+                "opciones": ["Motor Eléctrico", "Generador", "Centrales de Punta", "Centrales de Base"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "11. Abastecen Energía Eléctrica para un consumo elevado en horas pico de producción y de manera cambiante:",
+                "opciones": ["Motor Eléctrico", "Generador", "Centrales de Punta", "Centrales de Base"],
+                "correcta": 3
+            },
+           {
+                "pregunta": "12. Petróleo, Gas, Carbón y Biomasa, son fuentes de Energía de tipo:",
+                "opciones": ["Potencial Gravitatoria", "Cinética", "Química", "Eléctrica"],
+                "correcta": 2
+            },
+            {
+                "pregunta": "13. Agua de un río, y el Viento, son fuentes de Energía de tipo:",
+                "opciones": ["Potencial Gravitatoria", "Cinética", "Química", "Eléctrica"],
+                "correcta": 1
+            },
+            {
+                "pregunta": "14. Agua elevada en un Dique, son fuentes de Energía de tipo:",
+                "opciones": ["Potencial Gravitatoria", "Cinética", "Química", "Eléctrica"],
+                "correcta": 0
+            },
+            {
+                "pregunta": "15. La generación de Electricidad produce Residuos o subproductos que:",
+                "opciones": ["impactan el medioambiente", "destruyen ecosistemas", "Son Nocivos para seres vivos", "Todas las anteriores"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "16. Es uno de los subproductos Residuales",
+                "opciones": ["C2O", "Radiaciones de Uranio, Plutonio", "Isótopos del Cesio", "Todos los anteriores"],
+                "correcta": 2
+            },
+             {
+                "pregunta": "17. Un transformador ´´Transforma´´ corriente al generar un campo magnetico en un bobinado y:",
+                "opciones": ["Tansferir voltaje", "Inducir corriente en otro bobinado secundario de otra cantidad de espiras", "Entregar 220v", "Ninguna"],
+                "correcta": 1
+            },
+            {
+                "pregunta": "18. El SADI (Sistema Argentino de Interconexión permite:",
+                "opciones": ["Elegir a que zona abastecer", "Conectar distintos sectores del País", "Evitar interrumpir el servicio", "Todas las anteriores"],
+                "correcta": 3
+            },
+            {
+                "pregunta": "19.Además, permite la compra venta de energia conectando a países vecinos. Si Buenos Aires consume un 40% del total de Potencia Instalada, ¿Cual es el consumo en MW?",
+                "opciones": ["27000", "10800MW", "108MW", "108.000MW"],
+                "correcta": 1
+            },
+            {
+                "pregunta": "20. La Carga de una Central, es:",
+                "opciones": ["El consumo de agua que utiliza", "La carga horaria de funcionamiento", "La Potencia en función del tiempo", "Ninguna de las anteriores"],
+                "correcta": 2
+            }
+        ]
